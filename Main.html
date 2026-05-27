@@ -73,7 +73,6 @@
 </div></header>
 
 <main class="container main-content">
-    <!-- Главная -->
     <div id="homePage" class="page active">
         <div class="search-bar">
             <input type="text" id="homeSearch" placeholder="🔍 Поиск техники...">
@@ -94,7 +93,6 @@
         <h2 style="margin:20px 0 10px;">📦 Последние объявления</h2>
         <div id="latestGrid" class="grid">Загрузка...</div>
     </div>
-    <!-- Каталог -->
     <div id="catalogPage" class="page">
         <div class="search-bar">
             <input type="text" id="catSearch" placeholder="Поиск...">
@@ -103,19 +101,13 @@
         </div>
         <div id="catalogGrid" class="grid">Загрузка...</div>
     </div>
-    <!-- Корзина -->
     <div id="cartPage" class="page"><h2>🛒 Корзина</h2><div id="cartContainer">Пусто</div><div id="cartTotal" style="font-weight:700;margin-top:14px;"></div></div>
-    <!-- Избранное -->
     <div id="favoritesPage" class="page"><h2>⭐ Избранное</h2><div id="favGrid" class="grid"></div></div>
-    <!-- Инвентарь -->
     <div id="inventoryPage" class="page"><h2>🎒 Инвентарь</h2><div id="invContainer">Войдите для просмотра</div></div>
-    <!-- Сообщения -->
     <div id="messagesPage" class="page"><h2>✉️ Сообщения</h2><div id="msgContainer">Войдите для просмотра</div></div>
 </main>
 
-<!-- Детали объявления -->
 <div class="modal" id="detailsModal"><div class="modal-content" id="detailsContent"></div></div>
-<!-- Создание объявления -->
 <div class="modal" id="createModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('createModal').classList.remove('active')">✕</span>
     <h3>📝 Новое объявление</h3>
     <div class="tabs-nav">
@@ -130,7 +122,6 @@
         <button type="submit" class="btn btn-red" style="margin-top:12px;">Опубликовать (+1000💰)</button>
     </form>
 </div></div>
-<!-- Авторизация -->
 <div class="modal" id="authModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('authModal').classList.remove('active')">✕</span>
     <h3>👤 Вход / Регистрация</h3>
     <div class="form-group"><label>Логин</label><input id="authUser"></div>
@@ -139,12 +130,10 @@
     <button class="btn btn-outline" id="registerBtn" style="margin-left:8px;">Регистрация</button>
     <p id="authMsg" style="margin-top:8px;color:#c62828;"></p>
 </div></div>
-<!-- Сообщение -->
 <div class="modal" id="msgModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('msgModal').classList.remove('active')">✕</span>
     <h3>✉️ Диалог</h3><div id="msgDialog" style="max-height:300px;overflow-y:auto;margin-bottom:12px;"></div>
     <div class="form-group"><input id="msgInput" placeholder="Сообщение..."></div><button class="btn btn-red" id="msgSendBtn">Отправить</button>
 </div></div>
-<!-- Настройки GitHub -->
 <div class="modal" id="settingsModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('settingsModal').classList.remove('active')">✕</span>
     <h3>⚙️ GitHub</h3>
     <div class="form-group"><label>Токен</label><input id="ghToken" type="password"></div>
@@ -157,11 +146,43 @@
 (()=>{
 const GH=()=>({token:localStorage.getItem('gt')||'',owner:localStorage.getItem('go')||'',repo:localStorage.getItem('gr')||''});
 const setGH=(t,o,r)=>{localStorage.setItem('gt',t);localStorage.setItem('go',o);localStorage.setItem('gr',r);};
-async function api(path,m='GET',body=null){const{token,owner,repo}=GH();const u=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`;const h={Authorization:`token ${token}`};const o={method:m,headers:h};if(body){o.body=JSON.stringify(body);h['Content-Type']='application/json';}const r=await fetch(u,o);if(!r.ok)throw new Error(await r.text());return r.json();}
-async function getJSON(path){const d=await api(path);const c=decodeURIComponent(escape(atob(d.content.replace(/\s/g,''))));return{json:JSON.parse(c),sha:d.sha};}
-async function putJSON(path,content,sha=null){const body={message:`upd ${path}`,content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))};if(sha)body.sha=sha;return api(path,'PUT',body);}
-async function delFile(path,sha){return api(path,'DELETE',{message:`del ${path}`,sha});}
-async function listDir(path){try{return await api(path);}catch{return[];}}
+
+async function api(path,m='GET',body=null){
+    const{token,owner,repo}=GH();
+    const u=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    const h={Authorization:`token ${token}`};
+    const o={method:m,headers:h};
+    if(body){o.body=JSON.stringify(body);h['Content-Type']='application/json';}
+    const r=await fetch(u,o);
+    if(!r.ok)throw new Error(await r.text());
+    return r.json();
+}
+
+async function getJSON(path){
+    try{
+        const d=await api(path);
+        const c=decodeURIComponent(escape(atob(d.content.replace(/\s/g,''))));
+        return{json:JSON.parse(c),sha:d.sha};
+    }catch(e){return null;}
+}
+
+async function saveJSON(path,content){
+    const existing=await getJSON(path);
+    const body={
+        message:`update ${path}`,
+        content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))
+    };
+    if(existing)body.sha=existing.sha;
+    return api(path,'PUT',body);
+}
+
+async function delFile(path,sha){
+    return api(path,'DELETE',{message:`del ${path}`,sha});
+}
+
+async function listDir(path){
+    try{return await api(path);}catch{return[];}
+}
 
 let user=JSON.parse(sessionStorage.getItem('u')||'null');
 const setUser=(u)=>{user=u;sessionStorage.setItem('u',u?JSON.stringify(u):'');updateUI();};
@@ -180,19 +201,47 @@ function updateUI(){
 function updateCartBadge(){const b=document.getElementById('cartBadge');b.textContent=cart.length;b.style.display=cart.length?'inline':'none';}
 document.getElementById('authBtn').onclick=()=>{if(user){if(confirm('Выйти?'))setUser(null);}else document.getElementById('authModal').classList.add('active');};
 
-async function login(u,p){try{const{json}=await getJSON(`users/${u}.json`);if(json.password===p){setUser(json);document.getElementById('authModal').classList.remove('active');}else alert('Неверный пароль');}catch{alert('Пользователь не найден');}}
-async function register(u,p){const nu={username:u,password:p,balance:5000,inventory:[]};await putJSON(`users/${u}.json`,nu);setUser(nu);document.getElementById('authModal').classList.remove('active');}
+async function login(u,p){
+    try{
+        const data=await getJSON(`users/${u}.json`);
+        if(!data)return alert('Пользователь не найден');
+        if(data.json.password===p){
+            setUser(data.json);
+            document.getElementById('authModal').classList.remove('active');
+        }else alert('Неверный пароль');
+    }catch(e){alert('Ошибка входа');}
+}
+async function register(u,p){
+    if(!u||!p)return alert('Введите логин и пароль');
+    const existing=await getJSON(`users/${u}.json`);
+    if(existing)return alert('Пользователь уже существует');
+    const nu={username:u,password:p,balance:5000,inventory:[]};
+    await saveJSON(`users/${u}.json`,nu);
+    setUser(nu);
+    document.getElementById('authModal').classList.remove('active');
+}
 document.getElementById('loginBtn').onclick=()=>login(document.getElementById('authUser').value,document.getElementById('authPass').value);
 document.getElementById('registerBtn').onclick=()=>register(document.getElementById('authUser').value,document.getElementById('authPass').value);
 
 async function loadListings(){
-    try{const files=await listDir('listings');const lst=[];for(const f of files){if(f.name.endsWith('.json')){const{json}=await getJSON(`listings/${f.name}`);json._sha=f.sha;lst.push(json);}}allListings=lst;return lst;}catch{return[];}
+    try{
+        const files=await listDir('listings');
+        const lst=[];
+        for(const f of files){
+            if(f.name.endsWith('.json')){
+                const data=await getJSON(`listings/${f.name}`);
+                if(data){data.json._sha=f.sha;lst.push(data.json);}
+            }
+        }
+        allListings=lst;
+        return lst;
+    }catch{return[];}
 }
 function renderCards(lst,container){
     if(!lst.length){container.innerHTML='<p>Нет объявлений</p>';return;}
     container.innerHTML=lst.map(l=>`<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · Продавец: ${l.seller||'—'}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
 }
-function addToCart(id){if(!user)return alert('Войдите');if(cart.find(i=>i===id))return alert('Уже в корзине');cart.push(id);saveCart();alert('Добавлено!');}
+function addToCart(id){if(!user)return alert('Войдите');if(cart.find(i=>i===id))return alert('Уже в корзине');cart.push(id);saveCart();}
 function toggleFav(id){if(favs.includes(id))favs=favs.filter(i=>i!==id);else favs.push(id);saveFavs();renderAll();}
 
 function showDetails(id){
@@ -211,16 +260,14 @@ async function openChat(seller){
     document.getElementById('msgModal').classList.add('active');
     const dialog=document.getElementById('msgDialog');
     const chatId=[user.username,seller].sort().join('_');
-    try{
-        const{json}=await getJSON(`chats/${chatId}.json`);
-        dialog.innerHTML=json.messages.map(m=>`<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
-    }catch{dialog.innerHTML='<p>Нет сообщений</p>';}
+    const data=await getJSON(`chats/${chatId}.json`);
+    const msgs=data?data.json.messages:[];
+    dialog.innerHTML=msgs.map(m=>`<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
     document.getElementById('msgSendBtn').onclick=async()=>{
         const txt=document.getElementById('msgInput').value.trim();if(!txt)return;
-        let msgs=[];
-        try{const{json}=await getJSON(`chats/${chatId}.json`);msgs=json.messages;}catch{}
-        msgs.push({from:user.username,text:txt,time:new Date().toISOString()});
-        await putJSON(`chats/${chatId}.json`,{participants:[user.username,seller],messages:msgs});
+        const chatData=data?data.json:{participants:[user.username,seller],messages:[]};
+        chatData.messages.push({from:user.username,text:txt,time:new Date().toISOString()});
+        await saveJSON(`chats/${chatId}.json`,chatData);
         document.getElementById('msgInput').value='';
         openChat(seller);
     };
@@ -233,19 +280,24 @@ async function buyCart(){
         try{
             const files=await listDir('listings');const file=files.find(f=>f.name===id+'.json');
             if(!file){alert(`Объявление ${id} не найдено`);continue;}
-            const{json:l,sha}=await getJSON(`listings/${id}.json`);
+            const data=await getJSON(`listings/${id}.json`);
+            if(!data)continue;
+            const l=data.json;
             if(l.seller===user.username){alert('Нельзя купить своё');continue;}
             if(user.balance<l.price){alert('Недостаточно средств');continue;}
-            const{json:seller}=await getJSON(`users/${l.seller}.json`);
+            const sellerData=await getJSON(`users/${l.seller}.json`);
+            if(!sellerData)continue;
+            const seller=sellerData.json;
             seller.balance=(seller.balance||0)+l.price;
-            await putJSON(`users/${l.seller}.json`,seller);
-            user.balance-=l.price;user.inventory.push({id:l.id,title:l.title,type:l.type,year:l.year,price:l.price});
-            await putJSON(`users/${user.username}.json`,user);
-            await delFile(`listings/${id}.json`,sha);
+            await saveJSON(`users/${l.seller}.json`,seller);
+            user.balance-=l.price;
+            user.inventory.push({id:l.id,title:l.title,type:l.type,year:l.year,price:l.price});
+            await saveJSON(`users/${user.username}.json`,user);
+            await delFile(`listings/${id}.json`,data.sha);
             cart=cart.filter(i=>i!==id);saveCart();
-        }catch(e){alert('Ошибка: '+e.message);}
+        }catch(e){alert('Ошибка при покупке: '+e.message);}
     }
-    setUser({...user});saveCart();loadListings().then(()=>renderAll());
+    setUser({...user});saveCart();await loadListings();renderAll();
     alert('Покупки завершены!');
 }
 function renderCart(){
@@ -277,7 +329,15 @@ document.getElementById('createForm').addEventListener('submit',async(e)=>{
     e.preventDefault();if(!user)return alert('Войдите');
     const fd=new FormData(e.target);const l={id:'lst_'+Date.now(),title:fd.get('title'),type:fd.get('type'),year:fd.get('year'),price:Number(fd.get('price')),desc:fd.get('desc'),seller:user.username,createdAt:new Date().toISOString()};
     for(const[k,v]of fd.entries()){if(!['title','type','year','price','desc'].includes(k)&&v)l[k]=v;}
-    try{await putJSON(`listings/${l.id}.json`,l);user.balance=(user.balance||0)+1000;await putJSON(`users/${user.username}.json`,user);setUser({...user});document.getElementById('createModal').classList.remove('active');loadListings().then(()=>renderAll());alert('Опубликовано! +1000💰');}catch(err){alert('Ошибка: '+err.message);}
+    try{
+        await saveJSON(`listings/${l.id}.json`,l);
+        user.balance=(user.balance||0)+1000;
+        await saveJSON(`users/${user.username}.json`,user);
+        setUser({...user});
+        document.getElementById('createModal').classList.remove('active');
+        await loadListings();renderAll();
+        alert('Опубликовано! +1000💰');
+    }catch(err){alert('Ошибка: '+err.message);}
 });
 
 document.querySelectorAll('#createModal .tabs-nav button').forEach(b=>{b.addEventListener('click',()=>{
@@ -286,14 +346,28 @@ document.querySelectorAll('#createModal .tabs-nav button').forEach(b=>{b.addEven
     document.querySelector('#createModal .ctab.'+b.dataset.ctab).style.display='block';
 });});
 
-function showPage(p){['homePage','catalogPage','cartPage','favoritesPage','inventoryPage','messagesPage'].forEach(id=>document.getElementById(id).classList.remove('active'));document.getElementById(p+'Page').classList.add('active');
-    if(p==='cart')renderCart();if(p==='inventory'&&user)document.getElementById('invContainer').innerHTML=user.inventory.map(i=>`<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('')||'<p>Пусто</p>';
+function showPage(p){
+    ['homePage','catalogPage','cartPage','favoritesPage','inventoryPage','messagesPage'].forEach(id=>document.getElementById(id).classList.remove('active'));
+    document.getElementById(p+'Page').classList.add('active');
+    if(p==='cart')renderCart();
+    if(p==='inventory'&&user)document.getElementById('invContainer').innerHTML=user.inventory.map(i=>`<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('')||'<p>Пусто</p>';
     if(p==='messages'&&user)loadMsgThreads();
 }
 async function loadMsgThreads(){
     const mc=document.getElementById('msgContainer');if(!user){mc.innerHTML='Войдите';return;}
-    try{const files=await listDir('chats');const threads=[];for(const f of files){if(f.name.endsWith('.json')){const{json}=await getJSON(`chats/${f.name}`);if(json.participants.includes(user.username))threads.push({id:f.name.replace('.json',''),participants:json.participants,last:json.messages[json.messages.length-1]});}}
-    mc.innerHTML=threads.map(t=>`<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join('')||'<p>Нет сообщений</p>';}catch{mc.innerHTML='Ошибка';}
+    try{
+        const files=await listDir('chats');
+        const threads=[];
+        for(const f of files){
+            if(f.name.endsWith('.json')){
+                const data=await getJSON(`chats/${f.name}`);
+                if(data&&data.json.participants.includes(user.username)){
+                    threads.push({id:f.name.replace('.json',''),participants:data.json.participants,last:data.json.messages[data.json.messages.length-1]});
+                }
+            }
+        }
+        mc.innerHTML=threads.length?threads.map(t=>`<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join(''):'<p>Нет сообщений</p>';
+    }catch{mc.innerHTML='Ошибка загрузки';}
 }
 
 document.getElementById('goHome').onclick=()=>showPage('home');
