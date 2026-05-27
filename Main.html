@@ -2,435 +2,973 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>MILITARY.RU — маркетплейс военной техники</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArmoryMarket — военная техника</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:#f5f5f5; color:#1a1a1a; line-height:1.4;}
-        .container{max-width:1320px; margin:0 auto; padding:0 16px;}
-        .header{background:#fff; border-bottom:1px solid #e0e0e0; padding:10px 0; position:sticky; top:0; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .header-inner{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;}
-        .logo{font-size:26px; font-weight:800; color:#c62828; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;}
-        .logo span{background:#c62828; color:#fff; padding:3px 12px; border-radius:16px; font-size:14px;}
-        .nav-links{display:flex; gap:20px; font-weight:500; color:#444; flex-wrap:wrap;}
-        .nav-links a{text-decoration:none; color:#444; cursor:pointer; font-size:15px; transition:color 0.2s;}
-        .nav-links a:hover{color:#c62828;}
-        .header-right{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
-        .balance-badge{background:#fef3c7; color:#b45309; padding:6px 14px; border-radius:20px; font-weight:700; font-size:14px; display:none;}
-        .btn{padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer; transition:all .2s; font-size:14px; border:none;}
-        .btn-red{background:#c62828; color:#fff;}
-        .btn-red:hover{background:#b71c1c;}
-        .btn-outline{background:#fff; border:1px solid #d0d0d0; color:#333;}
-        .btn-outline:hover{border-color:#c62828; color:#c62828;}
-        .btn-sm{padding:6px 14px; font-size:13px;}
-        .main-content{padding:20px 0 50px;}
-        .page{display:none;}
-        .page.active{display:block;}
-        .search-bar{background:#fff; border-radius:12px; padding:16px 20px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-        .search-bar input{flex:1; min-width:200px; padding:12px 16px; border:1px solid #e0e0e0; border-radius:8px; font-size:15px;}
-        .search-bar select{padding:12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px; background:#fff;}
-        .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; margin-top:16px;}
-        .listing-card{background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06); transition:all .2s; cursor:pointer; border:1px solid transparent;}
-        .listing-card:hover{border-color:#c62828; box-shadow:0 4px 16px rgba(198,40,40,0.1);}
-        .listing-img{height:170px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:56px; color:#999; position:relative;}
-        .listing-img .badge{position:absolute; top:10px; left:10px; background:#c62828; color:#fff; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;}
-        .listing-info{padding:14px 16px;}
-        .listing-title{font-size:17px; font-weight:700; margin-bottom:4px; color:#1a1a1a;}
-        .listing-meta{color:#888; font-size:13px; margin-bottom:6px;}
-        .listing-price{font-size:20px; font-weight:800; color:#c62828; margin:6px 0;}
-        .listing-seller{color:#777; font-size:12px; cursor:pointer; text-decoration:underline;}
-        .modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); align-items:center; justify-content:center; z-index:200;}
-        .modal.active{display:flex;}
-        .modal-content{background:#fff; border-radius:16px; padding:28px; max-width:750px; width:95%; max-height:90vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
-        .modal-close{float:right; font-size:24px; cursor:pointer; color:#888; background:none; border:none;}
-        .form-group{margin-bottom:14px;}
-        .form-group label{display:block; font-weight:600; margin-bottom:5px; font-size:14px; color:#444;}
-        .form-group input,.form-group select,.form-group textarea{width:100%; padding:11px 14px; border:1px solid #ddd; border-radius:8px; font-size:15px; background:#fafafa;}
-        .spec-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
-        .spec-row .form-group{flex:1; min-width:120px;}
-        .tabs-nav{display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;}
-        .tabs-nav button{padding:8px 18px; background:#f0f0f0; border:none; border-radius:20px; cursor:pointer; font-weight:500; font-size:13px;}
-        .tabs-nav button.active{background:#c62828; color:#fff;}
-        .cart-item,.inventory-item,.user-item{background:#fff; border-radius:10px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .msg-thread{background:#fff; border-radius:10px; padding:14px; margin-bottom:8px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .badge-count{background:#c62828; color:#fff; border-radius:50%; padding:2px 7px; font-size:11px; margin-left:4px;}
-        @media(max-width:768px){.header-inner{flex-direction:column;align-items:flex-start}.search-bar{flex-direction:column}}
+        /* Общие стили в стиле Ozon */
+        :root {
+            --primary: #005bff;
+            --primary-hover: #0049cc;
+            --bg: #f2f3f5;
+            --card-bg: #ffffff;
+            --text: #001a34;
+            --text-secondary: #6b7d8e;
+            --border: #d9dde1;
+            --success: #00a046;
+            --danger: #f91155;
+            --warning: #ff9900;
+            --shadow: 0 1px 4px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { color: var(--primary-hover); }
+        
+        /* Шапка */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo span { font-size: 18px; color: #666; }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            gap: 6px;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .badge {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+        
+        /* Основной контейнер */
+        .container {
+            max-width: 1280px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+        }
+        
+        /* Карточка товара (стиль Ozon) */
+        .product-page {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+        .product-gallery {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .main-image {
+            width: 400px;
+            height: 300px;
+            background: #eef1f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #666;
+            position: relative;
+        }
+        .thumbnail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .thumbnail {
+            width: 80px;
+            height: 60px;
+            background: #eef1f5;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .thumbnail.active { border-color: var(--primary); }
+        
+        .product-info {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 32px;
+        }
+        .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        .stars { color: var(--warning); font-size: 18px; }
+        .price-block {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .currency {
+            font-size: 20px;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+        .wallet-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 8px 0 16px;
+        }
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin: 24px 0;
+        }
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        .specs-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .specs-table td:first-child {
+            font-weight: 600;
+            color: var(--text-secondary);
+            width: 40%;
+        }
+        
+        .ammo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .ammo-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: 0.2s;
+            background: #fff;
+        }
+        .ammo-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .ammo-image {
+            width: 100%;
+            height: 120px;
+            background: #f0f2f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        .ammo-name {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        /* Каталог */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .product-card .img {
+            height: 180px;
+            background: #eef1f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+        .product-card .info {
+            padding: 12px;
+        }
+        .product-card .name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .product-card .price {
+            font-size: 18px;
+            color: var(--text);
+        }
+        .like-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .like-btn.liked { color: var(--danger); }
+        
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 300;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } }
     </style>
 </head>
 <body>
-<header class="header"><div class="container header-inner">
-    <div class="logo" id="goHome">⚔️ MILITARY<span>RU</span></div>
-    <div class="nav-links">
-        <a id="navHome">Главная</a><a id="navCatalog">Каталог</a><a id="navCart">Корзина<span id="cartBadge" class="badge-count" style="display:none;">0</span></a><a id="navFavorites">Избранное</a><a id="navInventory">Инвентарь</a><a id="navMessages">Сообщения</a><a id="navUsers">Пользователи</a>
-    </div>
-    <div class="header-right">
-        <span id="balanceDisplay" class="balance-badge">💰 0</span>
-        <button id="authBtn" class="btn btn-outline btn-sm">Войти</button>
-        <button id="addListingBtn" class="btn btn-red btn-sm" style="display:none;">➕ Разместить</button>
-    </div>
-</div></header>
 
-<main class="container main-content">
-    <div id="homePage" class="page active">
-        <div class="search-bar">
-            <input type="text" id="homeSearch" placeholder="🔍 Поиск техники...">
-            <select id="homeTypeFilter"><option value="">Все типы</option><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option><option>ЗРК</option></select>
-            <select id="homeSort"><option value="newest">Сначала новые</option><option value="price_asc">Дешевле</option><option value="price_desc">Дороже</option></select>
-            <button class="btn btn-red" id="homeSearchBtn">Найти</button>
-        </div>
-        <h2 style="margin-bottom:12px;">🔥 Рекомендуемое</h2>
-        <div id="featuredListing" class="listing-card" style="display:flex;flex-wrap:wrap;">
-            <div class="listing-img" style="flex:1; min-width:200px; height:200px;">🦎</div>
-            <div style="flex:2; padding:20px;">
-                <h2>ОБТ «Импала» Mk.V «Чёрная Мамба» (2010)</h2>
-                <p style="color:#666;">Стелс-танк для саванны. 125-мм орудие, КАЗ «Шангве-2», 1500 л.с.</p>
-                <div class="listing-price">от 2 800 000 $</div>
-                <button class="btn btn-red" onclick="showMambaDetails()">Подробнее</button>
-            </div>
-        </div>
-        <h2 style="margin:20px 0 10px;">📦 Последние объявления</h2>
-        <div id="latestGrid" class="grid">Загрузка...</div>
+<div class="header">
+    <div class="logo">🛡️ ArmoryMarket <span>| военная техника</span></div>
+    <div class="header-actions" id="authActions">
+        <!-- Заполняется динамически -->
     </div>
-    <div id="catalogPage" class="page">
-        <div class="search-bar">
-            <input type="text" id="catSearch" placeholder="Поиск...">
-            <select id="catTypeFilter"><option value="">Все</option><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option></select>
-            <button class="btn btn-red" id="catSearchBtn">Искать</button>
-        </div>
-        <div id="catalogGrid" class="grid">Загрузка...</div>
-    </div>
-    <div id="cartPage" class="page"><h2>🛒 Корзина</h2><div id="cartContainer">Пусто</div><div id="cartTotal" style="font-weight:700;margin-top:14px;"></div></div>
-    <div id="favoritesPage" class="page"><h2>⭐ Избранное</h2><div id="favGrid" class="grid"></div></div>
-    <div id="inventoryPage" class="page"><h2>🎒 Инвентарь</h2><div id="invContainer">Войдите для просмотра</div></div>
-    <div id="messagesPage" class="page"><h2>✉️ Сообщения</h2><div id="msgContainer">Войдите для просмотра</div></div>
-    <div id="usersPage" class="page"><h2>👥 Пользователи</h2><div id="usersContainer">Загрузка...</div></div>
-</main>
+</div>
 
-<div class="modal" id="detailsModal"><div class="modal-content" id="detailsContent"></div></div>
-<div class="modal" id="createModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('createModal').classList.remove('active')">✕</span>
-    <h3>📝 Новое объявление</h3>
-    <div class="tabs-nav">
-        <button class="active" data-ctab="cbasic">Основное</button><button data-ctab="carmor">Броня</button><button data-ctab="cweapon">Вооружение</button><button data-ctab="cspec">ТТХ</button><button data-ctab="cammo">Боеприпасы</button>
-    </div>
-    <form id="createForm">
-        <div class="ctab cbasic"><div class="form-group"><label>Название*</label><input name="title" required></div><div class="form-group"><label>Тип*</label><select name="type"><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option><option>ЗРК</option></select></div><div class="form-group"><label>Год</label><input name="year" type="number" value="2025"></div><div class="form-group"><label>Цена ($)*</label><input name="price" type="number" required></div><div class="form-group"><label>Описание</label><textarea name="desc" rows="3"></textarea></div></div>
-        <div class="ctab carmor" style="display:none;"><div class="spec-row"><div class="form-group"><label>Лоб башни (мм)</label><input name="turret_front"></div><div class="form-group"><label>Лоб корпуса (мм)</label><input name="hull_front"></div></div><div class="form-group"><label>КАЗ</label><input name="aps"></div><div class="form-group"><label>ДЗ</label><input name="era"></div></div>
-        <div class="ctab cweapon" style="display:none;"><div class="form-group"><label>Орудие</label><input name="main_gun"></div><div class="form-group"><label>Боекомплект</label><input name="ammo_cap"></div><div class="form-group"><label>Пулемёты</label><input name="mg"></div></div>
-        <div class="ctab cspec" style="display:none;"><div class="spec-row"><div class="form-group"><label>Масса (т)</label><input name="weight"></div><div class="form-group"><label>Экипаж</label><input name="crew"></div></div><div class="spec-row"><div class="form-group"><label>Двигатель (л.с.)</label><input name="engine"></div><div class="form-group"><label>Скорость (км/ч)</label><input name="speed"></div></div><div class="form-group"><label>СУО</label><input name="fcs"></div></div>
-        <div class="ctab cammo" style="display:none;"><div class="form-group"><label>БОПС название</label><input name="apfsds_name" value="Ассегай-М"></div><div class="form-group"><label>Бронепробиваемость БОПС</label><input name="apfsds_pen"></div><div class="form-group"><label>Кум. снаряд</label><input name="heat_name" value="Импи-Т"></div><div class="form-group"><label>ПТУР</label><input name="atgm_name" value="Ингве-2"></div></div>
-        <button type="submit" class="btn btn-red" style="margin-top:12px;">Опубликовать (+1000💰)</button>
-    </form>
-</div></div>
-<div class="modal" id="authModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('authModal').classList.remove('active')">✕</span>
-    <h3>👤 Вход / Регистрация</h3>
-    <div class="form-group"><label>Логин</label><input id="authUser"></div>
-    <div class="form-group"><label>Пароль</label><input type="password" id="authPass"></div>
-    <button class="btn btn-red" id="loginBtn">Войти</button>
-    <button class="btn btn-outline" id="registerBtn" style="margin-left:8px;">Регистрация</button>
-    <p id="authMsg" style="margin-top:8px;color:#c62828;"></p>
-</div></div>
-<div class="modal" id="msgModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('msgModal').classList.remove('active')">✕</span>
-    <h3>✉️ Диалог</h3><div id="msgDialog" style="max-height:300px;overflow-y:auto;margin-bottom:12px;"></div>
-    <div class="form-group"><input id="msgInput" placeholder="Сообщение..."></div><button class="btn btn-red" id="msgSendBtn">Отправить</button>
-</div></div>
+<div class="container" id="app">
+    <!-- Контент -->
+</div>
+
+<!-- Модальные окна -->
+<div class="modal" id="authModal">
+    <div class="modal-content" id="authFormContainer"></div>
+</div>
+
+<div id="toastContainer"></div>
 
 <script>
-    (() => {
-        // ---------- LocalStorage helpers ----------
-        const LS = {
-            get(key, fallback = null) {
-                try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-                catch (e) { return fallback; }
+// ========== КОНФИГУРАЦИЯ GITHUB ==========
+const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
+const REPO_OWNER = 'YOUR_GITHUB_USERNAME';
+const REPO_NAME = 'war-marketplace-db';
+const DB_PATH = 'database.json';
+
+// ========== ГЛОБАЛЬНОЕ СОСТОЯНИЕ ==========
+let currentUser = null;          // объект пользователя или null
+let db = { users: [], products: [], orders: [] };
+let currentView = 'catalog';     // catalog, product, profile, cart
+let selectedProductId = null;
+let cart = [];                  // массив ID товаров (или объектов)
+
+// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.background = type === 'error' ? 'var(--danger)' : '#333';
+    toast.textContent = message;
+    document.getElementById('toastContainer').appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ========== РАБОТА С GITHUB API ==========
+async function loadDatabase() {
+    try {
+        const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DB_PATH}`, {
+            headers: { Authorization: `token ${GITHUB_TOKEN}` }
+        });
+        if (!response.ok) throw new Error('Ошибка загрузки базы');
+        const data = await response.json();
+        const content = atob(data.content);
+        db = JSON.parse(content);
+        return data.sha; // SHA для последующего сохранения
+    } catch (error) {
+        console.error('Не удалось загрузить базу с GitHub:', error);
+        showToast('Проблема с подключением к хранилищу. Работаем локально.', 'error');
+        // Загружаем локальный fallback
+        const local = localStorage.getItem('war_marketplace_db');
+        if (local) db = JSON.parse(local);
+        return null;
+    }
+}
+
+async function saveDatabase(sha) {
+    try {
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(db, null, 2))));
+        const body = {
+            message: 'update database',
+            content: content,
+            sha: sha
+        };
+        const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DB_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
             },
-            set(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
-        };
+            body: JSON.stringify(body)
+        });
+        if (!response.ok) throw new Error('Ошибка сохранения');
+        const data = await response.json();
+        // Сохраняем локально на всякий случай
+        localStorage.setItem('war_marketplace_db', JSON.stringify(db));
+        return data.content.sha;
+    } catch (error) {
+        console.error('Не удалось сохранить базу:', error);
+        showToast('Изменения не сохранены на GitHub. Проверьте соединение.', 'error');
+        return null;
+    }
+}
 
-        // ---------- State ----------
-        let user = LS.get('currentUser');
-        const setUser = (u) => { user = u; LS.set('currentUser', u); updateUI(); };
-        let cart = LS.get('cart', []);
-        const saveCart = () => { LS.set('cart', cart); updateCartBadge(); };
-        let favs = LS.get('favs', []);
-        const saveFavs = () => LS.set('favs', favs);
-        let listings = LS.get('listings', []);
-        const saveListings = () => LS.set('listings', listings);
-        let users = LS.get('users', []);
-        const saveUsers = () => LS.set('users', users);
-        let chats = LS.get('chats', {});
-        const saveChats = () => LS.set('chats', chats);
+// ========== УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЕМ ==========
+function hashPassword(password) {
+    // Простейший хеш для демо (не использовать в реальном проекте!)
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash |= 0;
+    }
+    return hash.toString(16);
+}
 
-        // Инициализация демо-данных
-        if (!listings.length) {
-            listings.push({
-                id: 'impala-mamba', title: 'ОБТ «Импала» Mk.V «Чёрная Мамба»', type: 'ОБТ', year: 2010, price: 2800000,
-                desc: 'Стелс-танк для саванны', seller: 'DISA', crew: '3', weight: '54 т', engine: '1500 л.с.', speed: '72 км/ч',
-                turret_front: '720 мм', hull_front: '620 мм', aps: 'Шангве-2', main_gun: '125-мм L/50', ammo_cap: '48',
-                apfsds_name: 'Ассегай-М', apfsds_pen: '650 мм', heat_name: 'Импи-Т', atgm_name: 'Ингве-2'
-            });
-            saveListings();
-        }
-        if (!users.length) {
-            users.push({ username: 'DISA', password: '1234', balance: 999999, inventory: [] });
-            saveUsers();
-        }
+function registerUser(username, password) {
+    if (db.users.find(u => u.username === username)) return false;
+    const newUser = {
+        id: Date.now().toString(),
+        username,
+        passwordHash: hashPassword(password),
+        balance: 100000, // стартовый баланс
+        createdAt: new Date().toISOString()
+    };
+    db.users.push(newUser);
+    currentUser = newUser;
+    return true;
+}
 
-        // ---------- UI Updates ----------
-        function updateUI() {
-            const ab = document.getElementById('authBtn');
-            const bb = document.getElementById('balanceDisplay');
-            const al = document.getElementById('addListingBtn');
-            if (user) {
-                ab.textContent = user.username;
-                ab.className = 'btn btn-red btn-sm';
-                bb.style.display = 'inline-block';
-                bb.textContent = `💰 ${user.balance || 0}`;
-                al.style.display = 'inline-block';
+function loginUser(username, password) {
+    const user = db.users.find(u => u.username === username && u.passwordHash === hashPassword(password));
+    if (user) {
+        currentUser = user;
+        return true;
+    }
+    return false;
+}
+
+function logout() {
+    currentUser = null;
+    updateUI();
+}
+
+// ========== БИЗНЕС-ЛОГИКА ==========
+function addToCart(productId) {
+    if (!cart.includes(productId)) {
+        cart.push(productId);
+        showToast('Добавлено в корзину');
+        updateUI();
+    }
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(id => id !== productId);
+    updateUI();
+}
+
+function likeProduct(productId) {
+    const product = db.products.find(p => p.id === productId);
+    if (!product) return;
+    product.likes = (product.likes || 0) + 1;
+    // Начисляем автору 10 кредитов за лайк
+    const author = db.users.find(u => u.id === product.sellerId);
+    if (author) {
+        author.balance += 10;
+        showToast(`Поставлен лайк! Автор получил +10 кредитов`);
+    }
+    updateUI();
+}
+
+function buyProduct(productId) {
+    if (!currentUser) {
+        showToast('Войдите, чтобы совершать покупки', 'error');
+        return;
+    }
+    const product = db.products.find(p => p.id === productId);
+    if (!product) return;
+    if (currentUser.balance < product.price) {
+        showToast('Недостаточно кредитов', 'error');
+        return;
+    }
+    // Списываем у покупателя
+    currentUser.balance -= product.price;
+    // Начисляем продавцу (цена - 5% комиссия площадки, или вся сумма как ты хочешь? По условию "за то что публикация набирает покупки даются деньги", упростим: 100% продавцу, плюс бонус?)
+    const seller = db.users.find(u => u.id === product.sellerId);
+    if (seller) {
+        seller.balance += product.price;
+        // Дополнительный бонус продавцу за покупку (например, 5% сверху)
+        seller.balance += Math.floor(product.price * 0.05);
+    }
+    // Запись в историю
+    db.orders.push({
+        id: Date.now().toString(),
+        productId,
+        buyerId: currentUser.id,
+        sellerId: product.sellerId,
+        price: product.price,
+        date: new Date().toISOString()
+    });
+    // Удаляем из корзины если есть
+    cart = cart.filter(id => id !== productId);
+    showToast('Покупка совершена!');
+    updateUI();
+}
+
+function publishProduct(name, type, description, price) {
+    if (!currentUser) return;
+    const product = {
+        id: Date.now().toString(),
+        name,
+        type,
+        description,
+        price: Number(price),
+        sellerId: currentUser.id,
+        likes: 0,
+        createdAt: new Date().toISOString()
+    };
+    db.products.push(product);
+    // Награда за публикацию: +500 кредитов автору
+    currentUser.balance += 500;
+    showToast('Товар опубликован! Вы получили 500 кредитов.');
+    updateUI();
+}
+
+// ========== ОТРИСОВКА ИНТЕРФЕЙСА ==========
+function renderAuthModal(mode = 'login') {
+    const container = document.getElementById('authFormContainer');
+    container.innerHTML = `
+        <h2 style="margin-bottom:20px">${mode === 'login' ? 'Вход' : 'Регистрация'}</h2>
+        <div class="form-group">
+            <label>Логин</label>
+            <input type="text" id="authUsername" placeholder="Введите логин">
+        </div>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input type="password" id="authPassword" placeholder="Введите пароль">
+        </div>
+        <button class="btn btn-primary" style="width:100%" id="authSubmitBtn">${mode === 'login' ? 'Войти' : 'Зарегистрироваться'}</button>
+        <p style="margin-top:12px;text-align:center">
+            ${mode === 'login' ? 'Нет аккаунта? ' : 'Уже есть аккаунт? '}
+            <a href="#" id="toggleAuthMode">${mode === 'login' ? 'Создать' : 'Войти'}</a>
+        </p>
+    `;
+    document.getElementById('authModal').classList.add('active');
+    
+    document.getElementById('authSubmitBtn').onclick = async () => {
+        const username = document.getElementById('authUsername').value.trim();
+        const password = document.getElementById('authPassword').value;
+        if (!username || !password) return showToast('Заполните все поля', 'error');
+        
+        if (mode === 'register') {
+            if (registerUser(username, password)) {
+                await syncDatabase();
+                showToast('Регистрация успешна!');
+                closeModal('authModal');
+                updateUI();
             } else {
-                ab.textContent = 'Войти';
-                ab.className = 'btn btn-outline btn-sm';
-                bb.style.display = 'none';
-                al.style.display = 'none';
+                showToast('Пользователь уже существует', 'error');
             }
-            updateCartBadge();
+        } else {
+            if (loginUser(username, password)) {
+                showToast('Добро пожаловать!');
+                closeModal('authModal');
+                updateUI();
+            } else {
+                showToast('Неверный логин или пароль', 'error');
+            }
         }
+    };
+    
+    document.getElementById('toggleAuthMode').onclick = (e) => {
+        e.preventDefault();
+        renderAuthModal(mode === 'login' ? 'register' : 'login');
+    };
+}
 
-        function updateCartBadge() {
-            const b = document.getElementById('cartBadge');
-            b.textContent = cart.length;
-            b.style.display = cart.length ? 'inline' : 'none';
-        }
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
 
-        document.getElementById('authBtn').onclick = () => {
-            if (user) { if (confirm('Выйти?')) setUser(null); }
-            else document.getElementById('authModal').classList.add('active');
-        };
+function updateAuthUI() {
+    const authDiv = document.getElementById('authActions');
+    if (currentUser) {
+        authDiv.innerHTML = `
+            <span>💰 ${currentUser.balance.toLocaleString()} кред.</span>
+            <span>👤 ${currentUser.username}</span>
+            <button class="btn btn-outline" onclick="navigateTo('profile')">Личный кабинет</button>
+            <button class="btn btn-outline" onclick="logout()">Выйти</button>
+        `;
+    } else {
+        authDiv.innerHTML = `
+            <button class="btn btn-outline" onclick="renderAuthModal('login')">Войти</button>
+            <button class="btn btn-primary" onclick="renderAuthModal('register')">Регистрация</button>
+        `;
+    }
+}
 
-        // ---------- Auth ----------
-        function login(u, p) {
-            if (!u || !p) return alert('Введите логин и пароль');
-            const found = users.find(x => x.username === u && x.password === p);
-            if (!found) return alert('Неверный логин или пароль');
-            setUser(found);
-            document.getElementById('authModal').classList.remove('active');
-        }
+function updateCartBadge() {
+    const cartBtn = document.getElementById('cartBtn');
+    if (cartBtn) {
+        cartBtn.innerHTML = `🛒 Корзина ${cart.length ? `<span class="badge">${cart.length}</span>` : ''}`;
+    }
+}
 
-        function register(u, p) {
-            if (!u || !p) return alert('Введите логин и пароль');
-            if (u.length < 3) return alert('Логин не менее 3 символов');
-            if (p.length < 4) return alert('Пароль не менее 4 символов');
-            if (users.find(x => x.username === u)) return alert('Пользователь уже существует');
-            const nu = { username: u, password: p, balance: 5000, inventory: [] };
-            users.push(nu);
-            saveUsers();
-            setUser(nu);
-            document.getElementById('authModal').classList.remove('active');
-        }
+function renderCatalog() {
+    const app = document.getElementById('app');
+    const productsHtml = db.products.map(p => `
+        <div class="product-card" onclick="navigateTo('product', '${p.id}')">
+            <div class="img">🪖</div>
+            <div class="info">
+                <div class="name">${p.name}</div>
+                <div class="price">${p.price.toLocaleString()} кред.</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px">
+                    <span style="color:var(--text-secondary); font-size:13px">👍 ${p.likes || 0}</span>
+                    <button class="like-btn" onclick="event.stopPropagation(); likeProduct('${p.id}')">
+                        ❤️
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    app.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
+            <h2>Каталог военной техники</h2>
+            <div style="display:flex; gap:12px">
+                <button class="btn btn-outline" id="cartBtn" onclick="navigateTo('cart')">🛒 Корзина</button>
+                <button class="btn btn-primary" onclick="navigateTo('publish')">➕ Выставить товар</button>
+            </div>
+        </div>
+        <div class="catalog-grid">${productsHtml || '<p>Нет товаров. Станьте первым продавцом!</p>'}</div>
+    `;
+    updateCartBadge();
+}
 
-        document.getElementById('loginBtn').onclick = () => login(document.getElementById('authUser').value, document.getElementById('authPass').value);
-        document.getElementById('registerBtn').onclick = () => register(document.getElementById('authUser').value, document.getElementById('authPass').value);
-
-        // ---------- Listings ----------
-        function renderCards(lst, container) {
-            if (!lst.length) { container.innerHTML = '<p>Нет объявлений</p>'; return; }
-            container.innerHTML = lst.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · <span class="listing-seller" onclick="event.stopPropagation();showUserProfile('${l.seller}')">${l.seller||'—'}</span></div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
-        }
-
-        function addToCart(id) {
-            if (!user) return alert('Войдите');
-            if (cart.includes(id)) return alert('Уже в корзине');
-            cart.push(id);
-            saveCart();
-        }
-
-        function toggleFav(id) {
-            if (favs.includes(id)) favs = favs.filter(i => i !== id);
-            else favs.push(id);
-            saveFavs();
-            renderAll();
-        }
-
-        function showDetails(id) {
-            const l = listings.find(i => i.id === id);
-            if (!l) return;
-            const mc = document.getElementById('detailsContent');
-            const specs = Object.entries(l).filter(([k]) => !['id', 'title', 'type', 'year', 'price', 'desc', 'seller'].includes(k) && l[k]);
-            mc.innerHTML = `
-                <span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span>
-                <div style="display:flex; gap:20px; flex-wrap:wrap;">
-                    <div style="flex:1; min-width:280px;">
-                        <div style="background:#f0f0f0; border-radius:12px; height:220px; display:flex; align-items:center; justify-content:center; font-size:72px;">🦎</div>
+function renderProductPage(productId) {
+    const product = db.products.find(p => p.id === productId);
+    if (!product) return renderCatalog();
+    
+    // Детальные данные для демо-танка (если это "Импала")
+    const isImpala = product.name.includes('Импала');
+    
+    const app = document.getElementById('app');
+    app.innerHTML = `
+        <div class="product-page">
+            <div style="margin-bottom:16px"><a href="#" onclick="navigateTo('catalog')">← Назад в каталог</a></div>
+            <div class="product-gallery">
+                <div class="main-image">🪖 Танк</div>
+                <div class="thumbnail-list">
+                    <div class="thumbnail active">🖼️</div>
+                    <div class="thumbnail">🛡️</div>
+                    <div class="thumbnail">🔫</div>
+                </div>
+            </div>
+            <div class="product-info">
+                <div>
+                    <h1 class="product-title">${product.name}</h1>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span>4.9 (12 отзывов)</span>
                     </div>
-                    <div style="flex:2;">
-                        <h2>${l.title}</h2>
-                        <p style="color:#666;">${l.type} · ${l.year} · Продавец: <span style="cursor:pointer;text-decoration:underline;" onclick="showUserProfile('${l.seller}')">${l.seller}</span></p>
-                        <div class="listing-price" style="font-size:28px;">${Number(l.price).toLocaleString()} $</div>
-                        <p>${l.desc||''}</p>
-                        <button class="btn btn-red" id="detBuyBtn">🛒 В корзину</button>
-                        <button class="btn btn-outline" id="detMsgBtn">✉️ Написать продавцу</button>
+                    <div>
+                        <button class="like-btn" onclick="likeProduct('${product.id}')">
+                            ❤️ <span id="likeCount">${product.likes || 0}</span>
+                        </button>
                     </div>
                 </div>
-                ${specs.length?`<table style="width:100%;margin-top:16px;border-collapse:collapse;">${specs.map(([k,v])=>`<tr style="border-bottom:1px solid #eee;"><td style="padding:8px;font-weight:600;color:#555;">${k}</td><td style="padding:8px;">${v}</td></tr>`).join('')}</table>`:''}
-            `;
-            document.getElementById('detailsModal').classList.add('active');
-            document.getElementById('detBuyBtn').onclick = () => { addToCart(l.id); };
-            document.getElementById('detMsgBtn').onclick = () => { openChat(l.seller); };
+                <div class="price-block">
+                    <div class="price">${product.price.toLocaleString()} <span class="currency">кред.</span></div>
+                    <div class="wallet-info">${currentUser ? `Ваш баланс: ${currentUser.balance.toLocaleString()} кред.` : 'Войдите для покупки'}</div>
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="buyProduct('${product.id}')">Купить сейчас</button>
+                        <button class="btn btn-outline" onclick="addToCart('${product.id}')">В корзину</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('specs')">Характеристики</div>
+                <div class="tab" onclick="switchTab('ammo')">Боеприпасы (125-мм)</div>
+            </div>
+            
+            <div id="tab-specs" class="tab-content active">
+                ${isImpala ? getImpalaSpecsHtml() : '<p>Подробные характеристики уточняйте у продавца.</p>'}
+            </div>
+            <div id="tab-ammo" class="tab-content">
+                <div class="ammo-grid">
+                    ${getAmmoCardsHtml()}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function getImpalaSpecsHtml() {
+    return `
+        <table class="specs-table">
+            <tr><td>Боевая масса</td><td>54 тонны</td></tr>
+            <tr><td>Экипаж</td><td>3 человека</td></tr>
+            <tr><td>Двигатель</td><td>Килиманджаро-4, 1500 л.с.</td></tr>
+            <tr><td>Макс. скорость</td><td>72 км/ч</td></tr>
+            <tr><td>Бронирование (лоб башни)</td><td>~720 мм от БОПС / ~1100 мм от КС</td></tr>
+            <tr><td>КАЗ</td><td>Шангве-2</td></tr>
+            <tr><td>Основное вооружение</td><td>125-мм гладкоствольная пушка</td></tr>
+            <tr><td>Боекомплект</td><td>48 выстрелов</td></tr>
+            <tr><td>СУО</td><td>Матрица</td></tr>
+        </table>
+    `;
+}
+
+function getAmmoCardsHtml() {
+    const shells = [
+        { name: 'Ассегай-М (БОПС)', img: '🔵', desc: 'Бронебойный оперённый подкалиберный. Пробитие 650-700 мм.', price: 800 },
+        { name: 'Импи-Т (Кумулятивный)', img: '🟠', desc: 'Тандемный кумулятивный. Пробитие 850 мм за ДЗ.', price: 1200 },
+        { name: 'Гром-Ф (ОФС)', img: '🟡', desc: 'Осколочно-фугасный с дистанционным подрывом.', price: 600 },
+        { name: 'Ингве-2 (ПТУР)', img: '🔴', desc: 'Управляемая ракета. Пробитие >1000 мм.', price: 2500 }
+    ];
+    return shells.map(s => `
+        <div class="ammo-card" onclick="addToCart('shell_${s.name}')">
+            <div class="ammo-image">${s.img}</div>
+            <div class="ammo-name">${s.name}</div>
+            <div style="font-size:14px; color:var(--text-secondary); margin-bottom:8px">${s.desc}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                <strong>${s.price} кред.</strong>
+                <button class="btn btn-outline" style="padding:4px 12px">В корзину</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+function renderCart() {
+    const app = document.getElementById('app');
+    const cartProducts = cart.map(id => {
+        const product = db.products.find(p => p.id === id);
+        if (product) return product;
+        // Если это снаряд, создаём виртуальный объект
+        if (id.startsWith('shell_')) {
+            const shellName = id.replace('shell_', '');
+            return { id, name: shellName, price: 800, isShell: true };
         }
+        return null;
+    }).filter(Boolean);
+    
+    const total = cartProducts.reduce((sum, p) => sum + (p.price || 0), 0);
+    
+    app.innerHTML = `
+        <h2>Корзина</h2>
+        ${cartProducts.length === 0 ? '<p>Корзина пуста</p>' : `
+            <div style="display:flex; flex-direction:column; gap:12px; margin:20px 0">
+                ${cartProducts.map(p => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:white; padding:12px; border-radius:8px">
+                        <span>${p.name}</span>
+                        <span>${p.price.toLocaleString()} кред.</span>
+                        <button class="btn btn-outline" onclick="removeFromCart('${p.id}')">Удалить</button>
+                    </div>
+                `).join('')}
+                <div style="text-align:right; font-weight:700; font-size:20px">Итого: ${total.toLocaleString()} кред.</div>
+                <button class="btn btn-primary" style="align-self:flex-end" onclick="cart.forEach(id => buyProduct(id))">Оплатить всё</button>
+            </div>
+        `}
+        <button class="btn btn-outline" onclick="navigateTo('catalog')">← Продолжить покупки</button>
+    `;
+}
 
-        function showMambaDetails() { showDetails('impala-mamba'); }
+function renderProfile() {
+    if (!currentUser) return navigateTo('catalog');
+    const myProducts = db.products.filter(p => p.sellerId === currentUser.id);
+    const myOrders = db.orders.filter(o => o.buyerId === currentUser.id || o.sellerId === currentUser.id);
+    
+    const app = document.getElementById('app');
+    app.innerHTML = `
+        <h2>Личный кабинет</h2>
+        <p>Имя: ${currentUser.username}</p>
+        <p>Баланс: <strong>${currentUser.balance.toLocaleString()} кредитов</strong></p>
+        <h3 style="margin-top:24px">Мои публикации</h3>
+        <div class="catalog-grid">
+            ${myProducts.map(p => `
+                <div class="product-card" onclick="navigateTo('product', '${p.id}')">
+                    <div class="img">🪖</div>
+                    <div class="info">
+                        <div class="name">${p.name}</div>
+                        <div class="price">${p.price.toLocaleString()} кред.</div>
+                        <span>👍 ${p.likes || 0}</span>
+                    </div>
+                </div>
+            `).join('') || '<p>Нет товаров</p>'}
+        </div>
+        <h3 style="margin-top:24px">История операций</h3>
+        <div style="background:white; border-radius:12px; padding:16px">
+            ${myOrders.slice(0, 10).map(o => {
+                const product = db.products.find(p => p.id === o.productId);
+                return `<div style="margin-bottom:8px">
+                    ${o.date.slice(0,10)} — ${product ? product.name : 'товар'} — ${o.price} кред.
+                </div>`;
+            }).join('') || 'Нет покупок'}
+        </div>
+    `;
+}
 
-        async function showUserProfile(username) {
-            const u = users.find(x => x.username === username);
-            if (!u) return alert('Пользователь не найден');
-            const userListings = listings.filter(l => l.seller === username);
-            const mc = document.getElementById('detailsContent');
-            mc.innerHTML = `<span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span>
-                <h2>👤 ${u.username}</h2><p>💰 Баланс: ${u.balance || 0}</p>
-                <h3>Объявления (${userListings.length})</h3>
-                <div class="grid">${userListings.length ? userListings.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️</div><div class="listing-info"><div class="listing-title">${l.title}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div></div></div>`).join('') : '<p>Нет объявлений</p>'}</div>`;
-            document.getElementById('detailsModal').classList.add('active');
-        }
+function renderPublishForm() {
+    if (!currentUser) {
+        showToast('Войдите, чтобы публиковать', 'error');
+        return navigateTo('catalog');
+    }
+    const app = document.getElementById('app');
+    app.innerHTML = `
+        <h2>Выставить военную технику</h2>
+        <div style="max-width:500px; background:white; padding:24px; border-radius:12px">
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" id="pubName" placeholder="ОБТ «Импала» Mk.V">
+            </div>
+            <div class="form-group">
+                <label>Тип техники</label>
+                <input type="text" id="pubType" placeholder="ОБТ">
+            </div>
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="pubDesc" rows="4" style="width:100%" placeholder="Характеристики..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Цена (кредиты)</label>
+                <input type="number" id="pubPrice" placeholder="2800000">
+            </div>
+            <button class="btn btn-primary" onclick="submitPublication()">Опубликовать</button>
+        </div>
+    `;
+}
 
-        function openChat(seller) {
-            if (!user) return alert('Войдите');
-            if (user.username === seller) return alert('Это вы');
-            document.getElementById('msgModal').classList.add('active');
-            const dialog = document.getElementById('msgDialog');
-            const chatId = [user.username, seller].sort().join('_');
-            const msgs = chats[chatId] || [];
-            dialog.innerHTML = msgs.map(m => `<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
-            document.getElementById('msgSendBtn').onclick = () => {
-                const txt = document.getElementById('msgInput').value.trim();
-                if (!txt) return;
-                if (!chats[chatId]) chats[chatId] = [];
-                chats[chatId].push({ from: user.username, text: txt, time: new Date().toISOString() });
-                saveChats();
-                document.getElementById('msgInput').value = '';
-                openChat(seller);
-            };
-        }
+function submitPublication() {
+    const name = document.getElementById('pubName').value;
+    const type = document.getElementById('pubType').value;
+    const desc = document.getElementById('pubDesc').value;
+    const price = document.getElementById('pubPrice').value;
+    if (name && price) {
+        publishProduct(name, type, desc, price);
+        navigateTo('catalog');
+        syncDatabase();
+    } else {
+        showToast('Заполните обязательные поля', 'error');
+    }
+}
 
-        function buyCart() {
-            if (!user) return alert('Войдите');
-            if (!cart.length) return alert('Корзина пуста');
-            for (const id of [...cart]) {
-                const idx = listings.findIndex(l => l.id === id);
-                if (idx === -1) { alert(`Объявление ${id} не найдено`); continue; }
-                const l = listings[idx];
-                if (l.seller === user.username) { alert('Нельзя купить своё'); continue; }
-                if (user.balance < l.price) { alert('Недостаточно средств'); continue; }
-                const seller = users.find(u => u.username === l.seller);
-                if (seller) { seller.balance = (seller.balance || 0) + l.price; saveUsers(); }
-                user.balance -= l.price;
-                user.inventory.push({ id: l.id, title: l.title, type: l.type, year: l.year, price: l.price });
-                listings.splice(idx, 1);
-                cart = cart.filter(i => i !== id);
-                saveCart();
-                saveListings();
-                setUser({ ...user });
-            }
-            renderAll();
-            alert('Покупки завершены!');
-        }
+// Навигация
+function navigateTo(view, productId = null) {
+    currentView = view;
+    selectedProductId = productId;
+    updateUI();
+}
 
-        function renderCart() {
-            const cc = document.getElementById('cartContainer');
-            const ct = document.getElementById('cartTotal');
-            const items = cart.map(id => listings.find(l => l.id === id)).filter(Boolean);
-            if (!items.length) { cc.innerHTML = '<p>Корзина пуста</p>'; ct.textContent = ''; return; }
-            cc.innerHTML = items.map(i => `<div class="cart-item"><span>${i.title} (${i.year})</span><span style="font-weight:700;color:#c62828;">${Number(i.price).toLocaleString()} $</span><button class="btn btn-outline btn-sm" onclick="cart=cart.filter(x=>x!=='${i.id}');saveCart();renderCart();">Удалить</button></div>`).join('');
-            const total = items.reduce((s, i) => s + Number(i.price), 0);
-            ct.innerHTML = `<strong>Итого: ${total.toLocaleString()} $</strong> <button class="btn btn-red" onclick="buyCart()">Купить всё</button>`;
-        }
+// Обновление интерфейса
+function updateUI() {
+    updateAuthUI();
+    switch (currentView) {
+        case 'catalog': renderCatalog(); break;
+        case 'product': renderProductPage(selectedProductId); break;
+        case 'cart': renderCart(); break;
+        case 'profile': renderProfile(); break;
+        case 'publish': renderPublishForm(); break;
+        default: renderCatalog();
+    }
+    updateCartBadge();
+}
 
-        function renderAll() {
-            renderCards(listings.slice(0, 6), document.getElementById('latestGrid'));
-            renderCards(listings, document.getElementById('catalogGrid'));
-            renderCards(listings.filter(l => favs.includes(l.id)), document.getElementById('favGrid'));
-            renderCart();
-            if (user) document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('') || '<p>Пусто</p>';
-        }
+// Синхронизация с GitHub
+let currentSha = null;
+async function syncDatabase() {
+    currentSha = await saveDatabase(currentSha);
+}
 
-        function loadUsers() {
-            const uc = document.getElementById('usersContainer');
-            uc.innerHTML = users.length ? users.map(u => `<div class="user-item"><span>👤 ${u.username}</span><span>💰 ${u.balance||0}</span><button class="btn btn-outline btn-sm" onclick="showUserProfile('${u.username}')">Профиль</button></div>`).join('') : '<p>Нет пользователей</p>';
-        }
-
-        function searchListings(query, type, sort) {
-            let lst = [...listings];
-            if (query) lst = lst.filter(l => l.title.toLowerCase().includes(query.toLowerCase()));
-            if (type) lst = lst.filter(l => l.type === type);
-            if (sort === 'price_asc') lst.sort((a, b) => Number(a.price) - Number(b.price));
-            else if (sort === 'price_desc') lst.sort((a, b) => Number(b.price) - Number(a.price));
-            else lst.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-            return lst;
-        }
-
-        document.getElementById('createForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!user) return alert('Войдите');
-            const fd = new FormData(e.target);
-            const l = { id: 'lst_' + Date.now(), title: fd.get('title'), type: fd.get('type'), year: fd.get('year'), price: Number(fd.get('price')), desc: fd.get('desc'), seller: user.username, createdAt: new Date().toISOString() };
-            for (const [k, v] of fd.entries()) { if (!['title', 'type', 'year', 'price', 'desc'].includes(k) && v) l[k] = v; }
-            listings.unshift(l);
-            saveListings();
-            user.balance = (user.balance || 0) + 1000;
-            setUser({ ...user });
-            document.getElementById('createModal').classList.remove('active');
-            renderAll();
-            alert('Опубликовано! +1000💰');
+// Инициализация
+window.onload = async () => {
+    const sha = await loadDatabase();
+    currentSha = sha;
+    // Если БД пустая, добавим тестовый товар
+    if (db.products.length === 0) {
+        db.products.push({
+            id: '1',
+            name: 'ОБТ «Импала» Mk.V «Чёрная Мамба»',
+            type: 'ОБТ',
+            description: 'Современный основной боевой танк',
+            price: 2800000,
+            sellerId: 'system',
+            likes: 5,
+            createdAt: new Date().toISOString()
         });
-
-        document.querySelectorAll('#createModal .tabs-nav button').forEach(b => {
-            b.addEventListener('click', () => {
-                document.querySelectorAll('#createModal .tabs-nav button').forEach(x => x.classList.remove('active'));
-                b.classList.add('active');
-                document.querySelectorAll('#createModal .ctab').forEach(t => t.style.display = 'none');
-                document.querySelector('#createModal .ctab.' + b.dataset.ctab).style.display = 'block';
-            });
+    }
+    // Если нет системного продавца, создаём
+    if (!db.users.find(u => u.id === 'system')) {
+        db.users.push({
+            id: 'system',
+            username: 'ArmoryMarket',
+            passwordHash: '',
+            balance: 999999999,
+            createdAt: new Date().toISOString()
         });
+    }
+    if (currentSha) await syncDatabase();
+    updateUI();
+    
+    // Закрытие модалки по клику вне её
+    document.getElementById('authModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal('authModal');
+    });
+};
 
-        function showPage(p) {
-            ['homePage','catalogPage','cartPage','favoritesPage','inventoryPage','messagesPage','usersPage'].forEach(id => document.getElementById(id).classList.remove('active'));
-            document.getElementById(p + 'Page').classList.add('active');
-            if (p === 'cart') renderCart();
-            if (p === 'inventory' && user) document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('') || '<p>Пусто</p>';
-            if (p === 'messages' && user) loadMsgThreads();
-            if (p === 'users') loadUsers();
-        }
-
-        function loadMsgThreads() {
-            const mc = document.getElementById('msgContainer');
-            if (!user) { mc.innerHTML = 'Войдите'; return; }
-            const threads = Object.entries(chats).filter(([k]) => k.includes(user.username));
-            mc.innerHTML = threads.length ? threads.map(([k, msgs]) => {
-                const other = k.split('_').find(p => p !== user.username);
-                const last = msgs[msgs.length - 1];
-                return `<div class="msg-thread" onclick="openChat('${other}')"><b>${other}</b><br><small>${last?.text?.slice(0,60)||''}</small></div>`;
-            }).join('') : '<p>Нет сообщений</p>';
-        }
-
-        document.getElementById('goHome').onclick = () => showPage('home');
-        document.getElementById('navHome').onclick = () => showPage('home');
-        document.getElementById('navCatalog').onclick = () => showPage('catalog');
-        document.getElementById('navCart').onclick = () => showPage('cart');
-        document.getElementById('navFavorites').onclick = () => showPage('favorites');
-        document.getElementById('navInventory').onclick = () => showPage('inventory');
-        document.getElementById('navMessages').onclick = () => showPage('messages');
-        document.getElementById('navUsers').onclick = () => showPage('users');
-        document.getElementById('addListingBtn').onclick = () => document.getElementById('createModal').classList.add('active');
-        document.getElementById('homeSearchBtn').onclick = () => {
-            const lst = searchListings(document.getElementById('homeSearch').value, document.getElementById('homeTypeFilter').value, document.getElementById('homeSort').value);
-            renderCards(lst, document.getElementById('latestGrid'));
-        };
-        document.getElementById('catSearchBtn').onclick = () => {
-            const lst = searchListings(document.getElementById('catSearch').value, document.getElementById('catTypeFilter').value, 'newest');
-            renderCards(lst, document.getElementById('catalogGrid'));
-        };
-        window.addEventListener('click', e => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
-
-        updateUI();
-        renderAll();
-    })();
+// Глобальные функции для onclick
+window.likeProduct = likeProduct;
+window.buyProduct = buyProduct;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.switchTab = switchTab;
+window.navigateTo = navigateTo;
+window.submitPublication = submitPublication;
+window.logout = logout;
+window.renderAuthModal = renderAuthModal;
 </script>
 </body>
 </html>
