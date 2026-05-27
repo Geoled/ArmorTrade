@@ -38,7 +38,7 @@
         .listing-title{font-size:17px; font-weight:700; margin-bottom:4px; color:#1a1a1a;}
         .listing-meta{color:#888; font-size:13px; margin-bottom:6px;}
         .listing-price{font-size:20px; font-weight:800; color:#c62828; margin:6px 0;}
-        .listing-seller{color:#777; font-size:12px;}
+        .listing-seller{color:#777; font-size:12px; cursor:pointer; text-decoration:underline;}
         .modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); align-items:center; justify-content:center; z-index:200;}
         .modal.active{display:flex;}
         .modal-content{background:#fff; border-radius:16px; padding:28px; max-width:750px; width:95%; max-height:90vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
@@ -51,8 +51,7 @@
         .tabs-nav{display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;}
         .tabs-nav button{padding:8px 18px; background:#f0f0f0; border:none; border-radius:20px; cursor:pointer; font-weight:500; font-size:13px;}
         .tabs-nav button.active{background:#c62828; color:#fff;}
-        .cart-item{background:#fff; border-radius:10px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .inventory-item{background:#fff; border-radius:10px; padding:16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .cart-item,.inventory-item,.user-item{background:#fff; border-radius:10px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
         .msg-thread{background:#fff; border-radius:10px; padding:14px; margin-bottom:8px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
         .badge-count{background:#c62828; color:#fff; border-radius:50%; padding:2px 7px; font-size:11px; margin-left:4px;}
         @media(max-width:768px){.header-inner{flex-direction:column;align-items:flex-start}.search-bar{flex-direction:column}}
@@ -62,7 +61,7 @@
 <header class="header"><div class="container header-inner">
     <div class="logo" id="goHome">⚔️ MILITARY<span>RU</span></div>
     <div class="nav-links">
-        <a id="navHome">Главная</a><a id="navCatalog">Каталог</a><a id="navCart">Корзина<span id="cartBadge" class="badge-count" style="display:none;">0</span></a><a id="navFavorites">Избранное</a><a id="navInventory">Инвентарь</a><a id="navMessages">Сообщения</a>
+        <a id="navHome">Главная</a><a id="navCatalog">Каталог</a><a id="navCart">Корзина<span id="cartBadge" class="badge-count" style="display:none;">0</span></a><a id="navFavorites">Избранное</a><a id="navInventory">Инвентарь</a><a id="navMessages">Сообщения</a><a id="navUsers">Пользователи</a>
     </div>
     <div class="header-right">
         <span id="balanceDisplay" class="balance-badge">💰 0</span>
@@ -105,6 +104,7 @@
     <div id="favoritesPage" class="page"><h2>⭐ Избранное</h2><div id="favGrid" class="grid"></div></div>
     <div id="inventoryPage" class="page"><h2>🎒 Инвентарь</h2><div id="invContainer">Войдите для просмотра</div></div>
     <div id="messagesPage" class="page"><h2>✉️ Сообщения</h2><div id="msgContainer">Войдите для просмотра</div></div>
+    <div id="usersPage" class="page"><h2>👥 Пользователи</h2><div id="usersContainer">Загрузка...</div></div>
 </main>
 
 <div class="modal" id="detailsModal"><div class="modal-content" id="detailsContent"></div></div>
@@ -144,7 +144,6 @@
 
 <script>
     (() => {
-        // ---------- GitHub helpers with SHA fix ----------
         const GH = () => ({ token: localStorage.getItem('gt') || '', owner: localStorage.getItem('go') || '', repo: localStorage.getItem('gr') || '' });
         const setGH = (t, o, r) => { localStorage.setItem('gt', t); localStorage.setItem('go', o); localStorage.setItem('gr', r); };
 
@@ -178,15 +177,9 @@
             return api(path, 'PUT', body);
         }
 
-        async function delFile(path, sha) {
-            return api(path, 'DELETE', { message: `del ${path}`, sha });
-        }
+        async function delFile(path, sha) { return api(path, 'DELETE', { message: `del ${path}`, sha }); }
+        async function listDir(path) { try { return await api(path); } catch { return []; } }
 
-        async function listDir(path) {
-            try { return await api(path); } catch { return []; }
-        }
-
-        // ---------- State ----------
         let user = JSON.parse(sessionStorage.getItem('u') || 'null');
         const setUser = (u) => { user = u; sessionStorage.setItem('u', u ? JSON.stringify(u) : ''); updateUI(); };
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -225,7 +218,6 @@
             else document.getElementById('authModal').classList.add('active');
         };
 
-        // ---------- Auth fix ----------
         async function login(u, p) {
             if (!u || !p) return alert('Введите логин и пароль');
             try {
@@ -253,7 +245,6 @@
         document.getElementById('loginBtn').onclick = () => login(document.getElementById('authUser').value, document.getElementById('authPass').value);
         document.getElementById('registerBtn').onclick = () => register(document.getElementById('authUser').value, document.getElementById('authPass').value);
 
-        // ---------- Listings ----------
         async function loadListings() {
             try {
                 const files = await listDir('listings');
@@ -271,7 +262,7 @@
 
         function renderCards(lst, container) {
             if (!lst.length) { container.innerHTML = '<p>Нет объявлений</p>'; return; }
-            container.innerHTML = lst.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · Продавец: ${l.seller||'—'}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
+            container.innerHTML = lst.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · <span class="listing-seller" onclick="event.stopPropagation();showUserProfile('${l.seller}')">${l.seller||'—'}</span></div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
         }
 
         function addToCart(id) {
@@ -289,7 +280,6 @@
             renderAll();
         }
 
-        // Auto.ru style card
         function showDetails(id) {
             const l = allListings.find(i => i.id === id) || (id === 'impala-mamba' ? {
                 id: 'impala-mamba', title: 'ОБТ «Импала» Mk.V «Чёрная Мамба»', type: 'ОБТ', year: 2010, price: 2800000,
@@ -308,7 +298,7 @@
                     </div>
                     <div style="flex:2;">
                         <h2>${l.title}</h2>
-                        <p style="color:#666;">${l.type} · ${l.year} · Продавец: ${l.seller}</p>
+                        <p style="color:#666;">${l.type} · ${l.year} · Продавец: <span style="cursor:pointer;text-decoration:underline;" onclick="showUserProfile('${l.seller}')">${l.seller}</span></p>
                         <div class="listing-price" style="font-size:28px;">${Number(l.price).toLocaleString()} $</div>
                         <p>${l.desc||''}</p>
                         <button class="btn btn-red" id="detBuyBtn">🛒 В корзину</button>
@@ -323,6 +313,19 @@
         }
 
         function showMambaDetails() { showDetails('impala-mamba'); }
+
+        async function showUserProfile(username) {
+            const data = await getJSON(`users/${username}.json`);
+            if (!data) return alert('Пользователь не найден');
+            const u = data.json;
+            const userListings = allListings.filter(l => l.seller === username);
+            const mc = document.getElementById('detailsContent');
+            mc.innerHTML = `<span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span>
+                <h2>👤 ${u.username}</h2><p>💰 Баланс: ${u.balance || 0}</p>
+                <h3>Объявления (${userListings.length})</h3>
+                <div class="grid">${userListings.length ? userListings.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️</div><div class="listing-info"><div class="listing-title">${l.title}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div></div></div>`).join('') : '<p>Нет объявлений</p>'}</div>`;
+            document.getElementById('detailsModal').classList.add('active');
+        }
 
         async function openChat(seller) {
             if (!user) return alert('Войдите');
@@ -347,8 +350,7 @@
         async function buyCart() {
             if (!user) return alert('Войдите');
             if (!cart.length) return alert('Корзина пуста');
-            const toBuy = [...cart];
-            for (const id of toBuy) {
+            for (const id of [...cart]) {
                 try {
                     const files = await listDir('listings');
                     const file = files.find(f => f.name === id + '.json');
@@ -369,10 +371,9 @@
                     await delFile(`listings/${id}.json`, data.sha);
                     cart = cart.filter(i => i !== id);
                     saveCart();
-                } catch (e) { alert('Ошибка при покупке: ' + e.message); }
+                } catch (e) { alert('Ошибка: ' + e.message); }
             }
             setUser({ ...user });
-            saveCart();
             await loadListings();
             renderAll();
             alert('Покупки завершены!');
@@ -393,9 +394,22 @@
             renderCards(allListings, document.getElementById('catalogGrid'));
             renderCards(allListings.filter(l => favs.includes(l.id)), document.getElementById('favGrid'));
             renderCart();
-            if (user) {
-                document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('') || '<p>Пусто</p>';
-            }
+            if (user) document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('') || '<p>Пусто</p>';
+        }
+
+        async function loadUsers() {
+            const uc = document.getElementById('usersContainer');
+            try {
+                const files = await listDir('users');
+                const users = [];
+                for (const f of files) {
+                    if (f.name.endsWith('.json')) {
+                        const data = await getJSON(`users/${f.name}`);
+                        if (data) users.push(data.json);
+                    }
+                }
+                uc.innerHTML = users.map(u => `<div class="user-item"><span>👤 ${u.username}</span><span>💰 ${u.balance||0}</span><button class="btn btn-outline btn-sm" onclick="showUserProfile('${u.username}')">Профиль</button></div>`).join('') || '<p>Нет пользователей</p>';
+            } catch { uc.innerHTML = 'Ошибка загрузки'; }
         }
 
         function searchListings(query, type, sort) {
@@ -412,16 +426,7 @@
             e.preventDefault();
             if (!user) return alert('Войдите');
             const fd = new FormData(e.target);
-            const l = {
-                id: 'lst_' + Date.now(),
-                title: fd.get('title'),
-                type: fd.get('type'),
-                year: fd.get('year'),
-                price: Number(fd.get('price')),
-                desc: fd.get('desc'),
-                seller: user.username,
-                createdAt: new Date().toISOString()
-            };
+            const l = { id: 'lst_' + Date.now(), title: fd.get('title'), type: fd.get('type'), year: fd.get('year'), price: Number(fd.get('price')), desc: fd.get('desc'), seller: user.username, createdAt: new Date().toISOString() };
             for (const [k, v] of fd.entries()) { if (!['title', 'type', 'year', 'price', 'desc'].includes(k) && v) l[k] = v; }
             try {
                 await saveJSON(`listings/${l.id}.json`, l);
@@ -445,11 +450,12 @@
         });
 
         function showPage(p) {
-            ['homePage', 'catalogPage', 'cartPage', 'favoritesPage', 'inventoryPage', 'messagesPage'].forEach(id => document.getElementById(id).classList.remove('active'));
+            ['homePage','catalogPage','cartPage','favoritesPage','inventoryPage','messagesPage','usersPage'].forEach(id => document.getElementById(id).classList.remove('active'));
             document.getElementById(p + 'Page').classList.add('active');
             if (p === 'cart') renderCart();
             if (p === 'inventory' && user) document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('') || '<p>Пусто</p>';
             if (p === 'messages' && user) loadMsgThreads();
+            if (p === 'users') loadUsers();
         }
 
         async function loadMsgThreads() {
@@ -477,6 +483,7 @@
         document.getElementById('navFavorites').onclick = () => showPage('favorites');
         document.getElementById('navInventory').onclick = () => showPage('inventory');
         document.getElementById('navMessages').onclick = () => showPage('messages');
+        document.getElementById('navUsers').onclick = () => showPage('users');
         document.getElementById('addListingBtn').onclick = () => document.getElementById('createModal').classList.add('active');
         document.getElementById('settingsBtn').onclick = () => {
             const s = GH();
