@@ -3,468 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>MILITARY.RU — магазин военной техники</title>
+    <title>MILITARY.RU — военная техника | маркетплейс</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.4; }
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
-        .header { background: #1e293b; border-bottom: 1px solid #334155; padding: 12px 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-        .header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-        .logo { font-size: 26px; font-weight: 800; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .logo span { background: #ef4444; color: white; padding: 2px 10px; border-radius: 16px; font-size: 15px; }
-        .nav-links { display: flex; gap: 24px; font-weight: 500; color: #cbd5e1; }
-        .nav-links a { text-decoration: none; color: inherit; cursor: pointer; transition: color 0.2s; }
-        .nav-links a:hover { color: #ef4444; }
-        .header-actions { display: flex; align-items: center; gap: 16px; }
-        .balance { background: #334155; padding: 6px 16px; border-radius: 20px; font-weight: 600; color: #facc15; }
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-red { background: #ef4444; color: white; }
-        .btn-red:hover { background: #dc2626; }
-        .btn-outline { background: transparent; border: 1px solid #475569; color: #cbd5e1; }
-        .btn-outline:hover { border-color: #ef4444; color: #ef4444; }
-        .main-content { padding: 24px 0 40px; }
-        .page { display: none; }
-        .page.active { display: block; }
-        .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
-        .listing-card { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; transition: 0.2s; }
-        .listing-card:hover { border-color: #ef4444; }
-        .listing-image { height: 180px; background: #0f172a; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #475569; }
-        .listing-info { padding: 16px; }
-        .listing-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-        .listing-price { font-size: 22px; font-weight: 800; color: #facc15; margin: 8px 0; }
-        .listing-meta { color: #94a3b8; font-size: 14px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 200; }
-        .modal.active { display: flex; }
-        .modal-content { background: #1e293b; border-radius: 16px; padding: 28px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; border: 1px solid #334155; }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-weight: 500; margin-bottom: 6px; color: #cbd5e1; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #e2e8f0; font-size: 15px; }
-        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .tab-nav { display: flex; gap: 8px; margin-bottom: 16px; }
-        .tab-nav button { padding: 8px 16px; background: #334155; border: none; color: #cbd5e1; border-radius: 20px; cursor: pointer; }
-        .tab-nav button.active { background: #ef4444; color: white; }
-        .inventory-item { background: #0f172a; border-radius: 10px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .settings-bar { background: #334155; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        @media (max-width: 768px) { .header-inner { flex-direction: column; align-items: flex-start; } }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#f5f5f5;color:#1a1a1a;line-height:1.4;}
+        .container{max-width:1320px;margin:0 auto;padding:0 16px;}
+        .header{background:#fff;border-bottom:1px solid #e0e0e0;padding:10px 0;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .header-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+        .logo{font-size:26px;font-weight:800;color:#c62828;cursor:pointer;display:flex;align-items:center;gap:4px;text-decoration:none;}
+        .logo span{background:#c62828;color:#fff;padding:3px 12px;border-radius:16px;font-size:14px;}
+        .nav-links{display:flex;gap:20px;font-weight:500;color:#444;flex-wrap:wrap;}
+        .nav-links a{text-decoration:none;color:#444;cursor:pointer;font-size:15px;transition:color 0.2s;}
+        .nav-links a:hover{color:#c62828;}
+        .header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+        .balance-badge{background:#fef3c7;color:#b45309;padding:6px 14px;border-radius:20px;font-weight:700;font-size:14px;display:none;}
+        .btn{padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;transition:all .2s;font-size:14px;border:none;}
+        .btn-red{background:#c62828;color:#fff;}
+        .btn-red:hover{background:#b71c1c;}
+        .btn-outline{background:#fff;border:1px solid #d0d0d0;color:#333;}
+        .btn-outline:hover{border-color:#c62828;color:#c62828;}
+        .btn-sm{padding:6px 14px;font-size:13px;}
+        .main-content{padding:20px 0 50px;}
+        .page{display:none;}
+        .page.active{display:block;}
+        .search-bar{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+        .search-bar input{flex:1;min-width:200px;padding:12px 16px;border:1px solid #e0e0e0;border-radius:8px;font-size:15px;}
+        .search-bar select{padding:12px;border:1px solid #e0e0e0;border-radius:8px;font-size:14px;background:#fff;}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;}
+        .listing-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all .2s;cursor:pointer;border:1px solid transparent;}
+        .listing-card:hover{border-color:#c62828;box-shadow:0 4px 16px rgba(198,40,40,0.1);}
+        .listing-img{height:170px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:56px;color:#999;position:relative;}
+        .listing-img .badge{position:absolute;top:10px;left:10px;background:#c62828;color:#fff;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:700;}
+        .listing-info{padding:14px 16px;}
+        .listing-title{font-size:17px;font-weight:700;margin-bottom:4px;color:#1a1a1a;}
+        .listing-meta{color:#888;font-size:13px;margin-bottom:6px;}
+        .listing-price{font-size:20px;font-weight:800;color:#c62828;margin:6px 0;}
+        .listing-seller{color:#777;font-size:12px;}
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;z-index:200;}
+        .modal.active{display:flex;}
+        .modal-content{background:#fff;border-radius:16px;padding:28px;max-width:750px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 40px rgba(0,0,0,0.2);}
+        .modal-close{float:right;font-size:24px;cursor:pointer;color:#888;background:none;border:none;}
+        .form-group{margin-bottom:14px;}
+        .form-group label{display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:#444;}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-size:15px;background:#fafafa;}
+        .spec-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+        .spec-row .form-group{flex:1;min-width:120px;}
+        .tabs-nav{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+        .tabs-nav button{padding:8px 18px;background:#f0f0f0;border:none;border-radius:20px;cursor:pointer;font-weight:500;font-size:13px;}
+        .tabs-nav button.active{background:#c62828;color:#fff;}
+        .cart-item{background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .inventory-item{background:#fff;border-radius:10px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .msg-thread{background:#fff;border-radius:10px;padding:14px;margin-bottom:8px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .badge-count{background:#c62828;color:#fff;border-radius:50%;padding:2px 7px;font-size:11px;margin-left:4px;}
+        @media(max-width:768px){.header-inner{flex-direction:column;align-items:flex-start}.search-bar{flex-direction:column}}
     </style>
 </head>
 <body>
-<header class="header">
-    <div class="container header-inner">
-        <div class="logo" id="goHome">⚔️ MILITARY<span>RU</span></div>
-        <div class="nav-links">
-            <a id="navHome">Главная</a>
-            <a id="navCatalog">Каталог</a>
-            <a id="navFavorites">Избранное</a>
-            <a id="navInventory">Инвентарь</a>
-        </div>
-        <div class="header-actions">
-            <span id="balanceDisplay" class="balance" style="display:none;">💰 0</span>
-            <button id="authBtn" class="btn btn-outline">Войти</button>
-            <button id="addListingBtn" class="btn btn-red" style="display:none;">➕ Разместить</button>
-            <button id="settingsBtn" class="btn btn-outline">⚙️ GitHub</button>
-        </div>
+<header class="header"><div class="container header-inner">
+    <div class="logo" id="goHome">⚔️ MILITARY<span>RU</span></div>
+    <div class="nav-links">
+        <a id="navHome">Главная</a><a id="navCatalog">Каталог</a><a id="navCart">Корзина<span id="cartBadge" class="badge-count" style="display:none;">0</span></a><a id="navFavorites">Избранное</a><a id="navInventory">Инвентарь</a><a id="navMessages">Сообщения</a>
     </div>
-</header>
+    <div class="header-right">
+        <span id="balanceDisplay" class="balance-badge">💰 0</span>
+        <button id="authBtn" class="btn btn-outline btn-sm">Войти</button>
+        <button id="addListingBtn" class="btn btn-red btn-sm" style="display:none;">➕ Разместить</button>
+        <button id="settingsBtn" class="btn btn-outline btn-sm">⚙️</button>
+    </div>
+</div></header>
 
 <main class="container main-content">
     <!-- Главная -->
     <div id="homePage" class="page active">
-        <h1 style="font-size:28px; margin-bottom:16px;">🔥 Рекомендуемая техника</h1>
-        <div class="card" style="display:flex; gap:20px; flex-wrap:wrap;">
-            <div style="flex:1; min-width:250px;">
-                <div class="listing-image" style="background:#0f172a; font-size:64px;">🦎</div>
-            </div>
-            <div style="flex:2;">
+        <div class="search-bar">
+            <input type="text" id="homeSearch" placeholder="🔍 Поиск техники...">
+            <select id="homeTypeFilter"><option value="">Все типы</option><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option><option>ЗРК</option></select>
+            <select id="homeSort"><option value="newest">Сначала новые</option><option value="price_asc">Дешевле</option><option value="price_desc">Дороже</option></select>
+            <button class="btn btn-red" id="homeSearchBtn">Найти</button>
+        </div>
+        <h2 style="margin-bottom:12px;">🔥 Рекомендуемое</h2>
+        <div id="featuredListing" class="listing-card" style="display:flex;flex-wrap:wrap;">
+            <div class="listing-img" style="flex:1;min-width:200px;height:200px;">🦎</div>
+            <div style="flex:2;padding:20px;">
                 <h2>ОБТ «Импала» Mk.V «Чёрная Мамба» (2010)</h2>
-                <p style="color:#94a3b8;">Стелс-танк для африканской саванны. 125-мм орудие, КАЗ «Шангве-2».</p>
+                <p style="color:#666;">Стелс-танк для саванны. 125-мм орудие, КАЗ «Шангве-2», 1500 л.с.</p>
                 <div class="listing-price">от 2 800 000 $</div>
-                <button class="btn btn-red" id="viewMambaDetails">Подробнее</button>
+                <button class="btn btn-red" onclick="showMambaDetails()">Подробнее</button>
             </div>
         </div>
-        <h2 style="margin-top:30px;">📦 Последние объявления</h2>
-        <div id="latestListings" class="grid"></div>
+        <h2 style="margin:20px 0 10px;">📦 Последние объявления</h2>
+        <div id="latestGrid" class="grid">Загрузка...</div>
     </div>
-
     <!-- Каталог -->
     <div id="catalogPage" class="page">
-        <h2>📦 Все объявления</h2>
+        <div class="search-bar">
+            <input type="text" id="catSearch" placeholder="Поиск...">
+            <select id="catTypeFilter"><option value="">Все</option><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option></select>
+            <button class="btn btn-red" id="catSearchBtn">Искать</button>
+        </div>
         <div id="catalogGrid" class="grid">Загрузка...</div>
     </div>
-
+    <!-- Корзина -->
+    <div id="cartPage" class="page"><h2>🛒 Корзина</h2><div id="cartContainer">Пусто</div><div id="cartTotal" style="font-weight:700;margin-top:14px;"></div></div>
     <!-- Избранное -->
-    <div id="favoritesPage" class="page">
-        <h2>⭐ Избранное</h2>
-        <div id="favoritesGrid" class="grid"></div>
-    </div>
-
+    <div id="favoritesPage" class="page"><h2>⭐ Избранное</h2><div id="favGrid" class="grid"></div></div>
     <!-- Инвентарь -->
-    <div id="inventoryPage" class="page">
-        <h2>🎒 Ваш инвентарь</h2>
-        <div id="inventoryContainer"></div>
-    </div>
+    <div id="inventoryPage" class="page"><h2>🎒 Инвентарь</h2><div id="invContainer">Войдите для просмотра</div></div>
+    <!-- Сообщения -->
+    <div id="messagesPage" class="page"><h2>✉️ Сообщения</h2><div id="msgContainer">Войдите для просмотра</div></div>
 </main>
 
-<!-- Модальное окно объявления (детальный просмотр) -->
-<div class="modal" id="detailsModal">
-    <div class="modal-content" id="detailsContent"></div>
-</div>
-
-<!-- Модальное окно создания объявления -->
-<div class="modal" id="createModal">
-    <div class="modal-content">
-        <h3>📝 Новое объявление</h3>
-        <div class="tab-nav">
-            <button class="active" data-tab="basic">Основное</button>
-            <button data-tab="armor">Бронирование</button>
-            <button data-tab="weapon">Вооружение</button>
-            <button data-tab="fcs">СУО</button>
-            <button data-tab="ammo">Боеприпасы</button>
-            <button data-tab="other">Ходовая/Другое</button>
-        </div>
-        <form id="createForm">
-            <div class="tab basic active">
-                <div class="form-group"><label>Название</label><input name="title" required></div>
-                <div class="form-group"><label>Тип</label><select name="type"><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option></select></div>
-                <div class="form-group"><label>Год</label><input name="year" type="number" value="2025"></div>
-                <div class="form-group"><label>Цена (USD)</label><input name="price" required></div>
-                <div class="form-group"><label>Описание</label><textarea name="desc" rows="2"></textarea></div>
-                <div class="form-group"><label>Боевая масса (т)</label><input name="weight"></div>
-                <div class="form-group"><label>Экипаж</label><input name="crew" value="3"></div>
-                <div class="form-group"><label>Двигатель</label><input name="engine"></div>
-                <div class="form-group"><label>Макс. скорость</label><input name="speed"></div>
-            </div>
-            <div class="tab armor" style="display:none;">
-                <div class="form-group"><label>Лоб башни (мм от БОПС)</label><input name="turret_front"></div>
-                <div class="form-group"><label>Лоб корпуса (мм)</label><input name="hull_front"></div>
-                <div class="form-group"><label>КАЗ</label><input name="aps"></div>
-                <div class="form-group"><label>Динамическая защита</label><input name="era"></div>
-            </div>
-            <div class="tab weapon" style="display:none;">
-                <div class="form-group"><label>Основное орудие</label><input name="main_gun"></div>
-                <div class="form-group"><label>Боекомплект</label><input name="ammo_capacity"></div>
-                <div class="form-group"><label>Пулемёты</label><input name="machineguns"></div>
-            </div>
-            <div class="tab fcs" style="display:none;">
-                <div class="form-group"><label>СУО</label><input name="fcs"></div>
-                <div class="form-group"><label>Прицел наводчика</label><input name="gunner_sight"></div>
-                <div class="form-group"><label>Панорама командира</label><input name="commander_sight"></div>
-            </div>
-            <div class="tab ammo" style="display:none;">
-                <p>БОПС</p>
-                <div class="spec-grid">
-                    <div class="form-group"><label>Название</label><input name="apfsds_name" value="Ассегай-М"></div>
-                    <div class="form-group"><label>Бронепробиваемость</label><input name="apfsds_pen"></div>
-                </div>
-                <p>Кумулятивный</p>
-                <div class="spec-grid">
-                    <div class="form-group"><label>Название</label><input name="heat_name" value="Импи-Т"></div>
-                    <div class="form-group"><label>Бронепробиваемость</label><input name="heat_pen"></div>
-                </div>
-                <p>Осколочно-фугасный</p>
-                <div class="form-group"><label>Название</label><input name="he_name" value="Гром-Ф"></div>
-                <p>ПТУР</p>
-                <div class="form-group"><label>Название</label><input name="atgm_name" value="Ингве-2"></div>
-            </div>
-            <div class="tab other" style="display:none;">
-                <div class="form-group"><label>Ходовая часть</label><input name="suspension"></div>
-                <div class="form-group"><label>Клиренс (мм)</label><input name="clearance"></div>
-            </div>
-            <button type="submit" class="btn btn-red" style="margin-top:16px;">Опубликовать (+1000 💰)</button>
-        </form>
+<!-- Детали объявления -->
+<div class="modal" id="detailsModal"><div class="modal-content" id="detailsContent"></div></div>
+<!-- Создание объявления -->
+<div class="modal" id="createModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('createModal').classList.remove('active')">✕</span>
+    <h3>📝 Новое объявление</h3>
+    <div class="tabs-nav">
+        <button class="active" data-ctab="cbasic">Основное</button><button data-ctab="carmor">Броня</button><button data-ctab="cweapon">Вооружение</button><button data-ctab="cspec">ТТХ</button><button data-ctab="cammo">Боеприпасы</button>
     </div>
-</div>
-
-<!-- Модальное окно авторизации -->
-<div class="modal" id="authModal">
-    <div class="modal-content">
-        <h3>👤 Вход / Регистрация</h3>
-        <div class="form-group"><label>Логин</label><input id="authUsername"></div>
-        <div class="form-group"><label>Пароль</label><input type="password" id="authPassword"></div>
-        <div style="display:flex; gap:10px;">
-            <button id="loginBtn" class="btn btn-red">Войти</button>
-            <button id="registerBtn" class="btn btn-outline">Регистрация</button>
-        </div>
-        <p id="authMsg" style="margin-top:8px; color:#facc15;"></p>
-    </div>
-</div>
-
+    <form id="createForm">
+        <div class="ctab cbasic"><div class="form-group"><label>Название*</label><input name="title" required></div><div class="form-group"><label>Тип*</label><select name="type"><option>ОБТ</option><option>БМП</option><option>БТР</option><option>САУ</option><option>ЗРК</option></select></div><div class="form-group"><label>Год</label><input name="year" type="number" value="2025"></div><div class="form-group"><label>Цена ($)*</label><input name="price" type="number" required></div><div class="form-group"><label>Описание</label><textarea name="desc" rows="3"></textarea></div></div>
+        <div class="ctab carmor" style="display:none;"><div class="spec-row"><div class="form-group"><label>Лоб башни (мм)</label><input name="turret_front"></div><div class="form-group"><label>Лоб корпуса (мм)</label><input name="hull_front"></div></div><div class="form-group"><label>КАЗ</label><input name="aps"></div><div class="form-group"><label>ДЗ</label><input name="era"></div></div>
+        <div class="ctab cweapon" style="display:none;"><div class="form-group"><label>Орудие</label><input name="main_gun"></div><div class="form-group"><label>Боекомплект</label><input name="ammo_cap"></div><div class="form-group"><label>Пулемёты</label><input name="mg"></div></div>
+        <div class="ctab cspec" style="display:none;"><div class="spec-row"><div class="form-group"><label>Масса (т)</label><input name="weight"></div><div class="form-group"><label>Экипаж</label><input name="crew"></div></div><div class="spec-row"><div class="form-group"><label>Двигатель (л.с.)</label><input name="engine"></div><div class="form-group"><label>Скорость (км/ч)</label><input name="speed"></div></div><div class="form-group"><label>СУО</label><input name="fcs"></div></div>
+        <div class="ctab cammo" style="display:none;"><div class="form-group"><label>БОПС название</label><input name="apfsds_name" value="Ассегай-М"></div><div class="form-group"><label>Бронепробиваемость БОПС</label><input name="apfsds_pen"></div><div class="form-group"><label>Кум. снаряд</label><input name="heat_name" value="Импи-Т"></div><div class="form-group"><label>ПТУР</label><input name="atgm_name" value="Ингве-2"></div></div>
+        <button type="submit" class="btn btn-red" style="margin-top:12px;">Опубликовать (+1000💰)</button>
+    </form>
+</div></div>
+<!-- Авторизация -->
+<div class="modal" id="authModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('authModal').classList.remove('active')">✕</span>
+    <h3>👤 Вход / Регистрация</h3>
+    <div class="form-group"><label>Логин</label><input id="authUser"></div>
+    <div class="form-group"><label>Пароль</label><input type="password" id="authPass"></div>
+    <button class="btn btn-red" id="loginBtn">Войти</button>
+    <button class="btn btn-outline" id="registerBtn" style="margin-left:8px;">Регистрация</button>
+    <p id="authMsg" style="margin-top:8px;color:#c62828;"></p>
+</div></div>
+<!-- Сообщение -->
+<div class="modal" id="msgModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('msgModal').classList.remove('active')">✕</span>
+    <h3>✉️ Диалог</h3><div id="msgDialog" style="max-height:300px;overflow-y:auto;margin-bottom:12px;"></div>
+    <div class="form-group"><input id="msgInput" placeholder="Сообщение..."></div><button class="btn btn-red" id="msgSendBtn">Отправить</button>
+</div></div>
 <!-- Настройки GitHub -->
-<div class="modal" id="settingsModal">
-    <div class="modal-content">
-        <h3>⚙️ GitHub конфигурация</h3>
-        <div class="form-group"><label>Токен</label><input id="ghTokenInput" type="password"></div>
-        <div class="form-group"><label>Владелец</label><input id="ghOwnerInput"></div>
-        <div class="form-group"><label>Репозиторий</label><input id="ghRepoInput"></div>
-        <button id="saveSettingsBtn" class="btn btn-red">Сохранить</button>
-        <p style="font-size:12px; margin-top:8px;">Требуются права repo. Будут созданы папки users и listings.</p>
-    </div>
-</div>
+<div class="modal" id="settingsModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('settingsModal').classList.remove('active')">✕</span>
+    <h3>⚙️ GitHub</h3>
+    <div class="form-group"><label>Токен</label><input id="ghToken" type="password"></div>
+    <div class="form-group"><label>Владелец</label><input id="ghOwner"></div>
+    <div class="form-group"><label>Репозиторий</label><input id="ghRepo"></div>
+    <button class="btn btn-red" id="saveGhBtn">Сохранить</button>
+</div></div>
 
 <script>
-    (() => {
-        // ---------- GitHub helpers ----------
-        const getSettings = () => ({
-            token: localStorage.getItem('gh_token') || '',
-            owner: localStorage.getItem('gh_owner') || '',
-            repo: localStorage.getItem('gh_repo') || ''
-        });
-        const setSettings = (t,o,r) => { localStorage.setItem('gh_token',t); localStorage.setItem('gh_owner',o); localStorage.setItem('gh_repo',r); };
+(()=>{
+const GH=()=>({token:localStorage.getItem('gt')||'',owner:localStorage.getItem('go')||'',repo:localStorage.getItem('gr')||''});
+const setGH=(t,o,r)=>{localStorage.setItem('gt',t);localStorage.setItem('go',o);localStorage.setItem('gr',r);};
+async function api(path,m='GET',body=null){const{token,owner,repo}=GH();const u=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`;const h={Authorization:`token ${token}`};const o={method:m,headers:h};if(body){o.body=JSON.stringify(body);h['Content-Type']='application/json';}const r=await fetch(u,o);if(!r.ok)throw new Error(await r.text());return r.json();}
+async function getJSON(path){const d=await api(path);const c=decodeURIComponent(escape(atob(d.content.replace(/\s/g,''))));return{json:JSON.parse(c),sha:d.sha};}
+async function putJSON(path,content,sha=null){const body={message:`upd ${path}`,content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))};if(sha)body.sha=sha;return api(path,'PUT',body);}
+async function delFile(path,sha){return api(path,'DELETE',{message:`del ${path}`,sha});}
+async function listDir(path){try{return await api(path);}catch{return[];}}
 
-        async function githubAPI(path, method='GET', body=null) {
-            const {token, owner, repo} = getSettings();
-            const base = `https://api.github.com/repos/${owner}/${repo}/contents`;
-            const url = `${base}/${path}`;
-            const headers = { 'Authorization': `token ${token}` };
-            const opts = { method, headers };
-            if (body) {
-                opts.body = JSON.stringify(body);
-                headers['Content-Type'] = 'application/json';
-            }
-            const resp = await fetch(url, opts);
-            if (!resp.ok) throw new Error(await resp.text());
-            return resp.json();
-        }
+let user=JSON.parse(sessionStorage.getItem('u')||'null');
+const setUser=(u)=>{user=u;sessionStorage.setItem('u',u?JSON.stringify(u):'');updateUI();};
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+const saveCart=()=>{localStorage.setItem('cart',JSON.stringify(cart));updateCartBadge();};
+let favs=JSON.parse(localStorage.getItem('favs')||'[]');
+const saveFavs=()=>localStorage.setItem('favs',JSON.stringify(favs));
+let allListings=[];
 
-        async function getFileJSON(path) {
-            const data = await githubAPI(path);
-            const content = decodeURIComponent(escape(atob(data.content.replace(/\s/g,''))));
-            return { json: JSON.parse(content), sha: data.sha };
-        }
-        async function putFile(path, content, sha=null) {
-            const body = {
-                message: `update ${path}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))))
-            };
-            if (sha) body.sha = sha;
-            return githubAPI(path, 'PUT', body);
-        }
-        async function deleteFile(path, sha) {
-            return githubAPI(path, 'DELETE', { message: `delete ${path}`, sha });
-        }
-        async function listDir(path) {
-            const data = await githubAPI(path);
-            return Array.isArray(data) ? data : [];
-        }
+function updateUI(){
+    const ab=document.getElementById('authBtn');const bb=document.getElementById('balanceDisplay');const al=document.getElementById('addListingBtn');
+    if(user){ab.textContent=user.username;ab.className='btn btn-red btn-sm';bb.style.display='inline-block';bb.textContent=`💰 ${user.balance||0}`;al.style.display='inline-block';}
+    else{ab.textContent='Войти';ab.className='btn btn-outline btn-sm';bb.style.display='none';al.style.display='none';}
+    updateCartBadge();
+}
+function updateCartBadge(){const b=document.getElementById('cartBadge');b.textContent=cart.length;b.style.display=cart.length?'inline':'none';}
+document.getElementById('authBtn').onclick=()=>{if(user){if(confirm('Выйти?'))setUser(null);}else document.getElementById('authModal').classList.add('active');};
 
-        // ---------- State ----------
-        let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
-        const setCurrentUser = (u) => { currentUser = u; sessionStorage.setItem('currentUser', u ? JSON.stringify(u) : ''); updateUI(); };
-        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+async function login(u,p){try{const{json}=await getJSON(`users/${u}.json`);if(json.password===p){setUser(json);document.getElementById('authModal').classList.remove('active');}else alert('Неверный пароль');}catch{alert('Пользователь не найден');}}
+async function register(u,p){const nu={username:u,password:p,balance:5000,inventory:[]};await putJSON(`users/${u}.json`,nu);setUser(nu);document.getElementById('authModal').classList.remove('active');}
+document.getElementById('loginBtn').onclick=()=>login(document.getElementById('authUser').value,document.getElementById('authPass').value);
+document.getElementById('registerBtn').onclick=()=>register(document.getElementById('authUser').value,document.getElementById('authPass').value);
 
-        // ---------- UI Updates ----------
-        function updateUI() {
-            const authBtn = document.getElementById('authBtn');
-            const balanceEl = document.getElementById('balanceDisplay');
-            const addBtn = document.getElementById('addListingBtn');
-            if (currentUser) {
-                authBtn.textContent = currentUser.username;
-                authBtn.classList.add('btn-red'); authBtn.classList.remove('btn-outline');
-                balanceEl.style.display = 'inline-block';
-                balanceEl.textContent = `💰 ${currentUser.balance || 0}`;
-                addBtn.style.display = 'inline-block';
-            } else {
-                authBtn.textContent = 'Войти';
-                authBtn.classList.remove('btn-red'); authBtn.classList.add('btn-outline');
-                balanceEl.style.display = 'none';
-                addBtn.style.display = 'none';
-            }
-            document.getElementById('authBtn').onclick = () => {
-                if (currentUser) { if (confirm('Выйти?')) setCurrentUser(null); }
-                else document.getElementById('authModal').classList.add('active');
-            };
-        }
+async function loadListings(){
+    try{const files=await listDir('listings');const lst=[];for(const f of files){if(f.name.endsWith('.json')){const{json}=await getJSON(`listings/${f.name}`);json._sha=f.sha;lst.push(json);}}allListings=lst;return lst;}catch{return[];}
+}
+function renderCards(lst,container){
+    if(!lst.length){container.innerHTML='<p>Нет объявлений</p>';return;}
+    container.innerHTML=lst.map(l=>`<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · Продавец: ${l.seller||'—'}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
+}
+function addToCart(id){if(!user)return alert('Войдите');if(cart.find(i=>i===id))return alert('Уже в корзине');cart.push(id);saveCart();alert('Добавлено!');}
+function toggleFav(id){if(favs.includes(id))favs=favs.filter(i=>i!==id);else favs.push(id);saveFavs();renderAll();}
 
-        // ---------- Auth ----------
-        async function register(username, password) {
-            const {token} = getSettings();
-            if (!token) return alert('Настройте GitHub');
-            const user = { username, password, balance: 5000, inventory: [] };
-            await putFile(`users/${username}.json`, user);
-            setCurrentUser(user);
-            document.getElementById('authModal').classList.remove('active');
-        }
-        async function login(username, password) {
-            try {
-                const {json} = await getFileJSON(`users/${username}.json`);
-                if (json.password === password) {
-                    setCurrentUser(json);
-                    document.getElementById('authModal').classList.remove('active');
-                } else alert('Неверный пароль');
-            } catch { alert('Пользователь не найден'); }
-        }
+function showDetails(id){
+    const l=allListings.find(i=>i.id===id)||(id==='impala-mamba'?{id:'impala-mamba',title:'ОБТ «Импала» Mk.V «Чёрная Мамба»',type:'ОБТ',year:2010,price:2800000,desc:'Стелс-танк для саванны',seller:'DISA',crew:'3',weight:'54 т',engine:'1500 л.с.',speed:'72 км/ч',turret_front:'720 мм',hull_front:'620 мм',aps:'Шангве-2',main_gun:'125-мм L/50',ammo_cap:'48',apfsds_name:'Ассегай-М',apfsds_pen:'650 мм',heat_name:'Импи-Т',atgm_name:'Ингве-2'}:null);
+    if(!l)return;
+    const mc=document.getElementById('detailsContent');
+    const specs=Object.entries(l).filter(([k])=>!['id','title','type','year','price','desc','seller','_sha'].includes(k)&&l[k]);
+    mc.innerHTML=`<span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span><h2>${l.title}</h2><p style="color:#666;">${l.type} · ${l.year} · Продавец: ${l.seller}</p><div class="listing-price">${Number(l.price).toLocaleString()} $</div><p>${l.desc||''}</p>${specs.length?`<table style="width:100%;margin:12px 0;border-collapse:collapse;">${specs.map(([k,v])=>`<tr style="border-bottom:1px solid #eee;"><td style="padding:8px;font-weight:600;color:#555;">${k}</td><td style="padding:8px;">${v}</td></tr>`).join('')}</table>`:''}<button class="btn btn-red" id="detBuyBtn">🛒 В корзину</button><button class="btn btn-outline" id="detMsgBtn">✉️ Написать продавцу</button>`;
+    document.getElementById('detailsModal').classList.add('active');
+    document.getElementById('detBuyBtn').onclick=()=>{addToCart(l.id);};
+    document.getElementById('detMsgBtn').onclick=()=>{openChat(l.seller);};
+}
+function showMambaDetails(){showDetails('impala-mamba');}
+async function openChat(seller){
+    if(!user)return alert('Войдите');if(user.username===seller)return alert('Это вы');
+    document.getElementById('msgModal').classList.add('active');
+    const dialog=document.getElementById('msgDialog');
+    const chatId=[user.username,seller].sort().join('_');
+    try{
+        const{json}=await getJSON(`chats/${chatId}.json`);
+        dialog.innerHTML=json.messages.map(m=>`<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
+    }catch{dialog.innerHTML='<p>Нет сообщений</p>';}
+    document.getElementById('msgSendBtn').onclick=async()=>{
+        const txt=document.getElementById('msgInput').value.trim();if(!txt)return;
+        let msgs=[];
+        try{const{json}=await getJSON(`chats/${chatId}.json`);msgs=json.messages;}catch{}
+        msgs.push({from:user.username,text:txt,time:new Date().toISOString()});
+        await putJSON(`chats/${chatId}.json`,{participants:[user.username,seller],messages:msgs});
+        document.getElementById('msgInput').value='';
+        openChat(seller);
+    };
+}
 
-        // ---------- Listings ----------
-        async function loadCatalog() {
-            const grid = document.getElementById('catalogGrid');
-            grid.innerHTML = 'Загрузка...';
-            try {
-                const files = await listDir('listings');
-                const listings = [];
-                for (let f of files) {
-                    if (f.name.endsWith('.json')) {
-                        const {json} = await getFileJSON(`listings/${f.name}`);
-                        json._sha = f.sha; listings.push(json);
-                    }
-                }
-                renderCatalog(listings, grid);
-                return listings;
-            } catch (e) { grid.innerHTML = 'Ошибка загрузки'; return []; }
-        }
+async function buyCart(){
+    if(!user)return alert('Войдите');if(!cart.length)return alert('Корзина пуста');
+    const toBuy=[...cart];
+    for(const id of toBuy){
+        try{
+            const files=await listDir('listings');const file=files.find(f=>f.name===id+'.json');
+            if(!file){alert(`Объявление ${id} не найдено`);continue;}
+            const{json:l,sha}=await getJSON(`listings/${id}.json`);
+            if(l.seller===user.username){alert('Нельзя купить своё');continue;}
+            if(user.balance<l.price){alert('Недостаточно средств');continue;}
+            const{json:seller}=await getJSON(`users/${l.seller}.json`);
+            seller.balance=(seller.balance||0)+l.price;
+            await putJSON(`users/${l.seller}.json`,seller);
+            user.balance-=l.price;user.inventory.push({id:l.id,title:l.title,type:l.type,year:l.year,price:l.price});
+            await putJSON(`users/${user.username}.json`,user);
+            await delFile(`listings/${id}.json`,sha);
+            cart=cart.filter(i=>i!==id);saveCart();
+        }catch(e){alert('Ошибка: '+e.message);}
+    }
+    setUser({...user});saveCart();loadListings().then(()=>renderAll());
+    alert('Покупки завершены!');
+}
+function renderCart(){
+    const cc=document.getElementById('cartContainer');const ct=document.getElementById('cartTotal');
+    const items=cart.map(id=>allListings.find(l=>l.id===id)).filter(Boolean);
+    if(!items.length){cc.innerHTML='<p>Корзина пуста</p>';ct.textContent='';return;}
+    cc.innerHTML=items.map(i=>`<div class="cart-item"><span>${i.title} (${i.year})</span><span style="font-weight:700;color:#c62828;">${Number(i.price).toLocaleString()} $</span><button class="btn btn-outline btn-sm" onclick="cart=cart.filter(x=>x!=='${i.id}');saveCart();renderCart();">Удалить</button></div>`).join('');
+    const total=items.reduce((s,i)=>s+Number(i.price),0);
+    ct.innerHTML=`<strong>Итого: ${total.toLocaleString()} $</strong> <button class="btn btn-red" onclick="buyCart()">Купить всё</button>`;
+}
+function renderAll(){
+    renderCards(allListings.slice(0,6),document.getElementById('latestGrid'));
+    renderCards(allListings,document.getElementById('catalogGrid'));
+    renderCards(allListings.filter(l=>favs.includes(l.id)),document.getElementById('favGrid'));
+    renderCart();
+    if(user){document.getElementById('invContainer').innerHTML=user.inventory.map(i=>`<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('')||'<p>Пусто</p>';}
+}
+function searchListings(query,type,sort){
+    let lst=[...allListings];
+    if(query)lst=lst.filter(l=>l.title.toLowerCase().includes(query.toLowerCase()));
+    if(type)lst=lst.filter(l=>l.type===type);
+    if(sort==='price_asc')lst.sort((a,b)=>Number(a.price)-Number(b.price));
+    else if(sort==='price_desc')lst.sort((a,b)=>Number(b.price)-Number(a.price));
+    else lst.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
+    return lst;
+}
 
-        function renderCatalog(listings, container) {
-            if (!listings.length) { container.innerHTML = '<p>Нет объявлений.</p>'; return; }
-            container.innerHTML = listings.map(l => `
-                <div class="listing-card">
-                    <div class="listing-image">🛡️</div>
-                    <div class="listing-info">
-                        <div class="listing-title">${l.title}</div>
-                        <div class="listing-meta">${l.type} · ${l.year}</div>
-                        <div class="listing-price">${l.price} $</div>
-                        <button class="btn btn-outline buy-btn" data-id="${l.id}" style="width:100%;">Купить</button>
-                        <button class="btn btn-outline details-btn" data-id="${l.id}" style="width:100%; margin-top:6px;">Подробнее</button>
-                    </div>
-                </div>
-            `).join('');
-            container.querySelectorAll('.details-btn').forEach(b => b.addEventListener('click', (e) => showDetails(listings.find(l=>l.id===e.target.dataset.id))));
-            container.querySelectorAll('.buy-btn').forEach(b => b.addEventListener('click', (e) => buyListing(e.target.dataset.id)));
-        }
+document.getElementById('createForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();if(!user)return alert('Войдите');
+    const fd=new FormData(e.target);const l={id:'lst_'+Date.now(),title:fd.get('title'),type:fd.get('type'),year:fd.get('year'),price:Number(fd.get('price')),desc:fd.get('desc'),seller:user.username,createdAt:new Date().toISOString()};
+    for(const[k,v]of fd.entries()){if(!['title','type','year','price','desc'].includes(k)&&v)l[k]=v;}
+    try{await putJSON(`listings/${l.id}.json`,l);user.balance=(user.balance||0)+1000;await putJSON(`users/${user.username}.json`,user);setUser({...user});document.getElementById('createModal').classList.remove('active');loadListings().then(()=>renderAll());alert('Опубликовано! +1000💰');}catch(err){alert('Ошибка: '+err.message);}
+});
 
-        async function buyListing(listingId) {
-            if (!currentUser) return alert('Войдите для покупки');
-            try {
-                const files = await listDir('listings');
-                const file = files.find(f => f.name === `${listingId}.json`);
-                if (!file) return alert('Объявление не найдено');
-                const {json: listing, sha} = await getFileJSON(`listings/${listingId}.json`);
-                if (listing.seller === currentUser.username) return alert('Нельзя купить своё');
-                if (currentUser.balance < listing.price) return alert('Недостаточно средств');
-                // обновить продавца
-                const {json: seller} = await getFileJSON(`users/${listing.seller}.json`);
-                seller.balance = (seller.balance || 0) + listing.price;
-                await putFile(`users/${listing.seller}.json`, seller);
-                // обновить покупателя
-                currentUser.balance -= listing.price;
-                currentUser.inventory.push({ id: listing.id, title: listing.title, type: listing.type, year: listing.year, desc: listing.desc });
-                await putFile(`users/${currentUser.username}.json`, currentUser);
-                setCurrentUser({...currentUser});
-                // удалить объявление
-                await deleteFile(`listings/${listingId}.json`, sha);
-                alert('Покупка совершена!');
-                loadCatalog();
-                if (document.getElementById('catalogPage').classList.contains('active')) loadCatalog();
-            } catch (e) { alert('Ошибка: '+e.message); }
-        }
+document.querySelectorAll('#createModal .tabs-nav button').forEach(b=>{b.addEventListener('click',()=>{
+    document.querySelectorAll('#createModal .tabs-nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+    document.querySelectorAll('#createModal .ctab').forEach(t=>t.style.display='none');
+    document.querySelector('#createModal .ctab.'+b.dataset.ctab).style.display='block';
+});});
 
-        function showDetails(listing) {
-            const modal = document.getElementById('detailsModal');
-            const content = document.getElementById('detailsContent');
-            content.innerHTML = `
-                <h2>${listing.title}</h2>
-                <p><b>Тип:</b> ${listing.type} | <b>Год:</b> ${listing.year}</p>
-                <p><b>Цена:</b> ${listing.price} $</p>
-                <p>${listing.desc || ''}</p>
-                <table style="width:100%; margin:10px 0;">${Object.entries(listing).filter(([k])=>!['id','title','type','year','price','desc','seller','_sha'].includes(k)).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table>
-                <button class="btn btn-red buy-btn" data-id="${listing.id}">Купить</button>
-                <button class="btn btn-outline fav-btn" data-id="${listing.id}">⭐ Избранное</button>
-            `;
-            modal.classList.add('active');
-            modal.querySelector('.buy-btn').onclick = () => { buyListing(listing.id); modal.classList.remove('active'); };
-            modal.querySelector('.fav-btn').onclick = () => { if (!favorites.includes(listing.id)) { favorites.push(listing.id); localStorage.setItem('favorites', JSON.stringify(favorites)); alert('Добавлено'); } };
-        }
-        window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
+function showPage(p){['homePage','catalogPage','cartPage','favoritesPage','inventoryPage','messagesPage'].forEach(id=>document.getElementById(id).classList.remove('active'));document.getElementById(p+'Page').classList.add('active');
+    if(p==='cart')renderCart();if(p==='inventory'&&user)document.getElementById('invContainer').innerHTML=user.inventory.map(i=>`<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('')||'<p>Пусто</p>';
+    if(p==='messages'&&user)loadMsgThreads();
+}
+async function loadMsgThreads(){
+    const mc=document.getElementById('msgContainer');if(!user){mc.innerHTML='Войдите';return;}
+    try{const files=await listDir('chats');const threads=[];for(const f of files){if(f.name.endsWith('.json')){const{json}=await getJSON(`chats/${f.name}`);if(json.participants.includes(user.username))threads.push({id:f.name.replace('.json',''),participants:json.participants,last:json.messages[json.messages.length-1]});}}
+    mc.innerHTML=threads.map(t=>`<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join('')||'<p>Нет сообщений</p>';}catch{mc.innerHTML='Ошибка';}
+}
 
-        // ---------- Create Listing ----------
-        document.getElementById('createForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUser) return alert('Войдите');
-            const form = new FormData(e.target);
-            const listing = {
-                id: 'lst_' + Date.now(),
-                title: form.get('title'),
-                type: form.get('type'),
-                year: form.get('year'),
-                price: Number(form.get('price')),
-                desc: form.get('desc'),
-                seller: currentUser.username,
-            };
-            for (let [k,v] of form.entries()) {
-                if (!['title','type','year','price','desc'].includes(k) && v) listing[k] = v;
-            }
-            try {
-                await putFile(`listings/${listing.id}.json`, listing);
-                currentUser.balance = (currentUser.balance || 0) + 1000;
-                await putFile(`users/${currentUser.username}.json`, currentUser);
-                setCurrentUser({...currentUser});
-                document.getElementById('createModal').classList.remove('active');
-                alert('Опубликовано! +1000💰');
-                loadCatalog();
-            } catch (err) { alert('Ошибка: '+err.message); }
-        });
+document.getElementById('goHome').onclick=()=>showPage('home');
+document.getElementById('navHome').onclick=()=>showPage('home');
+document.getElementById('navCatalog').onclick=()=>showPage('catalog');
+document.getElementById('navCart').onclick=()=>showPage('cart');
+document.getElementById('navFavorites').onclick=()=>showPage('favorites');
+document.getElementById('navInventory').onclick=()=>showPage('inventory');
+document.getElementById('navMessages').onclick=()=>showPage('messages');
+document.getElementById('addListingBtn').onclick=()=>document.getElementById('createModal').classList.add('active');
+document.getElementById('settingsBtn').onclick=()=>{const s=GH();document.getElementById('ghToken').value=s.token;document.getElementById('ghOwner').value=s.owner;document.getElementById('ghRepo').value=s.repo;document.getElementById('settingsModal').classList.add('active');};
+document.getElementById('saveGhBtn').onclick=()=>{setGH(document.getElementById('ghToken').value,document.getElementById('ghOwner').value,document.getElementById('ghRepo').value);document.getElementById('settingsModal').classList.remove('active');alert('Сохранено!');};
+document.getElementById('homeSearchBtn').onclick=()=>{const lst=searchListings(document.getElementById('homeSearch').value,document.getElementById('homeTypeFilter').value,document.getElementById('homeSort').value);renderCards(lst,document.getElementById('latestGrid'));};
+document.getElementById('catSearchBtn').onclick=()=>{const lst=searchListings(document.getElementById('catSearch').value,document.getElementById('catTypeFilter').value,'newest');renderCards(lst,document.getElementById('catalogGrid'));};
+window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.classList.remove('active');});
 
-        // ---------- Tabs in create modal ----------
-        document.querySelectorAll('#createModal .tab-nav button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('#createModal .tab-nav button').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const tab = btn.dataset.tab;
-                document.querySelectorAll('#createModal .tab').forEach(t => t.style.display = 'none');
-                document.querySelector(`#createModal .tab.${tab}`).style.display = 'block';
-            });
-        });
-
-        // ---------- Navigation ----------
-        document.getElementById('goHome').onclick = ()=> document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')) || document.getElementById('homePage').classList.add('active');
-        document.getElementById('navHome').onclick = ()=> { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('homePage').classList.add('active'); };
-        document.getElementById('navCatalog').onclick = ()=> { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('catalogPage').classList.add('active'); loadCatalog(); };
-        document.getElementById('navFavorites').onclick = async ()=> {
-            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-            document.getElementById('favoritesPage').classList.add('active');
-            const all = await loadCatalog();
-            const favList = all.filter(l => favorites.includes(l.id));
-            renderCatalog(favList, document.getElementById('favoritesGrid'));
-        };
-        document.getElementById('navInventory').onclick = ()=> {
-            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-            document.getElementById('inventoryPage').classList.add('active');
-            const inv = currentUser?.inventory || [];
-            document.getElementById('inventoryContainer').innerHTML = inv.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('') || '<p>Пусто</p>';
-        };
-
-        // ---------- Modals openers ----------
-        document.getElementById('addListingBtn').onclick = ()=> document.getElementById('createModal').classList.add('active');
-        document.getElementById('settingsBtn').onclick = ()=> {
-            const s = getSettings();
-            document.getElementById('ghTokenInput').value = s.token;
-            document.getElementById('ghOwnerInput').value = s.owner;
-            document.getElementById('ghRepoInput').value = s.repo;
-            document.getElementById('settingsModal').classList.add('active');
-        };
-        document.getElementById('saveSettingsBtn').onclick = ()=>{
-            setSettings(
-                document.getElementById('ghTokenInput').value,
-                document.getElementById('ghOwnerInput').value,
-                document.getElementById('ghRepoInput').value
-            );
-            document.getElementById('settingsModal').classList.remove('active');
-        };
-        document.getElementById('loginBtn').onclick = ()=> login(document.getElementById('authUsername').value, document.getElementById('authPassword').value);
-        document.getElementById('registerBtn').onclick = ()=> register(document.getElementById('authUsername').value, document.getElementById('authPassword').value);
-        document.getElementById('viewMambaDetails').onclick = ()=> showDetails({
-            id:'impala-mamba', title:'ОБТ «Импала» Mk.V «Чёрная Мамба»', type:'ОБТ', year:2010, price:'2 800 000',
-            desc:'Стелс-танк для саванны', crew:'3', weight:'54 т', engine:'1500 л.с.', speed:'72 км/ч',
-            turret_front:'720 мм', hull_front:'620 мм', aps:'Шангве-2', main_gun:'125-мм L/50', ammo_capacity:'48',
-            apfsds_name:'Ассегай-М', apfsds_pen:'650 мм', heat_name:'Импи-Т', heat_pen:'850 мм', he_name:'Гром-Ф', atgm_name:'Ингве-2'
-        });
-
-        // ---------- Initial load ----------
-        updateUI();
-        (async () => { if (document.getElementById('homePage').classList.contains('active')) {
-            const latest = await loadCatalog();
-            renderCatalog(latest.slice(0,4), document.getElementById('latestListings'));
-        }})();
-    })();
+(async()=>{updateUI();await loadListings();renderAll();})();
+})();
 </script>
 </body>
 </html>
