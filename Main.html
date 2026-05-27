@@ -3,58 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>MILITARY.RU — военная техника | маркетплейс</title>
+    <title>MILITARY.RU — маркетплейс военной техники</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#f5f5f5;color:#1a1a1a;line-height:1.4;}
-        .container{max-width:1320px;margin:0 auto;padding:0 16px;}
-        .header{background:#fff;border-bottom:1px solid #e0e0e0;padding:10px 0;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .header-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-        .logo{font-size:26px;font-weight:800;color:#c62828;cursor:pointer;display:flex;align-items:center;gap:4px;text-decoration:none;}
-        .logo span{background:#c62828;color:#fff;padding:3px 12px;border-radius:16px;font-size:14px;}
-        .nav-links{display:flex;gap:20px;font-weight:500;color:#444;flex-wrap:wrap;}
-        .nav-links a{text-decoration:none;color:#444;cursor:pointer;font-size:15px;transition:color 0.2s;}
+        body{font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background:#f5f5f5; color:#1a1a1a; line-height:1.4;}
+        .container{max-width:1320px; margin:0 auto; padding:0 16px;}
+        .header{background:#fff; border-bottom:1px solid #e0e0e0; padding:10px 0; position:sticky; top:0; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .header-inner{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+        .logo{font-size:26px; font-weight:800; color:#c62828; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;}
+        .logo span{background:#c62828; color:#fff; padding:3px 12px; border-radius:16px; font-size:14px;}
+        .nav-links{display:flex; gap:20px; font-weight:500; color:#444; flex-wrap:wrap;}
+        .nav-links a{text-decoration:none; color:#444; cursor:pointer; font-size:15px; transition:color 0.2s;}
         .nav-links a:hover{color:#c62828;}
-        .header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-        .balance-badge{background:#fef3c7;color:#b45309;padding:6px 14px;border-radius:20px;font-weight:700;font-size:14px;display:none;}
-        .btn{padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;transition:all .2s;font-size:14px;border:none;}
-        .btn-red{background:#c62828;color:#fff;}
+        .header-right{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+        .balance-badge{background:#fef3c7; color:#b45309; padding:6px 14px; border-radius:20px; font-weight:700; font-size:14px; display:none;}
+        .btn{padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer; transition:all .2s; font-size:14px; border:none;}
+        .btn-red{background:#c62828; color:#fff;}
         .btn-red:hover{background:#b71c1c;}
-        .btn-outline{background:#fff;border:1px solid #d0d0d0;color:#333;}
-        .btn-outline:hover{border-color:#c62828;color:#c62828;}
-        .btn-sm{padding:6px 14px;font-size:13px;}
+        .btn-outline{background:#fff; border:1px solid #d0d0d0; color:#333;}
+        .btn-outline:hover{border-color:#c62828; color:#c62828;}
+        .btn-sm{padding:6px 14px; font-size:13px;}
         .main-content{padding:20px 0 50px;}
         .page{display:none;}
         .page.active{display:block;}
-        .search-bar{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-        .search-bar input{flex:1;min-width:200px;padding:12px 16px;border:1px solid #e0e0e0;border-radius:8px;font-size:15px;}
-        .search-bar select{padding:12px;border:1px solid #e0e0e0;border-radius:8px;font-size:14px;background:#fff;}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;}
-        .listing-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all .2s;cursor:pointer;border:1px solid transparent;}
-        .listing-card:hover{border-color:#c62828;box-shadow:0 4px 16px rgba(198,40,40,0.1);}
-        .listing-img{height:170px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:56px;color:#999;position:relative;}
-        .listing-img .badge{position:absolute;top:10px;left:10px;background:#c62828;color:#fff;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:700;}
+        .search-bar{background:#fff; border-radius:12px; padding:16px 20px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.04); display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+        .search-bar input{flex:1; min-width:200px; padding:12px 16px; border:1px solid #e0e0e0; border-radius:8px; font-size:15px;}
+        .search-bar select{padding:12px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px; background:#fff;}
+        .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; margin-top:16px;}
+        .listing-card{background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06); transition:all .2s; cursor:pointer; border:1px solid transparent;}
+        .listing-card:hover{border-color:#c62828; box-shadow:0 4px 16px rgba(198,40,40,0.1);}
+        .listing-img{height:170px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:56px; color:#999; position:relative;}
+        .listing-img .badge{position:absolute; top:10px; left:10px; background:#c62828; color:#fff; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;}
         .listing-info{padding:14px 16px;}
-        .listing-title{font-size:17px;font-weight:700;margin-bottom:4px;color:#1a1a1a;}
-        .listing-meta{color:#888;font-size:13px;margin-bottom:6px;}
-        .listing-price{font-size:20px;font-weight:800;color:#c62828;margin:6px 0;}
-        .listing-seller{color:#777;font-size:12px;}
-        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;z-index:200;}
+        .listing-title{font-size:17px; font-weight:700; margin-bottom:4px; color:#1a1a1a;}
+        .listing-meta{color:#888; font-size:13px; margin-bottom:6px;}
+        .listing-price{font-size:20px; font-weight:800; color:#c62828; margin:6px 0;}
+        .listing-seller{color:#777; font-size:12px;}
+        .modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); align-items:center; justify-content:center; z-index:200;}
         .modal.active{display:flex;}
-        .modal-content{background:#fff;border-radius:16px;padding:28px;max-width:750px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 40px rgba(0,0,0,0.2);}
-        .modal-close{float:right;font-size:24px;cursor:pointer;color:#888;background:none;border:none;}
+        .modal-content{background:#fff; border-radius:16px; padding:28px; max-width:750px; width:95%; max-height:90vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
+        .modal-close{float:right; font-size:24px; cursor:pointer; color:#888; background:none; border:none;}
         .form-group{margin-bottom:14px;}
-        .form-group label{display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:#444;}
-        .form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-size:15px;background:#fafafa;}
-        .spec-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
-        .spec-row .form-group{flex:1;min-width:120px;}
-        .tabs-nav{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
-        .tabs-nav button{padding:8px 18px;background:#f0f0f0;border:none;border-radius:20px;cursor:pointer;font-weight:500;font-size:13px;}
-        .tabs-nav button.active{background:#c62828;color:#fff;}
-        .cart-item{background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .inventory-item{background:#fff;border-radius:10px;padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .msg-thread{background:#fff;border-radius:10px;padding:14px;margin-bottom:8px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-        .badge-count{background:#c62828;color:#fff;border-radius:50%;padding:2px 7px;font-size:11px;margin-left:4px;}
+        .form-group label{display:block; font-weight:600; margin-bottom:5px; font-size:14px; color:#444;}
+        .form-group input,.form-group select,.form-group textarea{width:100%; padding:11px 14px; border:1px solid #ddd; border-radius:8px; font-size:15px; background:#fafafa;}
+        .spec-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
+        .spec-row .form-group{flex:1; min-width:120px;}
+        .tabs-nav{display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;}
+        .tabs-nav button{padding:8px 18px; background:#f0f0f0; border:none; border-radius:20px; cursor:pointer; font-weight:500; font-size:13px;}
+        .tabs-nav button.active{background:#c62828; color:#fff;}
+        .cart-item{background:#fff; border-radius:10px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .inventory-item{background:#fff; border-radius:10px; padding:16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .msg-thread{background:#fff; border-radius:10px; padding:14px; margin-bottom:8px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+        .badge-count{background:#c62828; color:#fff; border-radius:50%; padding:2px 7px; font-size:11px; margin-left:4px;}
         @media(max-width:768px){.header-inner{flex-direction:column;align-items:flex-start}.search-bar{flex-direction:column}}
     </style>
 </head>
@@ -82,8 +82,8 @@
         </div>
         <h2 style="margin-bottom:12px;">🔥 Рекомендуемое</h2>
         <div id="featuredListing" class="listing-card" style="display:flex;flex-wrap:wrap;">
-            <div class="listing-img" style="flex:1;min-width:200px;height:200px;">🦎</div>
-            <div style="flex:2;padding:20px;">
+            <div class="listing-img" style="flex:1; min-width:200px; height:200px;">🦎</div>
+            <div style="flex:2; padding:20px;">
                 <h2>ОБТ «Импала» Mk.V «Чёрная Мамба» (2010)</h2>
                 <p style="color:#666;">Стелс-танк для саванны. 125-мм орудие, КАЗ «Шангве-2», 1500 л.с.</p>
                 <div class="listing-price">от 2 800 000 $</div>
@@ -143,249 +143,365 @@
 </div></div>
 
 <script>
-(()=>{
-const GH=()=>({token:localStorage.getItem('gt')||'',owner:localStorage.getItem('go')||'',repo:localStorage.getItem('gr')||''});
-const setGH=(t,o,r)=>{localStorage.setItem('gt',t);localStorage.setItem('go',o);localStorage.setItem('gr',r);};
+    (() => {
+        // ---------- GitHub helpers with SHA fix ----------
+        const GH = () => ({ token: localStorage.getItem('gt') || '', owner: localStorage.getItem('go') || '', repo: localStorage.getItem('gr') || '' });
+        const setGH = (t, o, r) => { localStorage.setItem('gt', t); localStorage.setItem('go', o); localStorage.setItem('gr', r); };
 
-async function api(path,m='GET',body=null){
-    const{token,owner,repo}=GH();
-    const u=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-    const h={Authorization:`token ${token}`};
-    const o={method:m,headers:h};
-    if(body){o.body=JSON.stringify(body);h['Content-Type']='application/json';}
-    const r=await fetch(u,o);
-    if(!r.ok)throw new Error(await r.text());
-    return r.json();
-}
+        async function api(path, m = 'GET', body = null) {
+            const { token, owner, repo } = GH();
+            if (!token || !owner || !repo) throw new Error('GitHub не настроен');
+            const u = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            const h = { Authorization: `token ${token}` };
+            const o = { method: m, headers: h };
+            if (body) { o.body = JSON.stringify(body); h['Content-Type'] = 'application/json'; }
+            const r = await fetch(u, o);
+            if (!r.ok) throw new Error(await r.text());
+            return r.json();
+        }
 
-async function getJSON(path){
-    try{
-        const d=await api(path);
-        const c=decodeURIComponent(escape(atob(d.content.replace(/\s/g,''))));
-        return{json:JSON.parse(c),sha:d.sha};
-    }catch(e){return null;}
-}
+        async function getJSON(path) {
+            try {
+                const d = await api(path);
+                const c = decodeURIComponent(escape(atob(d.content.replace(/\s/g, ''))));
+                return { json: JSON.parse(c), sha: d.sha };
+            } catch (e) { return null; }
+        }
 
-async function saveJSON(path,content){
-    const existing=await getJSON(path);
-    const body={
-        message:`update ${path}`,
-        content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))
-    };
-    if(existing)body.sha=existing.sha;
-    return api(path,'PUT',body);
-}
+        async function saveJSON(path, content) {
+            const existing = await getJSON(path);
+            const body = {
+                message: `update ${path}`,
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))))
+            };
+            if (existing && existing.sha) body.sha = existing.sha;
+            return api(path, 'PUT', body);
+        }
 
-async function delFile(path,sha){
-    return api(path,'DELETE',{message:`del ${path}`,sha});
-}
+        async function delFile(path, sha) {
+            return api(path, 'DELETE', { message: `del ${path}`, sha });
+        }
 
-async function listDir(path){
-    try{return await api(path);}catch{return[];}
-}
+        async function listDir(path) {
+            try { return await api(path); } catch { return []; }
+        }
 
-let user=JSON.parse(sessionStorage.getItem('u')||'null');
-const setUser=(u)=>{user=u;sessionStorage.setItem('u',u?JSON.stringify(u):'');updateUI();};
-let cart=JSON.parse(localStorage.getItem('cart')||'[]');
-const saveCart=()=>{localStorage.setItem('cart',JSON.stringify(cart));updateCartBadge();};
-let favs=JSON.parse(localStorage.getItem('favs')||'[]');
-const saveFavs=()=>localStorage.setItem('favs',JSON.stringify(favs));
-let allListings=[];
+        // ---------- State ----------
+        let user = JSON.parse(sessionStorage.getItem('u') || 'null');
+        const setUser = (u) => { user = u; sessionStorage.setItem('u', u ? JSON.stringify(u) : ''); updateUI(); };
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const saveCart = () => { localStorage.setItem('cart', JSON.stringify(cart)); updateCartBadge(); };
+        let favs = JSON.parse(localStorage.getItem('favs') || '[]');
+        const saveFavs = () => localStorage.setItem('favs', JSON.stringify(favs));
+        let allListings = [];
 
-function updateUI(){
-    const ab=document.getElementById('authBtn');const bb=document.getElementById('balanceDisplay');const al=document.getElementById('addListingBtn');
-    if(user){ab.textContent=user.username;ab.className='btn btn-red btn-sm';bb.style.display='inline-block';bb.textContent=`💰 ${user.balance||0}`;al.style.display='inline-block';}
-    else{ab.textContent='Войти';ab.className='btn btn-outline btn-sm';bb.style.display='none';al.style.display='none';}
-    updateCartBadge();
-}
-function updateCartBadge(){const b=document.getElementById('cartBadge');b.textContent=cart.length;b.style.display=cart.length?'inline':'none';}
-document.getElementById('authBtn').onclick=()=>{if(user){if(confirm('Выйти?'))setUser(null);}else document.getElementById('authModal').classList.add('active');};
+        function updateUI() {
+            const ab = document.getElementById('authBtn');
+            const bb = document.getElementById('balanceDisplay');
+            const al = document.getElementById('addListingBtn');
+            if (user) {
+                ab.textContent = user.username;
+                ab.className = 'btn btn-red btn-sm';
+                bb.style.display = 'inline-block';
+                bb.textContent = `💰 ${user.balance || 0}`;
+                al.style.display = 'inline-block';
+            } else {
+                ab.textContent = 'Войти';
+                ab.className = 'btn btn-outline btn-sm';
+                bb.style.display = 'none';
+                al.style.display = 'none';
+            }
+            updateCartBadge();
+        }
 
-async function login(u,p){
-    try{
-        const data=await getJSON(`users/${u}.json`);
-        if(!data)return alert('Пользователь не найден');
-        if(data.json.password===p){
-            setUser(data.json);
+        function updateCartBadge() {
+            const b = document.getElementById('cartBadge');
+            b.textContent = cart.length;
+            b.style.display = cart.length ? 'inline' : 'none';
+        }
+
+        document.getElementById('authBtn').onclick = () => {
+            if (user) { if (confirm('Выйти?')) setUser(null); }
+            else document.getElementById('authModal').classList.add('active');
+        };
+
+        // ---------- Auth fix ----------
+        async function login(u, p) {
+            if (!u || !p) return alert('Введите логин и пароль');
+            try {
+                const data = await getJSON(`users/${u}.json`);
+                if (!data) return alert('Пользователь не найден');
+                if (data.json.password === p) {
+                    setUser(data.json);
+                    document.getElementById('authModal').classList.remove('active');
+                } else alert('Неверный пароль');
+            } catch (e) { alert('Ошибка входа'); }
+        }
+
+        async function register(u, p) {
+            if (!u || !p) return alert('Введите логин и пароль');
+            if (u.length < 3) return alert('Логин должен быть не менее 3 символов');
+            if (p.length < 4) return alert('Пароль должен быть не менее 4 символов');
+            const existing = await getJSON(`users/${u}.json`);
+            if (existing) return alert('Пользователь уже существует');
+            const nu = { username: u, password: p, balance: 5000, inventory: [] };
+            await saveJSON(`users/${u}.json`, nu);
+            setUser(nu);
             document.getElementById('authModal').classList.remove('active');
-        }else alert('Неверный пароль');
-    }catch(e){alert('Ошибка входа');}
-}
-async function register(u,p){
-    if(!u||!p)return alert('Введите логин и пароль');
-    const existing=await getJSON(`users/${u}.json`);
-    if(existing)return alert('Пользователь уже существует');
-    const nu={username:u,password:p,balance:5000,inventory:[]};
-    await saveJSON(`users/${u}.json`,nu);
-    setUser(nu);
-    document.getElementById('authModal').classList.remove('active');
-}
-document.getElementById('loginBtn').onclick=()=>login(document.getElementById('authUser').value,document.getElementById('authPass').value);
-document.getElementById('registerBtn').onclick=()=>register(document.getElementById('authUser').value,document.getElementById('authPass').value);
-
-async function loadListings(){
-    try{
-        const files=await listDir('listings');
-        const lst=[];
-        for(const f of files){
-            if(f.name.endsWith('.json')){
-                const data=await getJSON(`listings/${f.name}`);
-                if(data){data.json._sha=f.sha;lst.push(data.json);}
-            }
         }
-        allListings=lst;
-        return lst;
-    }catch{return[];}
-}
-function renderCards(lst,container){
-    if(!lst.length){container.innerHTML='<p>Нет объявлений</p>';return;}
-    container.innerHTML=lst.map(l=>`<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · Продавец: ${l.seller||'—'}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
-}
-function addToCart(id){if(!user)return alert('Войдите');if(cart.find(i=>i===id))return alert('Уже в корзине');cart.push(id);saveCart();}
-function toggleFav(id){if(favs.includes(id))favs=favs.filter(i=>i!==id);else favs.push(id);saveFavs();renderAll();}
 
-function showDetails(id){
-    const l=allListings.find(i=>i.id===id)||(id==='impala-mamba'?{id:'impala-mamba',title:'ОБТ «Импала» Mk.V «Чёрная Мамба»',type:'ОБТ',year:2010,price:2800000,desc:'Стелс-танк для саванны',seller:'DISA',crew:'3',weight:'54 т',engine:'1500 л.с.',speed:'72 км/ч',turret_front:'720 мм',hull_front:'620 мм',aps:'Шангве-2',main_gun:'125-мм L/50',ammo_cap:'48',apfsds_name:'Ассегай-М',apfsds_pen:'650 мм',heat_name:'Импи-Т',atgm_name:'Ингве-2'}:null);
-    if(!l)return;
-    const mc=document.getElementById('detailsContent');
-    const specs=Object.entries(l).filter(([k])=>!['id','title','type','year','price','desc','seller','_sha'].includes(k)&&l[k]);
-    mc.innerHTML=`<span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span><h2>${l.title}</h2><p style="color:#666;">${l.type} · ${l.year} · Продавец: ${l.seller}</p><div class="listing-price">${Number(l.price).toLocaleString()} $</div><p>${l.desc||''}</p>${specs.length?`<table style="width:100%;margin:12px 0;border-collapse:collapse;">${specs.map(([k,v])=>`<tr style="border-bottom:1px solid #eee;"><td style="padding:8px;font-weight:600;color:#555;">${k}</td><td style="padding:8px;">${v}</td></tr>`).join('')}</table>`:''}<button class="btn btn-red" id="detBuyBtn">🛒 В корзину</button><button class="btn btn-outline" id="detMsgBtn">✉️ Написать продавцу</button>`;
-    document.getElementById('detailsModal').classList.add('active');
-    document.getElementById('detBuyBtn').onclick=()=>{addToCart(l.id);};
-    document.getElementById('detMsgBtn').onclick=()=>{openChat(l.seller);};
-}
-function showMambaDetails(){showDetails('impala-mamba');}
-async function openChat(seller){
-    if(!user)return alert('Войдите');if(user.username===seller)return alert('Это вы');
-    document.getElementById('msgModal').classList.add('active');
-    const dialog=document.getElementById('msgDialog');
-    const chatId=[user.username,seller].sort().join('_');
-    const data=await getJSON(`chats/${chatId}.json`);
-    const msgs=data?data.json.messages:[];
-    dialog.innerHTML=msgs.map(m=>`<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
-    document.getElementById('msgSendBtn').onclick=async()=>{
-        const txt=document.getElementById('msgInput').value.trim();if(!txt)return;
-        const chatData=data?data.json:{participants:[user.username,seller],messages:[]};
-        chatData.messages.push({from:user.username,text:txt,time:new Date().toISOString()});
-        await saveJSON(`chats/${chatId}.json`,chatData);
-        document.getElementById('msgInput').value='';
-        openChat(seller);
-    };
-}
+        document.getElementById('loginBtn').onclick = () => login(document.getElementById('authUser').value, document.getElementById('authPass').value);
+        document.getElementById('registerBtn').onclick = () => register(document.getElementById('authUser').value, document.getElementById('authPass').value);
 
-async function buyCart(){
-    if(!user)return alert('Войдите');if(!cart.length)return alert('Корзина пуста');
-    const toBuy=[...cart];
-    for(const id of toBuy){
-        try{
-            const files=await listDir('listings');const file=files.find(f=>f.name===id+'.json');
-            if(!file){alert(`Объявление ${id} не найдено`);continue;}
-            const data=await getJSON(`listings/${id}.json`);
-            if(!data)continue;
-            const l=data.json;
-            if(l.seller===user.username){alert('Нельзя купить своё');continue;}
-            if(user.balance<l.price){alert('Недостаточно средств');continue;}
-            const sellerData=await getJSON(`users/${l.seller}.json`);
-            if(!sellerData)continue;
-            const seller=sellerData.json;
-            seller.balance=(seller.balance||0)+l.price;
-            await saveJSON(`users/${l.seller}.json`,seller);
-            user.balance-=l.price;
-            user.inventory.push({id:l.id,title:l.title,type:l.type,year:l.year,price:l.price});
-            await saveJSON(`users/${user.username}.json`,user);
-            await delFile(`listings/${id}.json`,data.sha);
-            cart=cart.filter(i=>i!==id);saveCart();
-        }catch(e){alert('Ошибка при покупке: '+e.message);}
-    }
-    setUser({...user});saveCart();await loadListings();renderAll();
-    alert('Покупки завершены!');
-}
-function renderCart(){
-    const cc=document.getElementById('cartContainer');const ct=document.getElementById('cartTotal');
-    const items=cart.map(id=>allListings.find(l=>l.id===id)).filter(Boolean);
-    if(!items.length){cc.innerHTML='<p>Корзина пуста</p>';ct.textContent='';return;}
-    cc.innerHTML=items.map(i=>`<div class="cart-item"><span>${i.title} (${i.year})</span><span style="font-weight:700;color:#c62828;">${Number(i.price).toLocaleString()} $</span><button class="btn btn-outline btn-sm" onclick="cart=cart.filter(x=>x!=='${i.id}');saveCart();renderCart();">Удалить</button></div>`).join('');
-    const total=items.reduce((s,i)=>s+Number(i.price),0);
-    ct.innerHTML=`<strong>Итого: ${total.toLocaleString()} $</strong> <button class="btn btn-red" onclick="buyCart()">Купить всё</button>`;
-}
-function renderAll(){
-    renderCards(allListings.slice(0,6),document.getElementById('latestGrid'));
-    renderCards(allListings,document.getElementById('catalogGrid'));
-    renderCards(allListings.filter(l=>favs.includes(l.id)),document.getElementById('favGrid'));
-    renderCart();
-    if(user){document.getElementById('invContainer').innerHTML=user.inventory.map(i=>`<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('')||'<p>Пусто</p>';}
-}
-function searchListings(query,type,sort){
-    let lst=[...allListings];
-    if(query)lst=lst.filter(l=>l.title.toLowerCase().includes(query.toLowerCase()));
-    if(type)lst=lst.filter(l=>l.type===type);
-    if(sort==='price_asc')lst.sort((a,b)=>Number(a.price)-Number(b.price));
-    else if(sort==='price_desc')lst.sort((a,b)=>Number(b.price)-Number(a.price));
-    else lst.sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
-    return lst;
-}
-
-document.getElementById('createForm').addEventListener('submit',async(e)=>{
-    e.preventDefault();if(!user)return alert('Войдите');
-    const fd=new FormData(e.target);const l={id:'lst_'+Date.now(),title:fd.get('title'),type:fd.get('type'),year:fd.get('year'),price:Number(fd.get('price')),desc:fd.get('desc'),seller:user.username,createdAt:new Date().toISOString()};
-    for(const[k,v]of fd.entries()){if(!['title','type','year','price','desc'].includes(k)&&v)l[k]=v;}
-    try{
-        await saveJSON(`listings/${l.id}.json`,l);
-        user.balance=(user.balance||0)+1000;
-        await saveJSON(`users/${user.username}.json`,user);
-        setUser({...user});
-        document.getElementById('createModal').classList.remove('active');
-        await loadListings();renderAll();
-        alert('Опубликовано! +1000💰');
-    }catch(err){alert('Ошибка: '+err.message);}
-});
-
-document.querySelectorAll('#createModal .tabs-nav button').forEach(b=>{b.addEventListener('click',()=>{
-    document.querySelectorAll('#createModal .tabs-nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-    document.querySelectorAll('#createModal .ctab').forEach(t=>t.style.display='none');
-    document.querySelector('#createModal .ctab.'+b.dataset.ctab).style.display='block';
-});});
-
-function showPage(p){
-    ['homePage','catalogPage','cartPage','favoritesPage','inventoryPage','messagesPage'].forEach(id=>document.getElementById(id).classList.remove('active'));
-    document.getElementById(p+'Page').classList.add('active');
-    if(p==='cart')renderCart();
-    if(p==='inventory'&&user)document.getElementById('invContainer').innerHTML=user.inventory.map(i=>`<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('')||'<p>Пусто</p>';
-    if(p==='messages'&&user)loadMsgThreads();
-}
-async function loadMsgThreads(){
-    const mc=document.getElementById('msgContainer');if(!user){mc.innerHTML='Войдите';return;}
-    try{
-        const files=await listDir('chats');
-        const threads=[];
-        for(const f of files){
-            if(f.name.endsWith('.json')){
-                const data=await getJSON(`chats/${f.name}`);
-                if(data&&data.json.participants.includes(user.username)){
-                    threads.push({id:f.name.replace('.json',''),participants:data.json.participants,last:data.json.messages[data.json.messages.length-1]});
+        // ---------- Listings ----------
+        async function loadListings() {
+            try {
+                const files = await listDir('listings');
+                const lst = [];
+                for (const f of files) {
+                    if (f.name.endsWith('.json')) {
+                        const data = await getJSON(`listings/${f.name}`);
+                        if (data) { data.json._sha = f.sha; lst.push(data.json); }
+                    }
                 }
+                allListings = lst;
+                return lst;
+            } catch { return []; }
+        }
+
+        function renderCards(lst, container) {
+            if (!lst.length) { container.innerHTML = '<p>Нет объявлений</p>'; return; }
+            container.innerHTML = lst.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · Продавец: ${l.seller||'—'}</div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
+        }
+
+        function addToCart(id) {
+            if (!user) return alert('Войдите');
+            if (cart.find(i => i === id)) return alert('Уже в корзине');
+            cart.push(id);
+            saveCart();
+            alert('Добавлено в корзину');
+        }
+
+        function toggleFav(id) {
+            if (favs.includes(id)) favs = favs.filter(i => i !== id);
+            else favs.push(id);
+            saveFavs();
+            renderAll();
+        }
+
+        // Auto.ru style card
+        function showDetails(id) {
+            const l = allListings.find(i => i.id === id) || (id === 'impala-mamba' ? {
+                id: 'impala-mamba', title: 'ОБТ «Импала» Mk.V «Чёрная Мамба»', type: 'ОБТ', year: 2010, price: 2800000,
+                desc: 'Стелс-танк для саванны', seller: 'DISA', crew: '3', weight: '54 т', engine: '1500 л.с.', speed: '72 км/ч',
+                turret_front: '720 мм', hull_front: '620 мм', aps: 'Шангве-2', main_gun: '125-мм L/50', ammo_cap: '48',
+                apfsds_name: 'Ассегай-М', apfsds_pen: '650 мм', heat_name: 'Импи-Т', atgm_name: 'Ингве-2'
+            } : null);
+            if (!l) return;
+            const mc = document.getElementById('detailsContent');
+            const specs = Object.entries(l).filter(([k]) => !['id', 'title', 'type', 'year', 'price', 'desc', 'seller', '_sha'].includes(k) && l[k]);
+            mc.innerHTML = `
+                <span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span>
+                <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:280px;">
+                        <div style="background:#f0f0f0; border-radius:12px; height:220px; display:flex; align-items:center; justify-content:center; font-size:72px;">🦎</div>
+                    </div>
+                    <div style="flex:2;">
+                        <h2>${l.title}</h2>
+                        <p style="color:#666;">${l.type} · ${l.year} · Продавец: ${l.seller}</p>
+                        <div class="listing-price" style="font-size:28px;">${Number(l.price).toLocaleString()} $</div>
+                        <p>${l.desc||''}</p>
+                        <button class="btn btn-red" id="detBuyBtn">🛒 В корзину</button>
+                        <button class="btn btn-outline" id="detMsgBtn">✉️ Написать продавцу</button>
+                    </div>
+                </div>
+                ${specs.length?`<table style="width:100%;margin-top:16px;border-collapse:collapse;">${specs.map(([k,v])=>`<tr style="border-bottom:1px solid #eee;"><td style="padding:8px;font-weight:600;color:#555;">${k}</td><td style="padding:8px;">${v}</td></tr>`).join('')}</table>`:''}
+            `;
+            document.getElementById('detailsModal').classList.add('active');
+            document.getElementById('detBuyBtn').onclick = () => { addToCart(l.id); };
+            document.getElementById('detMsgBtn').onclick = () => { openChat(l.seller); };
+        }
+
+        function showMambaDetails() { showDetails('impala-mamba'); }
+
+        async function openChat(seller) {
+            if (!user) return alert('Войдите');
+            if (user.username === seller) return alert('Это вы');
+            document.getElementById('msgModal').classList.add('active');
+            const dialog = document.getElementById('msgDialog');
+            const chatId = [user.username, seller].sort().join('_');
+            const data = await getJSON(`chats/${chatId}.json`);
+            const msgs = data ? data.json.messages : [];
+            dialog.innerHTML = msgs.map(m => `<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
+            document.getElementById('msgSendBtn').onclick = async () => {
+                const txt = document.getElementById('msgInput').value.trim();
+                if (!txt) return;
+                const chatData = data ? data.json : { participants: [user.username, seller], messages: [] };
+                chatData.messages.push({ from: user.username, text: txt, time: new Date().toISOString() });
+                await saveJSON(`chats/${chatId}.json`, chatData);
+                document.getElementById('msgInput').value = '';
+                openChat(seller);
+            };
+        }
+
+        async function buyCart() {
+            if (!user) return alert('Войдите');
+            if (!cart.length) return alert('Корзина пуста');
+            const toBuy = [...cart];
+            for (const id of toBuy) {
+                try {
+                    const files = await listDir('listings');
+                    const file = files.find(f => f.name === id + '.json');
+                    if (!file) { alert(`Объявление ${id} не найдено`); continue; }
+                    const data = await getJSON(`listings/${id}.json`);
+                    if (!data) continue;
+                    const l = data.json;
+                    if (l.seller === user.username) { alert('Нельзя купить своё'); continue; }
+                    if (user.balance < l.price) { alert('Недостаточно средств'); continue; }
+                    const sellerData = await getJSON(`users/${l.seller}.json`);
+                    if (!sellerData) continue;
+                    const seller = sellerData.json;
+                    seller.balance = (seller.balance || 0) + l.price;
+                    await saveJSON(`users/${l.seller}.json`, seller);
+                    user.balance -= l.price;
+                    user.inventory.push({ id: l.id, title: l.title, type: l.type, year: l.year, price: l.price });
+                    await saveJSON(`users/${user.username}.json`, user);
+                    await delFile(`listings/${id}.json`, data.sha);
+                    cart = cart.filter(i => i !== id);
+                    saveCart();
+                } catch (e) { alert('Ошибка при покупке: ' + e.message); }
+            }
+            setUser({ ...user });
+            saveCart();
+            await loadListings();
+            renderAll();
+            alert('Покупки завершены!');
+        }
+
+        function renderCart() {
+            const cc = document.getElementById('cartContainer');
+            const ct = document.getElementById('cartTotal');
+            const items = cart.map(id => allListings.find(l => l.id === id)).filter(Boolean);
+            if (!items.length) { cc.innerHTML = '<p>Корзина пуста</p>'; ct.textContent = ''; return; }
+            cc.innerHTML = items.map(i => `<div class="cart-item"><span>${i.title} (${i.year})</span><span style="font-weight:700;color:#c62828;">${Number(i.price).toLocaleString()} $</span><button class="btn btn-outline btn-sm" onclick="cart=cart.filter(x=>x!=='${i.id}');saveCart();renderCart();">Удалить</button></div>`).join('');
+            const total = items.reduce((s, i) => s + Number(i.price), 0);
+            ct.innerHTML = `<strong>Итого: ${total.toLocaleString()} $</strong> <button class="btn btn-red" onclick="buyCart()">Купить всё</button>`;
+        }
+
+        function renderAll() {
+            renderCards(allListings.slice(0, 6), document.getElementById('latestGrid'));
+            renderCards(allListings, document.getElementById('catalogGrid'));
+            renderCards(allListings.filter(l => favs.includes(l.id)), document.getElementById('favGrid'));
+            renderCart();
+            if (user) {
+                document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('') || '<p>Пусто</p>';
             }
         }
-        mc.innerHTML=threads.length?threads.map(t=>`<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join(''):'<p>Нет сообщений</p>';
-    }catch{mc.innerHTML='Ошибка загрузки';}
-}
 
-document.getElementById('goHome').onclick=()=>showPage('home');
-document.getElementById('navHome').onclick=()=>showPage('home');
-document.getElementById('navCatalog').onclick=()=>showPage('catalog');
-document.getElementById('navCart').onclick=()=>showPage('cart');
-document.getElementById('navFavorites').onclick=()=>showPage('favorites');
-document.getElementById('navInventory').onclick=()=>showPage('inventory');
-document.getElementById('navMessages').onclick=()=>showPage('messages');
-document.getElementById('addListingBtn').onclick=()=>document.getElementById('createModal').classList.add('active');
-document.getElementById('settingsBtn').onclick=()=>{const s=GH();document.getElementById('ghToken').value=s.token;document.getElementById('ghOwner').value=s.owner;document.getElementById('ghRepo').value=s.repo;document.getElementById('settingsModal').classList.add('active');};
-document.getElementById('saveGhBtn').onclick=()=>{setGH(document.getElementById('ghToken').value,document.getElementById('ghOwner').value,document.getElementById('ghRepo').value);document.getElementById('settingsModal').classList.remove('active');alert('Сохранено!');};
-document.getElementById('homeSearchBtn').onclick=()=>{const lst=searchListings(document.getElementById('homeSearch').value,document.getElementById('homeTypeFilter').value,document.getElementById('homeSort').value);renderCards(lst,document.getElementById('latestGrid'));};
-document.getElementById('catSearchBtn').onclick=()=>{const lst=searchListings(document.getElementById('catSearch').value,document.getElementById('catTypeFilter').value,'newest');renderCards(lst,document.getElementById('catalogGrid'));};
-window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.classList.remove('active');});
+        function searchListings(query, type, sort) {
+            let lst = [...allListings];
+            if (query) lst = lst.filter(l => l.title.toLowerCase().includes(query.toLowerCase()));
+            if (type) lst = lst.filter(l => l.type === type);
+            if (sort === 'price_asc') lst.sort((a, b) => Number(a.price) - Number(b.price));
+            else if (sort === 'price_desc') lst.sort((a, b) => Number(b.price) - Number(a.price));
+            else lst.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            return lst;
+        }
 
-(async()=>{updateUI();await loadListings();renderAll();})();
-})();
+        document.getElementById('createForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!user) return alert('Войдите');
+            const fd = new FormData(e.target);
+            const l = {
+                id: 'lst_' + Date.now(),
+                title: fd.get('title'),
+                type: fd.get('type'),
+                year: fd.get('year'),
+                price: Number(fd.get('price')),
+                desc: fd.get('desc'),
+                seller: user.username,
+                createdAt: new Date().toISOString()
+            };
+            for (const [k, v] of fd.entries()) { if (!['title', 'type', 'year', 'price', 'desc'].includes(k) && v) l[k] = v; }
+            try {
+                await saveJSON(`listings/${l.id}.json`, l);
+                user.balance = (user.balance || 0) + 1000;
+                await saveJSON(`users/${user.username}.json`, user);
+                setUser({ ...user });
+                document.getElementById('createModal').classList.remove('active');
+                await loadListings();
+                renderAll();
+                alert('Опубликовано! +1000💰');
+            } catch (err) { alert('Ошибка: ' + err.message); }
+        });
+
+        document.querySelectorAll('#createModal .tabs-nav button').forEach(b => {
+            b.addEventListener('click', () => {
+                document.querySelectorAll('#createModal .tabs-nav button').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                document.querySelectorAll('#createModal .ctab').forEach(t => t.style.display = 'none');
+                document.querySelector('#createModal .ctab.' + b.dataset.ctab).style.display = 'block';
+            });
+        });
+
+        function showPage(p) {
+            ['homePage', 'catalogPage', 'cartPage', 'favoritesPage', 'inventoryPage', 'messagesPage'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById(p + 'Page').classList.add('active');
+            if (p === 'cart') renderCart();
+            if (p === 'inventory' && user) document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type}</span></div>`).join('') || '<p>Пусто</p>';
+            if (p === 'messages' && user) loadMsgThreads();
+        }
+
+        async function loadMsgThreads() {
+            const mc = document.getElementById('msgContainer');
+            if (!user) { mc.innerHTML = 'Войдите'; return; }
+            try {
+                const files = await listDir('chats');
+                const threads = [];
+                for (const f of files) {
+                    if (f.name.endsWith('.json')) {
+                        const data = await getJSON(`chats/${f.name}`);
+                        if (data && data.json.participants.includes(user.username)) {
+                            threads.push({ id: f.name.replace('.json', ''), participants: data.json.participants, last: data.json.messages[data.json.messages.length - 1] });
+                        }
+                    }
+                }
+                mc.innerHTML = threads.length ? threads.map(t => `<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join('') : '<p>Нет сообщений</p>';
+            } catch { mc.innerHTML = 'Ошибка загрузки'; }
+        }
+
+        document.getElementById('goHome').onclick = () => showPage('home');
+        document.getElementById('navHome').onclick = () => showPage('home');
+        document.getElementById('navCatalog').onclick = () => showPage('catalog');
+        document.getElementById('navCart').onclick = () => showPage('cart');
+        document.getElementById('navFavorites').onclick = () => showPage('favorites');
+        document.getElementById('navInventory').onclick = () => showPage('inventory');
+        document.getElementById('navMessages').onclick = () => showPage('messages');
+        document.getElementById('addListingBtn').onclick = () => document.getElementById('createModal').classList.add('active');
+        document.getElementById('settingsBtn').onclick = () => {
+            const s = GH();
+            document.getElementById('ghToken').value = s.token;
+            document.getElementById('ghOwner').value = s.owner;
+            document.getElementById('ghRepo').value = s.repo;
+            document.getElementById('settingsModal').classList.add('active');
+        };
+        document.getElementById('saveGhBtn').onclick = () => {
+            setGH(document.getElementById('ghToken').value, document.getElementById('ghOwner').value, document.getElementById('ghRepo').value);
+            document.getElementById('settingsModal').classList.remove('active');
+            alert('Сохранено!');
+        };
+        document.getElementById('homeSearchBtn').onclick = () => {
+            const lst = searchListings(document.getElementById('homeSearch').value, document.getElementById('homeTypeFilter').value, document.getElementById('homeSort').value);
+            renderCards(lst, document.getElementById('latestGrid'));
+        };
+        document.getElementById('catSearchBtn').onclick = () => {
+            const lst = searchListings(document.getElementById('catSearch').value, document.getElementById('catTypeFilter').value, 'newest');
+            renderCards(lst, document.getElementById('catalogGrid'));
+        };
+        window.addEventListener('click', e => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
+
+        (async () => { updateUI(); await loadListings(); renderAll(); })();
+    })();
 </script>
 </body>
 </html>
