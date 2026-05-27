@@ -6,7 +6,7 @@
     <title>MILITARY.RU — маркетплейс военной техники</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background:#f5f5f5; color:#1a1a1a; line-height:1.4;}
+        body{font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:#f5f5f5; color:#1a1a1a; line-height:1.4;}
         .container{max-width:1320px; margin:0 auto; padding:0 16px;}
         .header{background:#fff; border-bottom:1px solid #e0e0e0; padding:10px 0; position:sticky; top:0; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.04);}
         .header-inner{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;}
@@ -67,7 +67,6 @@
         <span id="balanceDisplay" class="balance-badge">💰 0</span>
         <button id="authBtn" class="btn btn-outline btn-sm">Войти</button>
         <button id="addListingBtn" class="btn btn-red btn-sm" style="display:none;">➕ Разместить</button>
-        <button id="settingsBtn" class="btn btn-outline btn-sm">⚙️</button>
     </div>
 </div></header>
 
@@ -134,62 +133,48 @@
     <h3>✉️ Диалог</h3><div id="msgDialog" style="max-height:300px;overflow-y:auto;margin-bottom:12px;"></div>
     <div class="form-group"><input id="msgInput" placeholder="Сообщение..."></div><button class="btn btn-red" id="msgSendBtn">Отправить</button>
 </div></div>
-<div class="modal" id="settingsModal"><div class="modal-content"><span class="modal-close" onclick="document.getElementById('settingsModal').classList.remove('active')">✕</span>
-    <h3>⚙️ GitHub</h3>
-    <div class="form-group"><label>Токен</label><input id="ghToken" type="password"></div>
-    <div class="form-group"><label>Владелец</label><input id="ghOwner"></div>
-    <div class="form-group"><label>Репозиторий</label><input id="ghRepo"></div>
-    <button class="btn btn-red" id="saveGhBtn">Сохранить</button>
-</div></div>
 
 <script>
     (() => {
-        const GH = () => ({ token: localStorage.getItem('gt') || '', owner: localStorage.getItem('go') || '', repo: localStorage.getItem('gr') || '' });
-        const setGH = (t, o, r) => { localStorage.setItem('gt', t); localStorage.setItem('go', o); localStorage.setItem('gr', r); };
+        // ---------- LocalStorage helpers ----------
+        const LS = {
+            get(key, fallback = null) {
+                try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+                catch (e) { return fallback; }
+            },
+            set(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+        };
 
-        async function api(path, m = 'GET', body = null) {
-            const { token, owner, repo } = GH();
-            if (!token || !owner || !repo) throw new Error('GitHub не настроен');
-            const u = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-            const h = { Authorization: `token ${token}` };
-            const o = { method: m, headers: h };
-            if (body) { o.body = JSON.stringify(body); h['Content-Type'] = 'application/json'; }
-            const r = await fetch(u, o);
-            if (m === 'GET' && r.status === 404) return null;
-            if (!r.ok) throw new Error(await r.text());
-            return r.json();
+        // ---------- State ----------
+        let user = LS.get('currentUser');
+        const setUser = (u) => { user = u; LS.set('currentUser', u); updateUI(); };
+        let cart = LS.get('cart', []);
+        const saveCart = () => { LS.set('cart', cart); updateCartBadge(); };
+        let favs = LS.get('favs', []);
+        const saveFavs = () => LS.set('favs', favs);
+        let listings = LS.get('listings', []);
+        const saveListings = () => LS.set('listings', listings);
+        let users = LS.get('users', []);
+        const saveUsers = () => LS.set('users', users);
+        let chats = LS.get('chats', {});
+        const saveChats = () => LS.set('chats', chats);
+
+        // Инициализация демо-данных
+        if (!listings.length) {
+            listings.push({
+                id: 'impala-mamba', title: 'ОБТ «Импала» Mk.V «Чёрная Мамба»', type: 'ОБТ', year: 2010, price: 2800000,
+                desc: 'Стелс-танк для саванны', seller: 'DISA', crew: '3', weight: '54 т', engine: '1500 л.с.', speed: '72 км/ч',
+                turret_front: '720 мм', hull_front: '620 мм', aps: 'Шангве-2', main_gun: '125-мм L/50', ammo_cap: '48',
+                apfsds_name: 'Ассегай-М', apfsds_pen: '650 мм', heat_name: 'Импи-Т', atgm_name: 'Ингве-2'
+            });
+            saveListings();
+        }
+        if (!users.length) {
+            users.push({ username: 'DISA', password: '1234', balance: 999999, inventory: [] });
+            saveUsers();
         }
 
-        async function getJSON(path) {
-            const d = await api(path);
-            if (!d) return null;
-            const c = decodeURIComponent(escape(atob(d.content.replace(/\s/g, ''))));
-            return { json: JSON.parse(c), sha: d.sha };
-        }
-
-        async function saveJSON(path, content) {
-            const existing = await getJSON(path);
-            const body = {
-                message: `update ${path}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))))
-            };
-            if (existing) body.sha = existing.sha;
-            return api(path, 'PUT', body);
-        }
-
-        async function delFile(path, sha) { return api(path, 'DELETE', { message: `del ${path}`, sha }); }
-        async function listDir(path) {
-            try { const d = await api(path); return Array.isArray(d) ? d : []; } catch (e) { return []; }
-        }
-
-        let user = JSON.parse(sessionStorage.getItem('u') || 'null');
-        const setUser = (u) => { user = u; sessionStorage.setItem('u', u ? JSON.stringify(u) : ''); updateUI(); };
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const saveCart = () => { localStorage.setItem('cart', JSON.stringify(cart)); updateCartBadge(); };
-        let favs = JSON.parse(localStorage.getItem('favs') || '[]');
-        const saveFavs = () => localStorage.setItem('favs', JSON.stringify(favs));
-        let allListings = [];
-
+        // ---------- UI Updates ----------
         function updateUI() {
             const ab = document.getElementById('authBtn');
             const bb = document.getElementById('balanceDisplay');
@@ -220,24 +205,23 @@
             else document.getElementById('authModal').classList.add('active');
         };
 
-        async function login(u, p) {
+        // ---------- Auth ----------
+        function login(u, p) {
             if (!u || !p) return alert('Введите логин и пароль');
-            const data = await getJSON(`users/${u}.json`);
-            if (!data) return alert('Пользователь не найден');
-            if (data.json.password === p) {
-                setUser(data.json);
-                document.getElementById('authModal').classList.remove('active');
-            } else alert('Неверный пароль');
+            const found = users.find(x => x.username === u && x.password === p);
+            if (!found) return alert('Неверный логин или пароль');
+            setUser(found);
+            document.getElementById('authModal').classList.remove('active');
         }
 
-        async function register(u, p) {
+        function register(u, p) {
             if (!u || !p) return alert('Введите логин и пароль');
             if (u.length < 3) return alert('Логин не менее 3 символов');
             if (p.length < 4) return alert('Пароль не менее 4 символов');
-            const exists = await getJSON(`users/${u}.json`);
-            if (exists) return alert('Пользователь уже существует');
+            if (users.find(x => x.username === u)) return alert('Пользователь уже существует');
             const nu = { username: u, password: p, balance: 5000, inventory: [] };
-            await saveJSON(`users/${u}.json`, nu);
+            users.push(nu);
+            saveUsers();
             setUser(nu);
             document.getElementById('authModal').classList.remove('active');
         }
@@ -245,19 +229,7 @@
         document.getElementById('loginBtn').onclick = () => login(document.getElementById('authUser').value, document.getElementById('authPass').value);
         document.getElementById('registerBtn').onclick = () => register(document.getElementById('authUser').value, document.getElementById('authPass').value);
 
-        async function loadListings() {
-            const files = await listDir('listings');
-            const lst = [];
-            for (const f of files) {
-                if (f.name.endsWith('.json')) {
-                    const data = await getJSON(`listings/${f.name}`);
-                    if (data) { data.json._sha = f.sha; lst.push(data.json); }
-                }
-            }
-            allListings = lst;
-            return lst;
-        }
-
+        // ---------- Listings ----------
         function renderCards(lst, container) {
             if (!lst.length) { container.innerHTML = '<p>Нет объявлений</p>'; return; }
             container.innerHTML = lst.map(l => `<div class="listing-card" onclick="showDetails('${l.id}')"><div class="listing-img">🛡️<div class="badge">${l.type||'Техника'}</div></div><div class="listing-info"><div class="listing-title">${l.title||'Без названия'}</div><div class="listing-meta">${l.year||'—'} · <span class="listing-seller" onclick="event.stopPropagation();showUserProfile('${l.seller}')">${l.seller||'—'}</span></div><div class="listing-price">${Number(l.price).toLocaleString()} $</div><button class="btn btn-red btn-sm" onclick="event.stopPropagation();addToCart('${l.id}')">🛒 В корзину</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleFav('${l.id}')" style="margin-left:4px;">${favs.includes(l.id)?'❤️':'🤍'}</button></div></div>`).join('');
@@ -278,15 +250,10 @@
         }
 
         function showDetails(id) {
-            const l = allListings.find(i => i.id === id) || (id === 'impala-mamba' ? {
-                id: 'impala-mamba', title: 'ОБТ «Импала» Mk.V «Чёрная Мамба»', type: 'ОБТ', year: 2010, price: 2800000,
-                desc: 'Стелс-танк для саванны', seller: 'DISA', crew: '3', weight: '54 т', engine: '1500 л.с.', speed: '72 км/ч',
-                turret_front: '720 мм', hull_front: '620 мм', aps: 'Шангве-2', main_gun: '125-мм L/50', ammo_cap: '48',
-                apfsds_name: 'Ассегай-М', apfsds_pen: '650 мм', heat_name: 'Импи-Т', atgm_name: 'Ингве-2'
-            } : null);
+            const l = listings.find(i => i.id === id);
             if (!l) return;
             const mc = document.getElementById('detailsContent');
-            const specs = Object.entries(l).filter(([k]) => !['id', 'title', 'type', 'year', 'price', 'desc', 'seller', '_sha'].includes(k) && l[k]);
+            const specs = Object.entries(l).filter(([k]) => !['id', 'title', 'type', 'year', 'price', 'desc', 'seller'].includes(k) && l[k]);
             mc.innerHTML = `
                 <span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span>
                 <div style="display:flex; gap:20px; flex-wrap:wrap;">
@@ -312,10 +279,9 @@
         function showMambaDetails() { showDetails('impala-mamba'); }
 
         async function showUserProfile(username) {
-            const data = await getJSON(`users/${username}.json`);
-            if (!data) return alert('Пользователь не найден');
-            const u = data.json;
-            const userListings = allListings.filter(l => l.seller === username);
+            const u = users.find(x => x.username === username);
+            if (!u) return alert('Пользователь не найден');
+            const userListings = listings.filter(l => l.seller === username);
             const mc = document.getElementById('detailsContent');
             mc.innerHTML = `<span class="modal-close" onclick="document.getElementById('detailsModal').classList.remove('active')">✕</span>
                 <h2>👤 ${u.username}</h2><p>💰 Баланс: ${u.balance || 0}</p>
@@ -324,54 +290,44 @@
             document.getElementById('detailsModal').classList.add('active');
         }
 
-        async function openChat(seller) {
+        function openChat(seller) {
             if (!user) return alert('Войдите');
             if (user.username === seller) return alert('Это вы');
             document.getElementById('msgModal').classList.add('active');
             const dialog = document.getElementById('msgDialog');
             const chatId = [user.username, seller].sort().join('_');
-            const data = await getJSON(`chats/${chatId}.json`);
-            const msgs = data ? data.json.messages : [];
+            const msgs = chats[chatId] || [];
             dialog.innerHTML = msgs.map(m => `<div style="margin:4px 0;padding:6px 10px;background:${m.from===user.username?'#e3f2fd':'#f5f5f5'};border-radius:8px;"><b>${m.from}:</b> ${m.text}</div>`).join('');
-            document.getElementById('msgSendBtn').onclick = async () => {
+            document.getElementById('msgSendBtn').onclick = () => {
                 const txt = document.getElementById('msgInput').value.trim();
                 if (!txt) return;
-                const chatData = data ? data.json : { participants: [user.username, seller], messages: [] };
-                chatData.messages.push({ from: user.username, text: txt, time: new Date().toISOString() });
-                await saveJSON(`chats/${chatId}.json`, chatData);
+                if (!chats[chatId]) chats[chatId] = [];
+                chats[chatId].push({ from: user.username, text: txt, time: new Date().toISOString() });
+                saveChats();
                 document.getElementById('msgInput').value = '';
                 openChat(seller);
             };
         }
 
-        async function buyCart() {
+        function buyCart() {
             if (!user) return alert('Войдите');
             if (!cart.length) return alert('Корзина пуста');
             for (const id of [...cart]) {
-                try {
-                    const files = await listDir('listings');
-                    const file = files.find(f => f.name === id + '.json');
-                    if (!file) { alert(`Объявление ${id} не найдено`); continue; }
-                    const data = await getJSON(`listings/${id}.json`);
-                    if (!data) continue;
-                    const l = data.json;
-                    if (l.seller === user.username) { alert('Нельзя купить своё'); continue; }
-                    if (user.balance < l.price) { alert('Недостаточно средств'); continue; }
-                    const sellerData = await getJSON(`users/${l.seller}.json`);
-                    if (!sellerData) continue;
-                    const seller = sellerData.json;
-                    seller.balance = (seller.balance || 0) + l.price;
-                    await saveJSON(`users/${l.seller}.json`, seller);
-                    user.balance -= l.price;
-                    user.inventory.push({ id: l.id, title: l.title, type: l.type, year: l.year, price: l.price });
-                    await saveJSON(`users/${user.username}.json`, user);
-                    await delFile(`listings/${id}.json`, data.sha);
-                    cart = cart.filter(i => i !== id);
-                    saveCart();
-                } catch (e) { alert('Ошибка при покупке: ' + e.message); }
+                const idx = listings.findIndex(l => l.id === id);
+                if (idx === -1) { alert(`Объявление ${id} не найдено`); continue; }
+                const l = listings[idx];
+                if (l.seller === user.username) { alert('Нельзя купить своё'); continue; }
+                if (user.balance < l.price) { alert('Недостаточно средств'); continue; }
+                const seller = users.find(u => u.username === l.seller);
+                if (seller) { seller.balance = (seller.balance || 0) + l.price; saveUsers(); }
+                user.balance -= l.price;
+                user.inventory.push({ id: l.id, title: l.title, type: l.type, year: l.year, price: l.price });
+                listings.splice(idx, 1);
+                cart = cart.filter(i => i !== id);
+                saveCart();
+                saveListings();
+                setUser({ ...user });
             }
-            setUser({ ...user });
-            await loadListings();
             renderAll();
             alert('Покупки завершены!');
         }
@@ -379,7 +335,7 @@
         function renderCart() {
             const cc = document.getElementById('cartContainer');
             const ct = document.getElementById('cartTotal');
-            const items = cart.map(id => allListings.find(l => l.id === id)).filter(Boolean);
+            const items = cart.map(id => listings.find(l => l.id === id)).filter(Boolean);
             if (!items.length) { cc.innerHTML = '<p>Корзина пуста</p>'; ct.textContent = ''; return; }
             cc.innerHTML = items.map(i => `<div class="cart-item"><span>${i.title} (${i.year})</span><span style="font-weight:700;color:#c62828;">${Number(i.price).toLocaleString()} $</span><button class="btn btn-outline btn-sm" onclick="cart=cart.filter(x=>x!=='${i.id}');saveCart();renderCart();">Удалить</button></div>`).join('');
             const total = items.reduce((s, i) => s + Number(i.price), 0);
@@ -387,28 +343,20 @@
         }
 
         function renderAll() {
-            renderCards(allListings.slice(0, 6), document.getElementById('latestGrid'));
-            renderCards(allListings, document.getElementById('catalogGrid'));
-            renderCards(allListings.filter(l => favs.includes(l.id)), document.getElementById('favGrid'));
+            renderCards(listings.slice(0, 6), document.getElementById('latestGrid'));
+            renderCards(listings, document.getElementById('catalogGrid'));
+            renderCards(listings.filter(l => favs.includes(l.id)), document.getElementById('favGrid'));
             renderCart();
             if (user) document.getElementById('invContainer').innerHTML = user.inventory.map(i => `<div class="inventory-item"><span>${i.title} (${i.year})</span><span>${i.type} · ${Number(i.price).toLocaleString()} $</span></div>`).join('') || '<p>Пусто</p>';
         }
 
-        async function loadUsers() {
+        function loadUsers() {
             const uc = document.getElementById('usersContainer');
-            const files = await listDir('users');
-            const users = [];
-            for (const f of files) {
-                if (f.name.endsWith('.json')) {
-                    const data = await getJSON(`users/${f.name}`);
-                    if (data) users.push(data.json);
-                }
-            }
             uc.innerHTML = users.length ? users.map(u => `<div class="user-item"><span>👤 ${u.username}</span><span>💰 ${u.balance||0}</span><button class="btn btn-outline btn-sm" onclick="showUserProfile('${u.username}')">Профиль</button></div>`).join('') : '<p>Нет пользователей</p>';
         }
 
         function searchListings(query, type, sort) {
-            let lst = [...allListings];
+            let lst = [...listings];
             if (query) lst = lst.filter(l => l.title.toLowerCase().includes(query.toLowerCase()));
             if (type) lst = lst.filter(l => l.type === type);
             if (sort === 'price_asc') lst.sort((a, b) => Number(a.price) - Number(b.price));
@@ -417,18 +365,17 @@
             return lst;
         }
 
-        document.getElementById('createForm').addEventListener('submit', async (e) => {
+        document.getElementById('createForm').addEventListener('submit', (e) => {
             e.preventDefault();
             if (!user) return alert('Войдите');
             const fd = new FormData(e.target);
             const l = { id: 'lst_' + Date.now(), title: fd.get('title'), type: fd.get('type'), year: fd.get('year'), price: Number(fd.get('price')), desc: fd.get('desc'), seller: user.username, createdAt: new Date().toISOString() };
             for (const [k, v] of fd.entries()) { if (!['title', 'type', 'year', 'price', 'desc'].includes(k) && v) l[k] = v; }
-            await saveJSON(`listings/${l.id}.json`, l);
+            listings.unshift(l);
+            saveListings();
             user.balance = (user.balance || 0) + 1000;
-            await saveJSON(`users/${user.username}.json`, user);
             setUser({ ...user });
             document.getElementById('createModal').classList.remove('active');
-            await loadListings();
             renderAll();
             alert('Опубликовано! +1000💰');
         });
@@ -451,20 +398,15 @@
             if (p === 'users') loadUsers();
         }
 
-        async function loadMsgThreads() {
+        function loadMsgThreads() {
             const mc = document.getElementById('msgContainer');
             if (!user) { mc.innerHTML = 'Войдите'; return; }
-            const files = await listDir('chats');
-            const threads = [];
-            for (const f of files) {
-                if (f.name.endsWith('.json')) {
-                    const data = await getJSON(`chats/${f.name}`);
-                    if (data && data.json.participants.includes(user.username)) {
-                        threads.push({ id: f.name.replace('.json', ''), participants: data.json.participants, last: data.json.messages[data.json.messages.length - 1] });
-                    }
-                }
-            }
-            mc.innerHTML = threads.length ? threads.map(t => `<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join('') : '<p>Нет сообщений</p>';
+            const threads = Object.entries(chats).filter(([k]) => k.includes(user.username));
+            mc.innerHTML = threads.length ? threads.map(([k, msgs]) => {
+                const other = k.split('_').find(p => p !== user.username);
+                const last = msgs[msgs.length - 1];
+                return `<div class="msg-thread" onclick="openChat('${other}')"><b>${other}</b><br><small>${last?.text?.slice(0,60)||''}</small></div>`;
+            }).join('') : '<p>Нет сообщений</p>';
         }
 
         document.getElementById('goHome').onclick = () => showPage('home');
@@ -476,18 +418,6 @@
         document.getElementById('navMessages').onclick = () => showPage('messages');
         document.getElementById('navUsers').onclick = () => showPage('users');
         document.getElementById('addListingBtn').onclick = () => document.getElementById('createModal').classList.add('active');
-        document.getElementById('settingsBtn').onclick = () => {
-            const s = GH();
-            document.getElementById('ghToken').value = s.token;
-            document.getElementById('ghOwner').value = s.owner;
-            document.getElementById('ghRepo').value = s.repo;
-            document.getElementById('settingsModal').classList.add('active');
-        };
-        document.getElementById('saveGhBtn').onclick = () => {
-            setGH(document.getElementById('ghToken').value, document.getElementById('ghOwner').value, document.getElementById('ghRepo').value);
-            document.getElementById('settingsModal').classList.remove('active');
-            alert('Настройки GitHub сохранены! Теперь можно пользоваться сайтом.');
-        };
         document.getElementById('homeSearchBtn').onclick = () => {
             const lst = searchListings(document.getElementById('homeSearch').value, document.getElementById('homeTypeFilter').value, document.getElementById('homeSort').value);
             renderCards(lst, document.getElementById('latestGrid'));
@@ -498,15 +428,8 @@
         };
         window.addEventListener('click', e => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
 
-        (async () => {
-            updateUI();
-            if (!GH().token) {
-                document.getElementById('settingsModal').classList.add('active');
-            } else {
-                await loadListings();
-                renderAll();
-            }
-        })();
+        updateUI();
+        renderAll();
     })();
 </script>
 </body>
