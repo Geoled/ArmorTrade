@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArmoryMarket — военная техника</title>
     <style>
-        /* Общие стили в стиле Ozon */
         :root {
             --primary: #005bff;
             --primary-hover: #0049cc;
@@ -20,340 +19,62 @@
             --shadow: 0 1px 4px rgba(0,0,0,0.08);
             --radius: 12px;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-        }
-        a { color: var(--primary); text-decoration: none; }
-        a:hover { color: var(--primary-hover); }
-        
-        /* Шапка */
-        .header {
-            background: #fff;
-            border-bottom: 1px solid var(--border);
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo {
-            font-weight: 700;
-            font-size: 24px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+        a { color: var(--primary); text-decoration: none; } a:hover { color: var(--primary-hover); }
+        .header { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: 700; font-size: 24px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
         .logo span { font-size: 18px; color: #666; }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-left: auto;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
-            gap: 6px;
-        }
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { background: var(--primary-hover); }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-        .btn-danger { background: var(--danger); color: #fff; }
-        .badge {
-            background: var(--primary);
-            color: #fff;
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: 4px;
-        }
-        
-        /* Основной контейнер */
-        .container {
-            max-width: 1280px;
-            margin: 24px auto;
-            padding: 0 16px;
-        }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 24px;
-        }
-        
-        /* Карточка товара (стиль Ozon) */
-        .product-page {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-        .product-gallery {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .main-image {
-            width: 400px;
-            height: 300px;
-            background: #eef1f5;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            color: #666;
-            position: relative;
-        }
-        .thumbnail-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .thumbnail {
-            width: 80px;
-            height: 60px;
-            background: #eef1f5;
-            border-radius: 6px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .header-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; gap: 6px; }
+        .btn-primary { background: var(--primary); color: #fff; } .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); } .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .badge { background: var(--primary); color: #fff; border-radius: 20px; padding: 2px 8px; font-size: 12px; font-weight: 700; margin-left: 4px; }
+        .container { max-width: 1280px; margin: 24px auto; padding: 0 16px; }
+        .product-page { background: var(--card-bg); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+        .product-gallery { display: flex; gap: 16px; margin-bottom: 24px; }
+        .main-image { width: 400px; height: 300px; background: #eef1f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #666; }
+        .thumbnail-list { display: flex; flex-direction: column; gap: 8px; }
+        .thumbnail { width: 80px; height: 60px; background: #eef1f5; border-radius: 6px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; }
         .thumbnail.active { border-color: var(--primary); }
-        
-        .product-info {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 32px;
-        }
-        .product-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .rating {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            color: var(--text-secondary);
-        }
+        .product-info { display: grid; grid-template-columns: 1fr 300px; gap: 32px; }
+        .product-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+        .rating { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--text-secondary); }
         .stars { color: var(--warning); font-size: 18px; }
-        .price-block {
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border);
-        }
-        .price {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .currency {
-            font-size: 20px;
-            font-weight: 600;
-            margin-left: 4px;
-        }
-        .wallet-info {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin: 8px 0 16px;
-        }
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-            margin: 24px 0;
-        }
-        .tab {
-            padding: 12px 24px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 2px solid transparent;
-        }
-        .tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .specs-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-        .specs-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
-        }
-        .specs-table td:first-child {
-            font-weight: 600;
-            color: var(--text-secondary);
-            width: 40%;
-        }
-        
-        .ammo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        .ammo-card {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            transition: 0.2s;
-            background: #fff;
-        }
-        .ammo-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .ammo-image {
-            width: 100%;
-            height: 120px;
-            background: #f0f2f5;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-        .ammo-name {
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        
-        /* Модальные окна */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-        }
+        .price-block { background: #f9fafb; border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
+        .price { font-size: 32px; font-weight: 700; } .currency { font-size: 20px; font-weight: 600; margin-left: 4px; }
+        .wallet-info { font-size: 13px; color: var(--text-secondary); margin: 8px 0 16px; }
+        .actions { display: flex; flex-direction: column; gap: 12px; }
+        .tabs { display: flex; border-bottom: 1px solid var(--border); margin: 24px 0; }
+        .tab { padding: 12px 24px; cursor: pointer; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+        .specs-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        .specs-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        .specs-table td:first-child { font-weight: 600; color: var(--text-secondary); width: 40%; }
+        .ammo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+        .ammo-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: 0.2s; background: #fff; cursor: pointer; }
+        .ammo-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .ammo-image { width: 100%; height: 120px; background: #f0f2f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px; }
+        .ammo-name { font-weight: 700; margin-bottom: 6px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            max-width: 480px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        /* Каталог */
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 16px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: 0.2s;
-            cursor: pointer;
-        }
+        .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; cursor: pointer; }
         .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
-        .product-card .img {
-            height: 180px;
-            background: #eef1f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-        }
-        .product-card .info {
-            padding: 12px;
-        }
-        .product-card .name {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-        .product-card .price {
-            font-size: 18px;
-            color: var(--text);
-        }
-        .like-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .product-card .img { height: 180px; background: #eef1f5; display: flex; align-items: center; justify-content: center; font-size: 42px; }
+        .product-card .info { padding: 12px; }
+        .product-card .name { font-weight: 600; font-size: 16px; margin-bottom: 8px; }
+        .product-card .price { font-size: 18px; }
+        .like-btn { background: none; border: none; cursor: pointer; font-size: 18px; display: inline-flex; align-items: center; gap: 4px; }
         .like-btn.liked { color: var(--danger); }
-        
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: #333;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            z-index: 300;
-            animation: fadeIn 0.3s;
-        }
+        .toast { position: fixed; bottom: 24px; right: 24px; background: #333; color: white; padding: 12px 24px; border-radius: 8px; z-index: 300; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } }
+        .settings-toggle { font-size: 18px; cursor: pointer; padding: 8px; }
     </style>
 </head>
 <body>
@@ -361,36 +82,67 @@
 <div class="header">
     <div class="logo">🛡️ ArmoryMarket <span>| военная техника</span></div>
     <div class="header-actions" id="authActions">
-        <!-- Заполняется динамически -->
+        <span class="settings-toggle" title="Настройки GitHub" onclick="showGitHubSettings()">⚙️</span>
     </div>
 </div>
 
-<div class="container" id="app">
-    <!-- Контент -->
-</div>
+<div class="container" id="app"></div>
 
-<!-- Модальные окна -->
+<!-- Модальное окно входа / регистрации -->
 <div class="modal" id="authModal">
     <div class="modal-content" id="authFormContainer"></div>
+</div>
+
+<!-- Модальное окно настроек GitHub -->
+<div class="modal" id="githubSettingsModal">
+    <div class="modal-content">
+        <h2>Настройки подключения к GitHub</h2>
+        <p style="margin-bottom:16px; font-size:14px; color:var(--text-secondary)">Введите данные вашего репозитория, где будет храниться база данных.</p>
+        <div class="form-group">
+            <label>GitHub Token</label>
+            <input type="password" id="ghToken" placeholder="ghp_...">
+        </div>
+        <div class="form-group">
+            <label>Имя пользователя (владелец)</label>
+            <input type="text" id="ghOwner" placeholder="your-username">
+        </div>
+        <div class="form-group">
+            <label>Название репозитория</label>
+            <input type="text" id="ghRepo" placeholder="war-marketplace-db">
+        </div>
+        <div class="form-group">
+            <label>Путь к файлу базы (по умолчанию database.json)</label>
+            <input type="text" id="ghPath" value="database.json">
+        </div>
+        <button class="btn btn-primary" style="width:100%" onclick="saveGitHubSettings()">Сохранить и подключиться</button>
+        <p style="margin-top:12px; text-align:center; font-size:12px; color:var(--text-secondary)">Токен и данные хранятся только в вашем браузере.</p>
+    </div>
 </div>
 
 <div id="toastContainer"></div>
 
 <script>
-// ========== КОНФИГУРАЦИЯ GITHUB ==========
-const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
-const REPO_OWNER = 'YOUR_GITHUB_USERNAME';
-const REPO_NAME = 'war-marketplace-db';
-const DB_PATH = 'database.json';
+// ========== НАСТРОЙКИ GITHUB ==========
+function getGitHubConfig() {
+    const config = localStorage.getItem('gh_config');
+    if (config) {
+        try { return JSON.parse(config); } catch(e) { return null; }
+    }
+    return null;
+}
 
-// ========== ГЛОБАЛЬНОЕ СОСТОЯНИЕ ==========
-let currentUser = null;          // объект пользователя или null
+function setGitHubConfig(token, owner, repo, path = 'database.json') {
+    localStorage.setItem('gh_config', JSON.stringify({ token, owner, repo, path }));
+}
+
+// ========== СОСТОЯНИЕ ==========
+let currentUser = null;
 let db = { users: [], products: [], orders: [] };
-let currentView = 'catalog';     // catalog, product, profile, cart
+let currentView = 'catalog';
 let selectedProductId = null;
-let cart = [];                  // массив ID товаров (или объектов)
+let cart = [];
+let currentSha = null;
 
-// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -400,21 +152,22 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.remove(), 3000);
 }
 
-// ========== РАБОТА С GITHUB API ==========
+// ========== GITHUB API ==========
 async function loadDatabase() {
+    const config = getGitHubConfig();
+    if (!config) return null;
     try {
-        const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DB_PATH}`, {
-            headers: { Authorization: `token ${GITHUB_TOKEN}` }
-        });
-        if (!response.ok) throw new Error('Ошибка загрузки базы');
+        const response = await fetch(
+            `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}`,
+            { headers: { Authorization: `token ${config.token}` } }
+        );
+        if (!response.ok) throw new Error('Ошибка загрузки');
         const data = await response.json();
         const content = atob(data.content);
         db = JSON.parse(content);
-        return data.sha; // SHA для последующего сохранения
+        return data.sha;
     } catch (error) {
-        console.error('Не удалось загрузить базу с GitHub:', error);
-        showToast('Проблема с подключением к хранилищу. Работаем локально.', 'error');
-        // Загружаем локальный fallback
+        console.error(error);
         const local = localStorage.getItem('war_marketplace_db');
         if (local) db = JSON.parse(local);
         return null;
@@ -422,296 +175,274 @@ async function loadDatabase() {
 }
 
 async function saveDatabase(sha) {
+    const config = getGitHubConfig();
+    if (!config) { showToast('Не настроено подключение к GitHub', 'error'); return null; }
     try {
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(db, null, 2))));
-        const body = {
-            message: 'update database',
-            content: content,
-            sha: sha
-        };
-        const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DB_PATH}`, {
-            method: 'PUT',
-            headers: {
-                Authorization: `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
+        const body = { message: 'update database', content: content, sha: sha };
+        const response = await fetch(
+            `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}`,
+            {
+                method: 'PUT',
+                headers: { Authorization: `token ${config.token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            }
+        );
         if (!response.ok) throw new Error('Ошибка сохранения');
         const data = await response.json();
-        // Сохраняем локально на всякий случай
         localStorage.setItem('war_marketplace_db', JSON.stringify(db));
         return data.content.sha;
     } catch (error) {
-        console.error('Не удалось сохранить базу:', error);
-        showToast('Изменения не сохранены на GitHub. Проверьте соединение.', 'error');
+        console.error(error);
+        showToast('Изменения не сохранены на GitHub', 'error');
         return null;
     }
 }
 
-// ========== УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЕМ ==========
-function hashPassword(password) {
-    // Простейший хеш для демо (не использовать в реальном проекте!)
-    let hash = 0;
-    for (let i = 0; i < password.length; i++) {
-        const char = password.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash |= 0;
-    }
-    return hash.toString(16);
+async function syncDatabase() {
+    currentSha = await saveDatabase(currentSha);
 }
+
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+async function initApp() {
+    const config = getGitHubConfig();
+    if (!config) {
+        document.getElementById('githubSettingsModal').classList.add('active');
+    } else {
+        currentSha = await loadDatabase();
+        if (!currentSha) {
+            document.getElementById('githubSettingsModal').classList.add('active');
+        }
+    }
+    // Если пусто – наполняем тестовыми данными
+    if (db.products.length === 0) {
+        db.products.push({
+            id: '1',
+            name: 'ОБТ «Импала» Mk.V «Чёрная Мамба»',
+            type: 'ОБТ',
+            description: 'Современный основной боевой танк',
+            price: 2800000,
+            sellerId: 'system',
+            likes: 5,
+            createdAt: new Date().toISOString()
+        });
+    }
+    if (!db.users.find(u => u.id === 'system')) {
+        db.users.push({
+            id: 'system',
+            username: 'ArmoryMarket',
+            passwordHash: '',
+            balance: 999999999,
+            createdAt: new Date().toISOString()
+        });
+    }
+    updateUI();
+}
+
+function showGitHubSettings() {
+    const config = getGitHubConfig();
+    if (config) {
+        document.getElementById('ghToken').value = config.token || '';
+        document.getElementById('ghOwner').value = config.owner || '';
+        document.getElementById('ghRepo').value = config.repo || '';
+        document.getElementById('ghPath').value = config.path || 'database.json';
+    }
+    document.getElementById('githubSettingsModal').classList.add('active');
+}
+
+async function saveGitHubSettings() {
+    const token = document.getElementById('ghToken').value.trim();
+    const owner = document.getElementById('ghOwner').value.trim();
+    const repo = document.getElementById('ghRepo').value.trim();
+    const path = document.getElementById('ghPath').value.trim() || 'database.json';
+    if (!token || !owner || !repo) { showToast('Заполните все поля', 'error'); return; }
+    setGitHubConfig(token, owner, repo, path);
+    document.getElementById('githubSettingsModal').classList.remove('active');
+    showToast('Настройки сохранены. Подключаемся...');
+    currentSha = await loadDatabase();
+    if (currentSha) showToast('Подключение успешно!');
+    else showToast('Ошибка подключения. Проверьте данные.', 'error');
+    updateUI();
+}
+
+// ========== АВТОРИЗАЦИЯ ==========
+function hashPassword(p) { let h=0; for(let i=0;i<p.length;i++){const c=p.charCodeAt(i);h=((h<<5)-h)+c;h|=0;} return h.toString(16); }
 
 function registerUser(username, password) {
     if (db.users.find(u => u.username === username)) return false;
-    const newUser = {
-        id: Date.now().toString(),
-        username,
-        passwordHash: hashPassword(password),
-        balance: 100000, // стартовый баланс
-        createdAt: new Date().toISOString()
-    };
+    const newUser = { id: Date.now().toString(), username, passwordHash: hashPassword(password), balance: 100000, createdAt: new Date().toISOString() };
     db.users.push(newUser);
     currentUser = newUser;
+    syncDatabase();
     return true;
 }
 
 function loginUser(username, password) {
     const user = db.users.find(u => u.username === username && u.passwordHash === hashPassword(password));
-    if (user) {
-        currentUser = user;
-        return true;
-    }
+    if (user) { currentUser = user; return true; }
     return false;
 }
 
-function logout() {
-    currentUser = null;
-    updateUI();
-}
+function logout() { currentUser = null; updateUI(); }
 
 // ========== БИЗНЕС-ЛОГИКА ==========
-function addToCart(productId) {
-    if (!cart.includes(productId)) {
-        cart.push(productId);
-        showToast('Добавлено в корзину');
-        updateUI();
-    }
-}
-
-function removeFromCart(productId) {
-    cart = cart.filter(id => id !== productId);
-    updateUI();
-}
-
+function addToCart(productId) { if (!cart.includes(productId)) { cart.push(productId); showToast('Добавлено в корзину'); } updateUI(); }
+function removeFromCart(productId) { cart = cart.filter(id => id !== productId); updateUI(); }
 function likeProduct(productId) {
     const product = db.products.find(p => p.id === productId);
     if (!product) return;
     product.likes = (product.likes || 0) + 1;
-    // Начисляем автору 10 кредитов за лайк
     const author = db.users.find(u => u.id === product.sellerId);
-    if (author) {
-        author.balance += 10;
-        showToast(`Поставлен лайк! Автор получил +10 кредитов`);
-    }
+    if (author) author.balance += 10;
+    showToast('Лайк! Автор получил +10 кред.');
+    syncDatabase();
     updateUI();
 }
-
 function buyProduct(productId) {
-    if (!currentUser) {
-        showToast('Войдите, чтобы совершать покупки', 'error');
-        return;
-    }
+    if (!currentUser) { showToast('Войдите для покупки', 'error'); return; }
     const product = db.products.find(p => p.id === productId);
     if (!product) return;
-    if (currentUser.balance < product.price) {
-        showToast('Недостаточно кредитов', 'error');
-        return;
-    }
-    // Списываем у покупателя
+    if (currentUser.balance < product.price) { showToast('Недостаточно кредитов', 'error'); return; }
     currentUser.balance -= product.price;
-    // Начисляем продавцу (цена - 5% комиссия площадки, или вся сумма как ты хочешь? По условию "за то что публикация набирает покупки даются деньги", упростим: 100% продавцу, плюс бонус?)
     const seller = db.users.find(u => u.id === product.sellerId);
     if (seller) {
         seller.balance += product.price;
-        // Дополнительный бонус продавцу за покупку (например, 5% сверху)
         seller.balance += Math.floor(product.price * 0.05);
     }
-    // Запись в историю
-    db.orders.push({
-        id: Date.now().toString(),
-        productId,
-        buyerId: currentUser.id,
-        sellerId: product.sellerId,
-        price: product.price,
-        date: new Date().toISOString()
-    });
-    // Удаляем из корзины если есть
+    db.orders.push({ id: Date.now().toString(), productId, buyerId: currentUser.id, sellerId: product.sellerId, price: product.price, date: new Date().toISOString() });
     cart = cart.filter(id => id !== productId);
     showToast('Покупка совершена!');
+    syncDatabase();
     updateUI();
 }
-
 function publishProduct(name, type, description, price) {
     if (!currentUser) return;
-    const product = {
-        id: Date.now().toString(),
-        name,
-        type,
-        description,
-        price: Number(price),
-        sellerId: currentUser.id,
-        likes: 0,
-        createdAt: new Date().toISOString()
-    };
+    const product = { id: Date.now().toString(), name, type, description, price: Number(price), sellerId: currentUser.id, likes: 0, createdAt: new Date().toISOString() };
     db.products.push(product);
-    // Награда за публикацию: +500 кредитов автору
     currentUser.balance += 500;
-    showToast('Товар опубликован! Вы получили 500 кредитов.');
+    showToast('Товар опубликован! +500 кред.');
+    syncDatabase();
     updateUI();
 }
 
-// ========== ОТРИСОВКА ИНТЕРФЕЙСА ==========
+// ========== ИНТЕРФЕЙС ==========
 function renderAuthModal(mode = 'login') {
     const container = document.getElementById('authFormContainer');
     container.innerHTML = `
         <h2 style="margin-bottom:20px">${mode === 'login' ? 'Вход' : 'Регистрация'}</h2>
-        <div class="form-group">
-            <label>Логин</label>
-            <input type="text" id="authUsername" placeholder="Введите логин">
-        </div>
-        <div class="form-group">
-            <label>Пароль</label>
-            <input type="password" id="authPassword" placeholder="Введите пароль">
-        </div>
+        <div class="form-group"><label>Логин</label><input type="text" id="authUsername"></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="authPassword"></div>
         <button class="btn btn-primary" style="width:100%" id="authSubmitBtn">${mode === 'login' ? 'Войти' : 'Зарегистрироваться'}</button>
-        <p style="margin-top:12px;text-align:center">
-            ${mode === 'login' ? 'Нет аккаунта? ' : 'Уже есть аккаунт? '}
-            <a href="#" id="toggleAuthMode">${mode === 'login' ? 'Создать' : 'Войти'}</a>
-        </p>
+        <p style="margin-top:12px;text-align:center">${mode === 'login' ? 'Нет аккаунта?' : 'Уже есть аккаунт?'} <a href="#" id="toggleAuthMode">${mode === 'login' ? 'Создать' : 'Войти'}</a></p>
     `;
     document.getElementById('authModal').classList.add('active');
-    
-    document.getElementById('authSubmitBtn').onclick = async () => {
-        const username = document.getElementById('authUsername').value.trim();
-        const password = document.getElementById('authPassword').value;
-        if (!username || !password) return showToast('Заполните все поля', 'error');
-        
+    document.getElementById('authSubmitBtn').onclick = () => {
+        const u = document.getElementById('authUsername').value.trim();
+        const p = document.getElementById('authPassword').value;
+        if (!u || !p) return showToast('Заполните все поля', 'error');
         if (mode === 'register') {
-            if (registerUser(username, password)) {
-                await syncDatabase();
-                showToast('Регистрация успешна!');
-                closeModal('authModal');
-                updateUI();
-            } else {
-                showToast('Пользователь уже существует', 'error');
-            }
+            if (registerUser(u, p)) { showToast('Регистрация успешна!'); closeModal('authModal'); updateUI(); }
+            else showToast('Пользователь уже существует', 'error');
         } else {
-            if (loginUser(username, password)) {
-                showToast('Добро пожаловать!');
-                closeModal('authModal');
-                updateUI();
-            } else {
-                showToast('Неверный логин или пароль', 'error');
-            }
+            if (loginUser(u, p)) { showToast('Добро пожаловать!'); closeModal('authModal'); updateUI(); }
+            else showToast('Неверный логин или пароль', 'error');
         }
     };
-    
-    document.getElementById('toggleAuthMode').onclick = (e) => {
-        e.preventDefault();
-        renderAuthModal(mode === 'login' ? 'register' : 'login');
-    };
+    document.getElementById('toggleAuthMode').onclick = (e) => { e.preventDefault(); renderAuthModal(mode === 'login' ? 'register' : 'login'); };
 }
 
-function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// Закрытие модалок по клику вне окна
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('active');
+    }
 }
 
 function updateAuthUI() {
     const authDiv = document.getElementById('authActions');
+    const settingsBtn = '<span class="settings-toggle" title="Настройки GitHub" onclick="showGitHubSettings()">⚙️</span>';
     if (currentUser) {
         authDiv.innerHTML = `
             <span>💰 ${currentUser.balance.toLocaleString()} кред.</span>
             <span>👤 ${currentUser.username}</span>
             <button class="btn btn-outline" onclick="navigateTo('profile')">Личный кабинет</button>
             <button class="btn btn-outline" onclick="logout()">Выйти</button>
+            ${settingsBtn}
         `;
     } else {
         authDiv.innerHTML = `
             <button class="btn btn-outline" onclick="renderAuthModal('login')">Войти</button>
             <button class="btn btn-primary" onclick="renderAuthModal('register')">Регистрация</button>
+            ${settingsBtn}
         `;
     }
 }
 
-function updateCartBadge() {
-    const cartBtn = document.getElementById('cartBtn');
-    if (cartBtn) {
-        cartBtn.innerHTML = `🛒 Корзина ${cart.length ? `<span class="badge">${cart.length}</span>` : ''}`;
+function updateUI() {
+    updateAuthUI();
+    switch (currentView) {
+        case 'catalog': renderCatalog(); break;
+        case 'product': renderProductPage(selectedProductId); break;
+        case 'cart': renderCart(); break;
+        case 'profile': renderProfile(); break;
+        case 'publish': renderPublishForm(); break;
+        default: renderCatalog();
     }
+}
+
+function navigateTo(view, productId = null) {
+    currentView = view;
+    selectedProductId = productId;
+    updateUI();
 }
 
 function renderCatalog() {
     const app = document.getElementById('app');
-    const productsHtml = db.products.map(p => `
-        <div class="product-card" onclick="navigateTo('product', '${p.id}')">
-            <div class="img">🪖</div>
-            <div class="info">
-                <div class="name">${p.name}</div>
-                <div class="price">${p.price.toLocaleString()} кред.</div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px">
-                    <span style="color:var(--text-secondary); font-size:13px">👍 ${p.likes || 0}</span>
-                    <button class="like-btn" onclick="event.stopPropagation(); likeProduct('${p.id}')">
-                        ❤️
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-    
     app.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
             <h2>Каталог военной техники</h2>
             <div style="display:flex; gap:12px">
-                <button class="btn btn-outline" id="cartBtn" onclick="navigateTo('cart')">🛒 Корзина</button>
+                <button class="btn btn-outline" onclick="navigateTo('cart')">🛒 Корзина ${cart.length ? '<span class="badge">'+cart.length+'</span>' : ''}</button>
                 <button class="btn btn-primary" onclick="navigateTo('publish')">➕ Выставить товар</button>
             </div>
         </div>
-        <div class="catalog-grid">${productsHtml || '<p>Нет товаров. Станьте первым продавцом!</p>'}</div>
+        <div class="catalog-grid">
+            ${db.products.map(p => `
+                <div class="product-card" onclick="navigateTo('product', '${p.id}')">
+                    <div class="img">🪖</div>
+                    <div class="info">
+                        <div class="name">${p.name}</div>
+                        <div class="price">${p.price.toLocaleString()} кред.</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px">
+                            <span style="color:var(--text-secondary); font-size:13px">👍 ${p.likes || 0}</span>
+                            <button class="like-btn" onclick="event.stopPropagation(); likeProduct('${p.id}')">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<p>Нет товаров. Станьте первым продавцом!</p>'}
+        </div>
     `;
-    updateCartBadge();
 }
 
 function renderProductPage(productId) {
     const product = db.products.find(p => p.id === productId);
     if (!product) return renderCatalog();
-    
-    // Детальные данные для демо-танка (если это "Импала")
     const isImpala = product.name.includes('Импала');
-    
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="product-page">
             <div style="margin-bottom:16px"><a href="#" onclick="navigateTo('catalog')">← Назад в каталог</a></div>
             <div class="product-gallery">
                 <div class="main-image">🪖 Танк</div>
-                <div class="thumbnail-list">
-                    <div class="thumbnail active">🖼️</div>
-                    <div class="thumbnail">🛡️</div>
-                    <div class="thumbnail">🔫</div>
-                </div>
+                <div class="thumbnail-list"><div class="thumbnail active">🖼️</div><div class="thumbnail">🛡️</div><div class="thumbnail">🔫</div></div>
             </div>
             <div class="product-info">
                 <div>
                     <h1 class="product-title">${product.name}</h1>
-                    <div class="rating">
-                        <span class="stars">★★★★★</span>
-                        <span>4.9 (12 отзывов)</span>
-                    </div>
-                    <div>
-                        <button class="like-btn" onclick="likeProduct('${product.id}')">
-                            ❤️ <span id="likeCount">${product.likes || 0}</span>
-                        </button>
-                    </div>
+                    <div class="rating"><span class="stars">★★★★★</span><span>4.9 (12 отзывов)</span></div>
+                    <button class="like-btn" onclick="likeProduct('${product.id}')">❤️ ${product.likes || 0}</button>
                 </div>
                 <div class="price-block">
                     <div class="price">${product.price.toLocaleString()} <span class="currency">кред.</span></div>
@@ -722,82 +453,73 @@ function renderProductPage(productId) {
                     </div>
                 </div>
             </div>
-            
             <div class="tabs">
-                <div class="tab active" onclick="switchTab('specs')">Характеристики</div>
-                <div class="tab" onclick="switchTab('ammo')">Боеприпасы (125-мм)</div>
+                <div class="tab active" onclick="switchTab('specs', this)">Характеристики</div>
+                <div class="tab" onclick="switchTab('ammo', this)">Боеприпасы (125-мм)</div>
             </div>
-            
             <div id="tab-specs" class="tab-content active">
-                ${isImpala ? getImpalaSpecsHtml() : '<p>Подробные характеристики уточняйте у продавца.</p>'}
+                ${isImpala ? `
+                    <table class="specs-table">
+                        <tr><td>Боевая масса</td><td>54 тонны</td></tr>
+                        <tr><td>Экипаж</td><td>3 человека</td></tr>
+                        <tr><td>Двигатель</td><td>Килиманджаро-4, 1500 л.с.</td></tr>
+                        <tr><td>Макс. скорость</td><td>72 км/ч</td></tr>
+                        <tr><td>Бронирование (лоб башни)</td><td>~720 мм от БОПС / ~1100 мм от КС</td></tr>
+                        <tr><td>КАЗ</td><td>Шангве-2</td></tr>
+                        <tr><td>Основное вооружение</td><td>125-мм гладкоствольная пушка</td></tr>
+                        <tr><td>Боекомплект</td><td>48 выстрелов</td></tr>
+                        <tr><td>СУО</td><td>Матрица</td></tr>
+                    </table>
+                ` : '<p>Подробные характеристики уточняйте у продавца.</p>'}
             </div>
             <div id="tab-ammo" class="tab-content">
                 <div class="ammo-grid">
-                    ${getAmmoCardsHtml()}
+                    <div class="ammo-card" onclick="addToCart('shell_Ассегай-М')">
+                        <div class="ammo-image">🔵</div>
+                        <div class="ammo-name">Ассегай-М (БОПС)</div>
+                        <div style="font-size:14px; color:var(--text-secondary)">Пробитие 650-700 мм.</div>
+                        <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>800 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
+                    </div>
+                    <div class="ammo-card" onclick="addToCart('shell_Импи-Т')">
+                        <div class="ammo-image">🟠</div>
+                        <div class="ammo-name">Импи-Т (Кумулятивный)</div>
+                        <div style="font-size:14px; color:var(--text-secondary)">Пробитие 850 мм за ДЗ.</div>
+                        <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>1200 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
+                    </div>
+                    <div class="ammo-card" onclick="addToCart('shell_Гром-Ф')">
+                        <div class="ammo-image">🟡</div>
+                        <div class="ammo-name">Гром-Ф (ОФС)</div>
+                        <div style="font-size:14px; color:var(--text-secondary)">Дистанционный подрыв.</div>
+                        <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>600 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
+                    </div>
+                    <div class="ammo-card" onclick="addToCart('shell_Ингве-2')">
+                        <div class="ammo-image">🔴</div>
+                        <div class="ammo-name">Ингве-2 (ПТУР)</div>
+                        <div style="font-size:14px; color:var(--text-secondary)">Пробитие >1000 мм.</div>
+                        <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>2500 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
+                    </div>
                 </div>
             </div>
         </div>
     `;
 }
 
-function getImpalaSpecsHtml() {
-    return `
-        <table class="specs-table">
-            <tr><td>Боевая масса</td><td>54 тонны</td></tr>
-            <tr><td>Экипаж</td><td>3 человека</td></tr>
-            <tr><td>Двигатель</td><td>Килиманджаро-4, 1500 л.с.</td></tr>
-            <tr><td>Макс. скорость</td><td>72 км/ч</td></tr>
-            <tr><td>Бронирование (лоб башни)</td><td>~720 мм от БОПС / ~1100 мм от КС</td></tr>
-            <tr><td>КАЗ</td><td>Шангве-2</td></tr>
-            <tr><td>Основное вооружение</td><td>125-мм гладкоствольная пушка</td></tr>
-            <tr><td>Боекомплект</td><td>48 выстрелов</td></tr>
-            <tr><td>СУО</td><td>Матрица</td></tr>
-        </table>
-    `;
-}
-
-function getAmmoCardsHtml() {
-    const shells = [
-        { name: 'Ассегай-М (БОПС)', img: '🔵', desc: 'Бронебойный оперённый подкалиберный. Пробитие 650-700 мм.', price: 800 },
-        { name: 'Импи-Т (Кумулятивный)', img: '🟠', desc: 'Тандемный кумулятивный. Пробитие 850 мм за ДЗ.', price: 1200 },
-        { name: 'Гром-Ф (ОФС)', img: '🟡', desc: 'Осколочно-фугасный с дистанционным подрывом.', price: 600 },
-        { name: 'Ингве-2 (ПТУР)', img: '🔴', desc: 'Управляемая ракета. Пробитие >1000 мм.', price: 2500 }
-    ];
-    return shells.map(s => `
-        <div class="ammo-card" onclick="addToCart('shell_${s.name}')">
-            <div class="ammo-image">${s.img}</div>
-            <div class="ammo-name">${s.name}</div>
-            <div style="font-size:14px; color:var(--text-secondary); margin-bottom:8px">${s.desc}</div>
-            <div style="display:flex; justify-content:space-between; align-items:center">
-                <strong>${s.price} кред.</strong>
-                <button class="btn btn-outline" style="padding:4px 12px">В корзину</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function switchTab(tabName) {
+function switchTab(tabName, el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
+    el.classList.add('active');
     document.getElementById(`tab-${tabName}`).classList.add('active');
 }
 
 function renderCart() {
-    const app = document.getElementById('app');
     const cartProducts = cart.map(id => {
         const product = db.products.find(p => p.id === id);
         if (product) return product;
-        // Если это снаряд, создаём виртуальный объект
-        if (id.startsWith('shell_')) {
-            const shellName = id.replace('shell_', '');
-            return { id, name: shellName, price: 800, isShell: true };
-        }
+        if (id.startsWith('shell_')) return { id, name: id.replace('shell_', ''), price: 800, isShell: true };
         return null;
     }).filter(Boolean);
-    
-    const total = cartProducts.reduce((sum, p) => sum + (p.price || 0), 0);
-    
+    const total = cartProducts.reduce((s, p) => s + (p.price || 0), 0);
+    const app = document.getElementById('app');
     app.innerHTML = `
         <h2>Корзина</h2>
         ${cartProducts.length === 0 ? '<p>Корзина пуста</p>' : `
@@ -821,7 +543,6 @@ function renderProfile() {
     if (!currentUser) return navigateTo('catalog');
     const myProducts = db.products.filter(p => p.sellerId === currentUser.id);
     const myOrders = db.orders.filter(o => o.buyerId === currentUser.id || o.sellerId === currentUser.id);
-    
     const app = document.getElementById('app');
     app.innerHTML = `
         <h2>Личный кабинет</h2>
@@ -831,12 +552,7 @@ function renderProfile() {
         <div class="catalog-grid">
             ${myProducts.map(p => `
                 <div class="product-card" onclick="navigateTo('product', '${p.id}')">
-                    <div class="img">🪖</div>
-                    <div class="info">
-                        <div class="name">${p.name}</div>
-                        <div class="price">${p.price.toLocaleString()} кред.</div>
-                        <span>👍 ${p.likes || 0}</span>
-                    </div>
+                    <div class="img">🪖</div><div class="info"><div class="name">${p.name}</div><div class="price">${p.price.toLocaleString()} кред.</div><span>👍 ${p.likes || 0}</span></div>
                 </div>
             `).join('') || '<p>Нет товаров</p>'}
         </div>
@@ -844,131 +560,40 @@ function renderProfile() {
         <div style="background:white; border-radius:12px; padding:16px">
             ${myOrders.slice(0, 10).map(o => {
                 const product = db.products.find(p => p.id === o.productId);
-                return `<div style="margin-bottom:8px">
-                    ${o.date.slice(0,10)} — ${product ? product.name : 'товар'} — ${o.price} кред.
-                </div>`;
+                return `<div style="margin-bottom:8px">${o.date.slice(0,10)} — ${product ? product.name : 'товар'} — ${o.price} кред.</div>`;
             }).join('') || 'Нет покупок'}
         </div>
     `;
 }
 
 function renderPublishForm() {
-    if (!currentUser) {
-        showToast('Войдите, чтобы публиковать', 'error');
-        return navigateTo('catalog');
-    }
+    if (!currentUser) { showToast('Войдите для публикации', 'error'); return navigateTo('catalog'); }
     const app = document.getElementById('app');
     app.innerHTML = `
         <h2>Выставить военную технику</h2>
         <div style="max-width:500px; background:white; padding:24px; border-radius:12px">
-            <div class="form-group">
-                <label>Название</label>
-                <input type="text" id="pubName" placeholder="ОБТ «Импала» Mk.V">
-            </div>
-            <div class="form-group">
-                <label>Тип техники</label>
-                <input type="text" id="pubType" placeholder="ОБТ">
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="pubDesc" rows="4" style="width:100%" placeholder="Характеристики..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Цена (кредиты)</label>
-                <input type="number" id="pubPrice" placeholder="2800000">
-            </div>
+            <div class="form-group"><label>Название</label><input type="text" id="pubName"></div>
+            <div class="form-group"><label>Тип техники</label><input type="text" id="pubType"></div>
+            <div class="form-group"><label>Описание</label><textarea id="pubDesc" rows="4" style="width:100%"></textarea></div>
+            <div class="form-group"><label>Цена (кредиты)</label><input type="number" id="pubPrice"></div>
             <button class="btn btn-primary" onclick="submitPublication()">Опубликовать</button>
         </div>
     `;
 }
 
 function submitPublication() {
-    const name = document.getElementById('pubName').value;
-    const type = document.getElementById('pubType').value;
-    const desc = document.getElementById('pubDesc').value;
-    const price = document.getElementById('pubPrice').value;
-    if (name && price) {
-        publishProduct(name, type, desc, price);
-        navigateTo('catalog');
-        syncDatabase();
-    } else {
-        showToast('Заполните обязательные поля', 'error');
-    }
+    const n = document.getElementById('pubName').value;
+    const t = document.getElementById('pubType').value;
+    const d = document.getElementById('pubDesc').value;
+    const p = document.getElementById('pubPrice').value;
+    if (n && p) { publishProduct(n, t, d, p); navigateTo('catalog'); }
+    else showToast('Заполните обязательные поля', 'error');
 }
 
-// Навигация
-function navigateTo(view, productId = null) {
-    currentView = view;
-    selectedProductId = productId;
-    updateUI();
-}
-
-// Обновление интерфейса
-function updateUI() {
-    updateAuthUI();
-    switch (currentView) {
-        case 'catalog': renderCatalog(); break;
-        case 'product': renderProductPage(selectedProductId); break;
-        case 'cart': renderCart(); break;
-        case 'profile': renderProfile(); break;
-        case 'publish': renderPublishForm(); break;
-        default: renderCatalog();
-    }
-    updateCartBadge();
-}
-
-// Синхронизация с GitHub
-let currentSha = null;
-async function syncDatabase() {
-    currentSha = await saveDatabase(currentSha);
-}
-
-// Инициализация
-window.onload = async () => {
-    const sha = await loadDatabase();
-    currentSha = sha;
-    // Если БД пустая, добавим тестовый товар
-    if (db.products.length === 0) {
-        db.products.push({
-            id: '1',
-            name: 'ОБТ «Импала» Mk.V «Чёрная Мамба»',
-            type: 'ОБТ',
-            description: 'Современный основной боевой танк',
-            price: 2800000,
-            sellerId: 'system',
-            likes: 5,
-            createdAt: new Date().toISOString()
-        });
-    }
-    // Если нет системного продавца, создаём
-    if (!db.users.find(u => u.id === 'system')) {
-        db.users.push({
-            id: 'system',
-            username: 'ArmoryMarket',
-            passwordHash: '',
-            balance: 999999999,
-            createdAt: new Date().toISOString()
-        });
-    }
-    if (currentSha) await syncDatabase();
-    updateUI();
-    
-    // Закрытие модалки по клику вне её
-    document.getElementById('authModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal('authModal');
-    });
+// ========== ЗАПУСК ==========
+window.onload = () => {
+    initApp();
 };
-
-// Глобальные функции для onclick
-window.likeProduct = likeProduct;
-window.buyProduct = buyProduct;
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.switchTab = switchTab;
-window.navigateTo = navigateTo;
-window.submitPublication = submitPublication;
-window.logout = logout;
-window.renderAuthModal = renderAuthModal;
 </script>
 </body>
 </html>
