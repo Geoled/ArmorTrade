@@ -1,1 +1,13 @@
-{"users":[],"products":[],"orders":[]}
+{
+  "users": [
+    {
+      "id": "1779859398001",
+      "username": "Smakers",
+      "passwordHash": "-7d0a111e",
+      "balance": 100000,
+      "createdAt": "2026-05-27T05:23:18.001Z"
+    }
+  ],
+  "products": [],
+  "orders": []
+}
