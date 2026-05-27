@@ -155,16 +155,16 @@
             const o = { method: m, headers: h };
             if (body) { o.body = JSON.stringify(body); h['Content-Type'] = 'application/json'; }
             const r = await fetch(u, o);
+            if (m === 'GET' && r.status === 404) return null;
             if (!r.ok) throw new Error(await r.text());
             return r.json();
         }
 
         async function getJSON(path) {
-            try {
-                const d = await api(path);
-                const c = decodeURIComponent(escape(atob(d.content.replace(/\s/g, ''))));
-                return { json: JSON.parse(c), sha: d.sha };
-            } catch (e) { return null; }
+            const d = await api(path);
+            if (!d) return null;
+            const c = decodeURIComponent(escape(atob(d.content.replace(/\s/g, ''))));
+            return { json: JSON.parse(c), sha: d.sha };
         }
 
         async function saveJSON(path, content) {
@@ -173,12 +173,14 @@
                 message: `update ${path}`,
                 content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))))
             };
-            if (existing && existing.sha) body.sha = existing.sha;
+            if (existing) body.sha = existing.sha;
             return api(path, 'PUT', body);
         }
 
         async function delFile(path, sha) { return api(path, 'DELETE', { message: `del ${path}`, sha }); }
-        async function listDir(path) { try { return await api(path); } catch { return []; } }
+        async function listDir(path) {
+            try { const d = await api(path); return Array.isArray(d) ? d : []; } catch (e) { return []; }
+        }
 
         let user = JSON.parse(sessionStorage.getItem('u') || 'null');
         const setUser = (u) => { user = u; sessionStorage.setItem('u', u ? JSON.stringify(u) : ''); updateUI(); };
@@ -220,22 +222,20 @@
 
         async function login(u, p) {
             if (!u || !p) return alert('Введите логин и пароль');
-            try {
-                const data = await getJSON(`users/${u}.json`);
-                if (!data) return alert('Пользователь не найден');
-                if (data.json.password === p) {
-                    setUser(data.json);
-                    document.getElementById('authModal').classList.remove('active');
-                } else alert('Неверный пароль');
-            } catch (e) { alert('Ошибка входа'); }
+            const data = await getJSON(`users/${u}.json`);
+            if (!data) return alert('Пользователь не найден');
+            if (data.json.password === p) {
+                setUser(data.json);
+                document.getElementById('authModal').classList.remove('active');
+            } else alert('Неверный пароль');
         }
 
         async function register(u, p) {
             if (!u || !p) return alert('Введите логин и пароль');
-            if (u.length < 3) return alert('Логин должен быть не менее 3 символов');
-            if (p.length < 4) return alert('Пароль должен быть не менее 4 символов');
-            const existing = await getJSON(`users/${u}.json`);
-            if (existing) return alert('Пользователь уже существует');
+            if (u.length < 3) return alert('Логин не менее 3 символов');
+            if (p.length < 4) return alert('Пароль не менее 4 символов');
+            const exists = await getJSON(`users/${u}.json`);
+            if (exists) return alert('Пользователь уже существует');
             const nu = { username: u, password: p, balance: 5000, inventory: [] };
             await saveJSON(`users/${u}.json`, nu);
             setUser(nu);
@@ -246,18 +246,16 @@
         document.getElementById('registerBtn').onclick = () => register(document.getElementById('authUser').value, document.getElementById('authPass').value);
 
         async function loadListings() {
-            try {
-                const files = await listDir('listings');
-                const lst = [];
-                for (const f of files) {
-                    if (f.name.endsWith('.json')) {
-                        const data = await getJSON(`listings/${f.name}`);
-                        if (data) { data.json._sha = f.sha; lst.push(data.json); }
-                    }
+            const files = await listDir('listings');
+            const lst = [];
+            for (const f of files) {
+                if (f.name.endsWith('.json')) {
+                    const data = await getJSON(`listings/${f.name}`);
+                    if (data) { data.json._sha = f.sha; lst.push(data.json); }
                 }
-                allListings = lst;
-                return lst;
-            } catch { return []; }
+            }
+            allListings = lst;
+            return lst;
         }
 
         function renderCards(lst, container) {
@@ -267,10 +265,9 @@
 
         function addToCart(id) {
             if (!user) return alert('Войдите');
-            if (cart.find(i => i === id)) return alert('Уже в корзине');
+            if (cart.includes(id)) return alert('Уже в корзине');
             cart.push(id);
             saveCart();
-            alert('Добавлено в корзину');
         }
 
         function toggleFav(id) {
@@ -371,7 +368,7 @@
                     await delFile(`listings/${id}.json`, data.sha);
                     cart = cart.filter(i => i !== id);
                     saveCart();
-                } catch (e) { alert('Ошибка: ' + e.message); }
+                } catch (e) { alert('Ошибка при покупке: ' + e.message); }
             }
             setUser({ ...user });
             await loadListings();
@@ -399,17 +396,15 @@
 
         async function loadUsers() {
             const uc = document.getElementById('usersContainer');
-            try {
-                const files = await listDir('users');
-                const users = [];
-                for (const f of files) {
-                    if (f.name.endsWith('.json')) {
-                        const data = await getJSON(`users/${f.name}`);
-                        if (data) users.push(data.json);
-                    }
+            const files = await listDir('users');
+            const users = [];
+            for (const f of files) {
+                if (f.name.endsWith('.json')) {
+                    const data = await getJSON(`users/${f.name}`);
+                    if (data) users.push(data.json);
                 }
-                uc.innerHTML = users.map(u => `<div class="user-item"><span>👤 ${u.username}</span><span>💰 ${u.balance||0}</span><button class="btn btn-outline btn-sm" onclick="showUserProfile('${u.username}')">Профиль</button></div>`).join('') || '<p>Нет пользователей</p>';
-            } catch { uc.innerHTML = 'Ошибка загрузки'; }
+            }
+            uc.innerHTML = users.length ? users.map(u => `<div class="user-item"><span>👤 ${u.username}</span><span>💰 ${u.balance||0}</span><button class="btn btn-outline btn-sm" onclick="showUserProfile('${u.username}')">Профиль</button></div>`).join('') : '<p>Нет пользователей</p>';
         }
 
         function searchListings(query, type, sort) {
@@ -428,16 +423,14 @@
             const fd = new FormData(e.target);
             const l = { id: 'lst_' + Date.now(), title: fd.get('title'), type: fd.get('type'), year: fd.get('year'), price: Number(fd.get('price')), desc: fd.get('desc'), seller: user.username, createdAt: new Date().toISOString() };
             for (const [k, v] of fd.entries()) { if (!['title', 'type', 'year', 'price', 'desc'].includes(k) && v) l[k] = v; }
-            try {
-                await saveJSON(`listings/${l.id}.json`, l);
-                user.balance = (user.balance || 0) + 1000;
-                await saveJSON(`users/${user.username}.json`, user);
-                setUser({ ...user });
-                document.getElementById('createModal').classList.remove('active');
-                await loadListings();
-                renderAll();
-                alert('Опубликовано! +1000💰');
-            } catch (err) { alert('Ошибка: ' + err.message); }
+            await saveJSON(`listings/${l.id}.json`, l);
+            user.balance = (user.balance || 0) + 1000;
+            await saveJSON(`users/${user.username}.json`, user);
+            setUser({ ...user });
+            document.getElementById('createModal').classList.remove('active');
+            await loadListings();
+            renderAll();
+            alert('Опубликовано! +1000💰');
         });
 
         document.querySelectorAll('#createModal .tabs-nav button').forEach(b => {
@@ -461,19 +454,17 @@
         async function loadMsgThreads() {
             const mc = document.getElementById('msgContainer');
             if (!user) { mc.innerHTML = 'Войдите'; return; }
-            try {
-                const files = await listDir('chats');
-                const threads = [];
-                for (const f of files) {
-                    if (f.name.endsWith('.json')) {
-                        const data = await getJSON(`chats/${f.name}`);
-                        if (data && data.json.participants.includes(user.username)) {
-                            threads.push({ id: f.name.replace('.json', ''), participants: data.json.participants, last: data.json.messages[data.json.messages.length - 1] });
-                        }
+            const files = await listDir('chats');
+            const threads = [];
+            for (const f of files) {
+                if (f.name.endsWith('.json')) {
+                    const data = await getJSON(`chats/${f.name}`);
+                    if (data && data.json.participants.includes(user.username)) {
+                        threads.push({ id: f.name.replace('.json', ''), participants: data.json.participants, last: data.json.messages[data.json.messages.length - 1] });
                     }
                 }
-                mc.innerHTML = threads.length ? threads.map(t => `<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join('') : '<p>Нет сообщений</p>';
-            } catch { mc.innerHTML = 'Ошибка загрузки'; }
+            }
+            mc.innerHTML = threads.length ? threads.map(t => `<div class="msg-thread" onclick="openChat('${t.participants.find(p=>p!==user.username)}')"><b>${t.participants.filter(p=>p!==user.username).join(', ')}</b><br><small>${t.last?.text?.slice(0,60)||''}</small></div>`).join('') : '<p>Нет сообщений</p>';
         }
 
         document.getElementById('goHome').onclick = () => showPage('home');
@@ -495,7 +486,7 @@
         document.getElementById('saveGhBtn').onclick = () => {
             setGH(document.getElementById('ghToken').value, document.getElementById('ghOwner').value, document.getElementById('ghRepo').value);
             document.getElementById('settingsModal').classList.remove('active');
-            alert('Сохранено!');
+            alert('Настройки GitHub сохранены! Теперь можно пользоваться сайтом.');
         };
         document.getElementById('homeSearchBtn').onclick = () => {
             const lst = searchListings(document.getElementById('homeSearch').value, document.getElementById('homeTypeFilter').value, document.getElementById('homeSort').value);
@@ -507,7 +498,15 @@
         };
         window.addEventListener('click', e => { if (e.target.classList.contains('modal')) e.target.classList.remove('active'); });
 
-        (async () => { updateUI(); await loadListings(); renderAll(); })();
+        (async () => {
+            updateUI();
+            if (!GH().token) {
+                document.getElementById('settingsModal').classList.add('active');
+            } else {
+                await loadListings();
+                renderAll();
+            }
+        })();
     })();
 </script>
 </body>
