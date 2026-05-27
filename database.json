@@ -18,7 +18,7 @@
       "id": "1779860189729",
       "username": "Burmalda",
       "passwordHash": "582d2c7e",
-      "balance": 100500,
+      "balance": 103600,
       "createdAt": "2026-05-27T05:36:29.729Z"
     }
   ],
@@ -44,7 +44,16 @@
       "createdAt": "2026-05-27T05:37:14.990Z"
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "id": "1779860237382",
+      "productId": "1779860234990",
+      "buyerId": "1779860189729",
+      "sellerId": "1779860189729",
+      "price": 62000,
+      "date": "2026-05-27T05:37:17.382Z"
+    }
+  ],
   "messages": [],
   "reviews": []
 }
