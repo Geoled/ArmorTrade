@@ -6,8 +6,35 @@
       "passwordHash": "-7d0a111e",
       "balance": 100000,
       "createdAt": "2026-05-27T05:23:18.001Z"
+    },
+    {
+      "id": "system",
+      "username": "ArmoryMarket",
+      "passwordHash": "",
+      "balance": 999999999,
+      "createdAt": "2026-05-27T05:36:21.922Z"
+    },
+    {
+      "id": "1779860189729",
+      "username": "Burmalda",
+      "passwordHash": "582d2c7e",
+      "balance": 100000,
+      "createdAt": "2026-05-27T05:36:29.729Z"
     }
   ],
-  "products": [],
-  "orders": []
+  "products": [
+    {
+      "id": "1",
+      "name": "ОБТ «Импала» Mk.V «Чёрная Мамба»",
+      "type": "ОБТ",
+      "description": "Современный основной боевой танк",
+      "price": 2800000,
+      "sellerId": "system",
+      "likes": 5,
+      "createdAt": "2026-05-27T05:36:21.922Z"
+    }
+  ],
+  "orders": [],
+  "messages": [],
+  "reviews": []
 }
