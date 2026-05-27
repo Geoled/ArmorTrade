@@ -23,7 +23,7 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
         a { color: var(--primary); text-decoration: none; } a:hover { color: var(--primary-hover); }
         .header { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
-        .logo { font-weight: 700; font-size: 24px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .logo { font-weight: 700; font-size: 24px; color: var(--primary); display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .logo span { font-size: 18px; color: #666; }
         .header-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; gap: 6px; }
@@ -36,7 +36,6 @@
         .main-image { width: 400px; height: 300px; background: #eef1f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #666; }
         .thumbnail-list { display: flex; flex-direction: column; gap: 8px; }
         .thumbnail { width: 80px; height: 60px; background: #eef1f5; border-radius: 6px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; }
-        .thumbnail.active { border-color: var(--primary); }
         .product-info { display: grid; grid-template-columns: 1fr 300px; gap: 32px; }
         .product-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
         .rating { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--text-secondary); }
@@ -59,10 +58,10 @@
         .ammo-name { font-weight: 700; margin-bottom: 6px; }
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 6px; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
         .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
         .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; cursor: pointer; }
         .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
@@ -71,16 +70,20 @@
         .product-card .name { font-weight: 600; font-size: 16px; margin-bottom: 8px; }
         .product-card .price { font-size: 18px; }
         .like-btn { background: none; border: none; cursor: pointer; font-size: 18px; display: inline-flex; align-items: center; gap: 4px; }
-        .like-btn.liked { color: var(--danger); }
         .toast { position: fixed; bottom: 24px; right: 24px; background: #333; color: white; padding: 12px 24px; border-radius: 8px; z-index: 300; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } }
         .settings-toggle { font-size: 18px; cursor: pointer; padding: 8px; }
+        .chat-messages { max-height: 300px; overflow-y: auto; margin-bottom: 16px; }
+        .chat-msg { margin-bottom: 8px; }
+        .chat-msg .author { font-weight: 700; }
+        .review { border-bottom: 1px solid var(--border); padding: 12px 0; }
+        .search-bar { display: flex; gap: 12px; margin-bottom: 24px; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="logo">🛡️ ArmoryMarket <span>| военная техника</span></div>
+    <div class="logo" onclick="navigateTo('catalog')">🛡️ ArmoryMarket <span>| военная техника</span></div>
     <div class="header-actions" id="authActions">
         <span class="settings-toggle" title="Настройки GitHub" onclick="showGitHubSettings()">⚙️</span>
     </div>
@@ -119,6 +122,13 @@
     </div>
 </div>
 
+<!-- Модальное окно чата -->
+<div class="modal" id="chatModal">
+    <div class="modal-content" id="chatContainer">
+        <!-- заполняется динамически -->
+    </div>
+</div>
+
 <div id="toastContainer"></div>
 
 <script>
@@ -137,11 +147,12 @@ function setGitHubConfig(token, owner, repo, path = 'database.json') {
 
 // ========== СОСТОЯНИЕ ==========
 let currentUser = null;
-let db = { users: [], products: [], orders: [] };
+let db = { users: [], products: [], orders: [], messages: [], reviews: [] };
 let currentView = 'catalog';
 let selectedProductId = null;
 let cart = [];
 let currentSha = null;
+let unreadMessages = 0; // кол-во непрочитанных диалогов для текущего пользователя
 
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
@@ -165,11 +176,15 @@ async function loadDatabase() {
         const data = await response.json();
         const content = atob(data.content);
         db = JSON.parse(content);
+        if (!db.messages) db.messages = [];
+        if (!db.reviews) db.reviews = [];
         return data.sha;
     } catch (error) {
         console.error(error);
         const local = localStorage.getItem('war_marketplace_db');
-        if (local) db = JSON.parse(local);
+        if (local) {
+            try { db = JSON.parse(local); } catch(e) {}
+        }
         return null;
     }
 }
@@ -203,7 +218,7 @@ async function syncDatabase() {
     currentSha = await saveDatabase(currentSha);
 }
 
-// ========== ИНИЦИАЛИЗАЦИЯ ==========
+// ========== ИНИЦИАЛИЗАЦИЯ И СЕССИЯ ==========
 async function initApp() {
     const config = getGitHubConfig();
     if (!config) {
@@ -214,7 +229,20 @@ async function initApp() {
             document.getElementById('githubSettingsModal').classList.add('active');
         }
     }
-    // Если пусто – наполняем тестовыми данными
+    // Восстановление сессии
+    const savedUserId = localStorage.getItem('currentUserId');
+    if (savedUserId) {
+        const user = db.users.find(u => u.id === savedUserId);
+        if (user) {
+            currentUser = user;
+        }
+    }
+    // Восстановление корзины
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+    }
+
     if (db.products.length === 0) {
         db.products.push({
             id: '1',
@@ -237,35 +265,35 @@ async function initApp() {
         });
     }
     updateUI();
+    computeUnreadMessages();
 }
 
-function showGitHubSettings() {
-    const config = getGitHubConfig();
-    if (config) {
-        document.getElementById('ghToken').value = config.token || '';
-        document.getElementById('ghOwner').value = config.owner || '';
-        document.getElementById('ghRepo').value = config.repo || '';
-        document.getElementById('ghPath').value = config.path || 'database.json';
+function computeUnreadMessages() {
+    if (!currentUser) {
+        unreadMessages = 0;
+        return;
     }
-    document.getElementById('githubSettingsModal').classList.add('active');
+    // Простая логика: все сообщения, где receiverId = currentUser.id и дата > lastRead? Пока без lastRead, будем считать непрочитанными все входящие, не просмотренные в текущем сеансе. Но для простоты просто покажем количество диалогов с непрочитанными. Мы не храним статус прочтения, так что просто покажем общее количество диалогов, где есть сообщения от других.
+    const dialogs = new Set();
+    db.messages.forEach(m => {
+        if (m.receiverId === currentUser.id) {
+            dialogs.add(m.productId + '_' + m.senderId);
+        }
+    });
+    unreadMessages = dialogs.size;
 }
 
-async function saveGitHubSettings() {
-    const token = document.getElementById('ghToken').value.trim();
-    const owner = document.getElementById('ghOwner').value.trim();
-    const repo = document.getElementById('ghRepo').value.trim();
-    const path = document.getElementById('ghPath').value.trim() || 'database.json';
-    if (!token || !owner || !repo) { showToast('Заполните все поля', 'error'); return; }
-    setGitHubConfig(token, owner, repo, path);
-    document.getElementById('githubSettingsModal').classList.remove('active');
-    showToast('Настройки сохранены. Подключаемся...');
-    currentSha = await loadDatabase();
-    if (currentSha) showToast('Подключение успешно!');
-    else showToast('Ошибка подключения. Проверьте данные.', 'error');
-    updateUI();
+// Сохранение сессии и корзины в localStorage
+function persistState() {
+    if (currentUser) {
+        localStorage.setItem('currentUserId', currentUser.id);
+    } else {
+        localStorage.removeItem('currentUserId');
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// ========== АВТОРИЗАЦИЯ ==========
+// ========== ПОЛЬЗОВАТЕЛИ ==========
 function hashPassword(p) { let h=0; for(let i=0;i<p.length;i++){const c=p.charCodeAt(i);h=((h<<5)-h)+c;h|=0;} return h.toString(16); }
 
 function registerUser(username, password) {
@@ -273,21 +301,41 @@ function registerUser(username, password) {
     const newUser = { id: Date.now().toString(), username, passwordHash: hashPassword(password), balance: 100000, createdAt: new Date().toISOString() };
     db.users.push(newUser);
     currentUser = newUser;
+    persistState();
     syncDatabase();
     return true;
 }
 
 function loginUser(username, password) {
     const user = db.users.find(u => u.username === username && u.passwordHash === hashPassword(password));
-    if (user) { currentUser = user; return true; }
+    if (user) {
+        currentUser = user;
+        persistState();
+        return true;
+    }
     return false;
 }
 
-function logout() { currentUser = null; updateUI(); }
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('currentUserId');
+    updateUI();
+}
 
 // ========== БИЗНЕС-ЛОГИКА ==========
-function addToCart(productId) { if (!cart.includes(productId)) { cart.push(productId); showToast('Добавлено в корзину'); } updateUI(); }
-function removeFromCart(productId) { cart = cart.filter(id => id !== productId); updateUI(); }
+function addToCart(productId) {
+    if (!cart.includes(productId)) {
+        cart.push(productId);
+        showToast('Добавлено в корзину');
+        persistState();
+        updateUI();
+    }
+}
+function removeFromCart(productId) {
+    cart = cart.filter(id => id !== productId);
+    persistState();
+    updateUI();
+}
 function likeProduct(productId) {
     const product = db.products.find(p => p.id === productId);
     if (!product) return;
@@ -312,9 +360,11 @@ function buyProduct(productId) {
     db.orders.push({ id: Date.now().toString(), productId, buyerId: currentUser.id, sellerId: product.sellerId, price: product.price, date: new Date().toISOString() });
     cart = cart.filter(id => id !== productId);
     showToast('Покупка совершена!');
+    persistState();
     syncDatabase();
     updateUI();
 }
+
 function publishProduct(name, type, description, price) {
     if (!currentUser) return;
     const product = { id: Date.now().toString(), name, type, description, price: Number(price), sellerId: currentUser.id, likes: 0, createdAt: new Date().toISOString() };
@@ -323,6 +373,89 @@ function publishProduct(name, type, description, price) {
     showToast('Товар опубликован! +500 кред.');
     syncDatabase();
     updateUI();
+}
+
+// ========== ОТЗЫВЫ ==========
+function addReview(productId, rating, text) {
+    if (!currentUser) { showToast('Войдите для отзыва', 'error'); return; }
+    db.reviews.push({
+        id: Date.now().toString(),
+        productId,
+        userId: currentUser.id,
+        username: currentUser.username,
+        rating: Number(rating),
+        text,
+        date: new Date().toISOString()
+    });
+    syncDatabase();
+    updateUI();
+}
+
+function getAverageRating(productId) {
+    const reviews = db.reviews.filter(r => r.productId === productId);
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+    return (sum / reviews.length).toFixed(1);
+}
+
+// ========== МЕССЕНДЖЕР ==========
+function openChat(productId, sellerId) {
+    if (!currentUser) { showToast('Войдите для чата', 'error'); return; }
+    const chatModal = document.getElementById('chatModal');
+    const container = document.getElementById('chatContainer');
+    const product = db.products.find(p => p.id === productId);
+    const seller = db.users.find(u => u.id === sellerId);
+    if (!product || !seller) return;
+
+    const messages = db.messages.filter(m => m.productId === productId &&
+        ((m.senderId === currentUser.id && m.receiverId === sellerId) || (m.senderId === sellerId && m.receiverId === currentUser.id))
+    ).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    container.innerHTML = `
+        <h3>Чат с продавцом "${seller.username}" по товару "${product.name}"</h3>
+        <div class="chat-messages" id="chatMessages">
+            ${messages.map(m => `
+                <div class="chat-msg">
+                    <span class="author">${m.senderId === currentUser.id ? 'Вы' : seller.username}:</span>
+                    <span>${m.text}</span>
+                    <div style="font-size:11px; color:gray">${new Date(m.timestamp).toLocaleString()}</div>
+                </div>
+            `).join('')}
+        </div>
+        <div style="display:flex; gap:8px">
+            <input type="text" id="chatInput" placeholder="Введите сообщение..." style="flex:1" onkeypress="if(event.key==='Enter') sendMessage('${productId}','${sellerId}')">
+            <button class="btn btn-primary" onclick="sendMessage('${productId}','${sellerId}')">Отправить</button>
+        </div>
+    `;
+    chatModal.classList.add('active');
+    // Прокрутка вниз
+    const msgDiv = document.getElementById('chatMessages');
+    if (msgDiv) msgDiv.scrollTop = msgDiv.scrollHeight;
+}
+
+function sendMessage(productId, receiverId) {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text || !currentUser) return;
+    db.messages.push({
+        id: Date.now().toString(),
+        productId,
+        senderId: currentUser.id,
+        receiverId,
+        text,
+        timestamp: new Date().toISOString()
+    });
+    syncDatabase();
+    // Обновить чат
+    openChat(productId, receiverId);
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('active');
+    }
 }
 
 // ========== ИНТЕРФЕЙС ==========
@@ -351,22 +484,15 @@ function renderAuthModal(mode = 'login') {
     document.getElementById('toggleAuthMode').onclick = (e) => { e.preventDefault(); renderAuthModal(mode === 'login' ? 'register' : 'login'); };
 }
 
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-// Закрытие модалок по клику вне окна
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.classList.remove('active');
-    }
-}
-
 function updateAuthUI() {
     const authDiv = document.getElementById('authActions');
     const settingsBtn = '<span class="settings-toggle" title="Настройки GitHub" onclick="showGitHubSettings()">⚙️</span>';
+    const chatIcon = currentUser ? `<span style="cursor:pointer;position:relative" onclick="navigateTo('messages')">💬 ${unreadMessages ? '<span class="badge">'+unreadMessages+'</span>' : ''}</span>` : '';
     if (currentUser) {
         authDiv.innerHTML = `
             <span>💰 ${currentUser.balance.toLocaleString()} кред.</span>
             <span>👤 ${currentUser.username}</span>
+            ${chatIcon}
             <button class="btn btn-outline" onclick="navigateTo('profile')">Личный кабинет</button>
             <button class="btn btn-outline" onclick="logout()">Выйти</button>
             ${settingsBtn}
@@ -388,6 +514,7 @@ function updateUI() {
         case 'cart': renderCart(); break;
         case 'profile': renderProfile(); break;
         case 'publish': renderPublishForm(); break;
+        case 'messages': renderMessages(); break;
         default: renderCatalog();
     }
 }
@@ -400,6 +527,21 @@ function navigateTo(view, productId = null) {
 
 function renderCatalog() {
     const app = document.getElementById('app');
+    let filtered = [...db.products];
+    // Поиск и сортировка
+    let searchHtml = `
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Поиск по названию..." oninput="applyFilters()" style="flex:1; padding:12px; border:1px solid var(--border); border-radius:8px">
+            <select id="sortSelect" onchange="applyFilters()" style="padding:12px; border:1px solid var(--border); border-radius:8px">
+                <option value="default">По умолчанию</option>
+                <option value="price_asc">Цена: по возрастанию</option>
+                <option value="price_desc">Цена: по убыванию</option>
+                <option value="date">Новые поступления</option>
+                <option value="popular">Популярные</option>
+            </select>
+        </div>
+        <div class="catalog-grid" id="catalogGrid"></div>
+    `;
     app.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
             <h2>Каталог военной техники</h2>
@@ -408,28 +550,51 @@ function renderCatalog() {
                 <button class="btn btn-primary" onclick="navigateTo('publish')">➕ Выставить товар</button>
             </div>
         </div>
-        <div class="catalog-grid">
-            ${db.products.map(p => `
+        ${searchHtml}
+    `;
+    applyFilters(); // вызовет renderCatalogGrid
+}
+
+function applyFilters() {
+    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
+    const sort = document.getElementById('sortSelect')?.value || 'default';
+    let filtered = db.products.filter(p => p.name.toLowerCase().includes(searchTerm));
+    switch(sort) {
+        case 'price_asc': filtered.sort((a,b) => a.price - b.price); break;
+        case 'price_desc': filtered.sort((a,b) => b.price - a.price); break;
+        case 'date': filtered.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
+        case 'popular': filtered.sort((a,b) => (b.likes||0) - (a.likes||0)); break;
+    }
+    const grid = document.getElementById('catalogGrid');
+    if (grid) {
+        grid.innerHTML = filtered.map(p => {
+            const avgRating = getAverageRating(p.id);
+            const starsHtml = avgRating > 0 ? '⭐'.repeat(Math.round(avgRating)) + ` ${avgRating}` : 'нет оценок';
+            return `
                 <div class="product-card" onclick="navigateTo('product', '${p.id}')">
                     <div class="img">🪖</div>
                     <div class="info">
                         <div class="name">${p.name}</div>
                         <div class="price">${p.price.toLocaleString()} кред.</div>
+                        <div style="font-size:13px; color:var(--warning)">${starsHtml}</div>
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px">
                             <span style="color:var(--text-secondary); font-size:13px">👍 ${p.likes || 0}</span>
                             <button class="like-btn" onclick="event.stopPropagation(); likeProduct('${p.id}')">❤️</button>
                         </div>
                     </div>
                 </div>
-            `).join('') || '<p>Нет товаров. Станьте первым продавцом!</p>'}
-        </div>
-    `;
+            `;
+        }).join('') || '<p>Ничего не найдено</p>';
+    }
 }
 
 function renderProductPage(productId) {
     const product = db.products.find(p => p.id === productId);
     if (!product) return renderCatalog();
     const isImpala = product.name.includes('Импала');
+    const seller = db.users.find(u => u.id === product.sellerId);
+    const avgRating = getAverageRating(productId);
+    const reviews = db.reviews.filter(r => r.productId === productId);
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="product-page">
@@ -441,8 +606,12 @@ function renderProductPage(productId) {
             <div class="product-info">
                 <div>
                     <h1 class="product-title">${product.name}</h1>
-                    <div class="rating"><span class="stars">★★★★★</span><span>4.9 (12 отзывов)</span></div>
+                    <div class="rating">
+                        <span class="stars">${'⭐'.repeat(Math.round(avgRating))}</span>
+                        <span>${avgRating} (${reviews.length} отзывов)</span>
+                    </div>
                     <button class="like-btn" onclick="likeProduct('${product.id}')">❤️ ${product.likes || 0}</button>
+                    ${currentUser && currentUser.id !== product.sellerId ? `<button class="btn btn-outline" style="margin-left:12px" onclick="openChat('${product.id}','${product.sellerId}')">💬 Написать продавцу</button>` : ''}
                 </div>
                 <div class="price-block">
                     <div class="price">${product.price.toLocaleString()} <span class="currency">кред.</span></div>
@@ -456,6 +625,7 @@ function renderProductPage(productId) {
             <div class="tabs">
                 <div class="tab active" onclick="switchTab('specs', this)">Характеристики</div>
                 <div class="tab" onclick="switchTab('ammo', this)">Боеприпасы (125-мм)</div>
+                <div class="tab" onclick="switchTab('reviews', this)">Отзывы</div>
             </div>
             <div id="tab-specs" class="tab-content active">
                 ${isImpala ? `
@@ -475,40 +645,63 @@ function renderProductPage(productId) {
             <div id="tab-ammo" class="tab-content">
                 <div class="ammo-grid">
                     <div class="ammo-card" onclick="addToCart('shell_Ассегай-М')">
-                        <div class="ammo-image">🔵</div>
-                        <div class="ammo-name">Ассегай-М (БОПС)</div>
+                        <div class="ammo-image">🔵</div><div class="ammo-name">Ассегай-М (БОПС)</div>
                         <div style="font-size:14px; color:var(--text-secondary)">Пробитие 650-700 мм.</div>
                         <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>800 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
                     </div>
                     <div class="ammo-card" onclick="addToCart('shell_Импи-Т')">
-                        <div class="ammo-image">🟠</div>
-                        <div class="ammo-name">Импи-Т (Кумулятивный)</div>
+                        <div class="ammo-image">🟠</div><div class="ammo-name">Импи-Т (Кумулятивный)</div>
                         <div style="font-size:14px; color:var(--text-secondary)">Пробитие 850 мм за ДЗ.</div>
                         <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>1200 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
                     </div>
                     <div class="ammo-card" onclick="addToCart('shell_Гром-Ф')">
-                        <div class="ammo-image">🟡</div>
-                        <div class="ammo-name">Гром-Ф (ОФС)</div>
+                        <div class="ammo-image">🟡</div><div class="ammo-name">Гром-Ф (ОФС)</div>
                         <div style="font-size:14px; color:var(--text-secondary)">Дистанционный подрыв.</div>
                         <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>600 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
                     </div>
                     <div class="ammo-card" onclick="addToCart('shell_Ингве-2')">
-                        <div class="ammo-image">🔴</div>
-                        <div class="ammo-name">Ингве-2 (ПТУР)</div>
+                        <div class="ammo-image">🔴</div><div class="ammo-name">Ингве-2 (ПТУР)</div>
                         <div style="font-size:14px; color:var(--text-secondary)">Пробитие >1000 мм.</div>
                         <div style="display:flex; justify-content:space-between; margin-top:8px"><strong>2500 кред.</strong><button class="btn btn-outline" style="padding:4px 12px">В корзину</button></div>
                     </div>
                 </div>
+            </div>
+            <div id="tab-reviews" class="tab-content">
+                <h3>Отзывы</h3>
+                ${reviews.map(r => `
+                    <div class="review">
+                        <strong>${r.username}</strong> (${'⭐'.repeat(r.rating)}) <span style="color:gray; font-size:12px">${new Date(r.date).toLocaleDateString()}</span>
+                        <p>${r.text}</p>
+                    </div>
+                `).join('') || '<p>Пока нет отзывов.</p>'}
+                ${currentUser ? `
+                    <div style="margin-top:20px">
+                        <h4>Оставить отзыв</h4>
+                        <div class="form-group"><label>Оценка</label><select id="reviewRating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div>
+                        <div class="form-group"><label>Текст отзыва</label><textarea id="reviewText" rows="3"></textarea></div>
+                        <button class="btn btn-primary" onclick="submitReview('${product.id}')">Отправить</button>
+                    </div>
+                ` : '<p>Войдите, чтобы оставить отзыв.</p>'}
             </div>
         </div>
     `;
 }
 
 function switchTab(tabName, el) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const tabs = el.parentElement.querySelectorAll('.tab');
+    const contents = el.parentElement.parentElement.querySelectorAll('.tab-content');
+    tabs.forEach(t => t.classList.remove('active'));
+    contents.forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+function submitReview(productId) {
+    const rating = document.getElementById('reviewRating').value;
+    const text = document.getElementById('reviewText').value.trim();
+    if (!text) return showToast('Введите текст отзыва', 'error');
+    addReview(productId, rating, text);
+    navigateTo('product', productId);
 }
 
 function renderCart() {
@@ -548,6 +741,7 @@ function renderProfile() {
         <h2>Личный кабинет</h2>
         <p>Имя: ${currentUser.username}</p>
         <p>Баланс: <strong>${currentUser.balance.toLocaleString()} кредитов</strong></p>
+        <button class="btn btn-outline" onclick="navigateTo('messages')">💬 Мои сообщения</button>
         <h3 style="margin-top:24px">Мои публикации</h3>
         <div class="catalog-grid">
             ${myProducts.map(p => `
@@ -560,8 +754,9 @@ function renderProfile() {
         <div style="background:white; border-radius:12px; padding:16px">
             ${myOrders.slice(0, 10).map(o => {
                 const product = db.products.find(p => p.id === o.productId);
-                return `<div style="margin-bottom:8px">${o.date.slice(0,10)} — ${product ? product.name : 'товар'} — ${o.price} кред.</div>`;
-            }).join('') || 'Нет покупок'}
+                const type = o.buyerId === currentUser.id ? 'Покупка' : 'Продажа';
+                return `<div style="margin-bottom:8px">${o.date.slice(0,10)} — ${type}: ${product ? product.name : 'товар'} — ${o.price} кред.</div>`;
+            }).join('') || 'Нет операций'}
         </div>
     `;
 }
@@ -581,6 +776,37 @@ function renderPublishForm() {
     `;
 }
 
+function renderMessages() {
+    if (!currentUser) return navigateTo('catalog');
+    // Получить все уникальные диалоги текущего пользователя
+    const dialogsMap = new Map();
+    db.messages.forEach(m => {
+        if (m.senderId === currentUser.id || m.receiverId === currentUser.id) {
+            const otherUserId = m.senderId === currentUser.id ? m.receiverId : m.senderId;
+            const key = `${m.productId}_${otherUserId}`;
+            if (!dialogsMap.has(key)) {
+                const product = db.products.find(p => p.id === m.productId);
+                const otherUser = db.users.find(u => u.id === otherUserId);
+                dialogsMap.set(key, { productId: m.productId, otherUserId, productName: product?.name, otherUsername: otherUser?.username });
+            }
+        }
+    });
+    const dialogs = Array.from(dialogsMap.values());
+    const app = document.getElementById('app');
+    app.innerHTML = `
+        <h2>Мои сообщения</h2>
+        ${dialogs.length === 0 ? '<p>Нет диалогов</p>' : `
+            <div style="display:flex; flex-direction:column; gap:8px">
+                ${dialogs.map(d => `
+                    <div style="background:white; padding:16px; border-radius:8px; cursor:pointer" onclick="openChat('${d.productId}','${d.otherUserId}')">
+                        <strong>${d.otherUsername}</strong> по товару «${d.productName}»
+                    </div>
+                `).join('')}
+            </div>
+        `}
+    `;
+}
+
 function submitPublication() {
     const n = document.getElementById('pubName').value;
     const t = document.getElementById('pubType').value;
@@ -588,6 +814,32 @@ function submitPublication() {
     const p = document.getElementById('pubPrice').value;
     if (n && p) { publishProduct(n, t, d, p); navigateTo('catalog'); }
     else showToast('Заполните обязательные поля', 'error');
+}
+
+function showGitHubSettings() {
+    const config = getGitHubConfig();
+    if (config) {
+        document.getElementById('ghToken').value = config.token || '';
+        document.getElementById('ghOwner').value = config.owner || '';
+        document.getElementById('ghRepo').value = config.repo || '';
+        document.getElementById('ghPath').value = config.path || 'database.json';
+    }
+    document.getElementById('githubSettingsModal').classList.add('active');
+}
+
+async function saveGitHubSettings() {
+    const token = document.getElementById('ghToken').value.trim();
+    const owner = document.getElementById('ghOwner').value.trim();
+    const repo = document.getElementById('ghRepo').value.trim();
+    const path = document.getElementById('ghPath').value.trim() || 'database.json';
+    if (!token || !owner || !repo) { showToast('Заполните все поля', 'error'); return; }
+    setGitHubConfig(token, owner, repo, path);
+    document.getElementById('githubSettingsModal').classList.remove('active');
+    showToast('Настройки сохранены. Подключаемся...');
+    currentSha = await loadDatabase();
+    if (currentSha) showToast('Подключение успешно!');
+    else showToast('Ошибка подключения. Проверьте данные.', 'error');
+    updateUI();
 }
 
 // ========== ЗАПУСК ==========
